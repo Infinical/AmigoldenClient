@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { UsersListPage } from './users-list.page';
+import { ListBaseComponent } from 'src/app/components/list-base/list-base.component';
+import { SharedComponentsModule } from 'src/app/components/shared.components.module';
 
 const routes: Routes = [
   {
@@ -16,11 +18,12 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    // SharedComponentsModule,
     CommonModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [UsersListPage]
+  declarations: [UsersListPage, ListBaseComponent]
 })
 export class UsersListPageModule {}
