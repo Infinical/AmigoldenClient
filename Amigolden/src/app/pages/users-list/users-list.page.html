@@ -1,7 +1,7 @@
 <app-list-base [config]="config" [template]="itemTemplate"></app-list-base>
 <ng-template #itemTemplate let-entity="entity">
-  <ion-item no-lines> 
-    <h2>Entity: {{ entity.id }}</h2>
+  <ion-item> 
+    <ion-label>Entity: {{ entity.id }}</ion-label>
     <ion-icon name="arrow-forward" item-end></ion-icon>
   </ion-item>
 </ng-template>

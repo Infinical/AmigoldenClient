@@ -1,9 +1,18 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>login</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-
+<ion-content padding class="login-background no-scroll">
+	<h3 class="login-tag">Unleash yourself</h3>
 </ion-content>
+<ion-footer no-shadow>
+	<ion-toolbar no-shadow position="bottom">
+		<form #form method="post" class="form-horizontal" [action]="loginUrl">
+			<div>
+				<p>
+          <button ion-button block [disabled]="isDisabled" (click)="form.submit()" type="submit" 
+            title="Log in using your Stripe account">
+						Stripe Connect
+					</button>
+					<input type="hidden" name="provider" value="StripeConnect">
+				</p>
+			</div>
+		</form>
+	</ion-toolbar>
+</ion-footer>

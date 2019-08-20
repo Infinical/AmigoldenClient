@@ -3,7 +3,13 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  odataMetadataurl: 'https://localhost:44377/OData/$metadata',
+  baseUrl: 'https://localhost:44377/',
+  apiUrl: 'https://localhost:44377/api',
+  authentication: {
+    userTokenName: 'UT-8675309'
+  }
 };
 
 /*

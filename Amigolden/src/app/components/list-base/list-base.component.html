@@ -8,34 +8,22 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-list>
-        <!-- <ion-infinite-scroll *ngIf="config?.isReverse && !isPagingComplete" (ionInfinite)="loadData($event)" position="top">
-            <ion-infinite-scroll-content></ion-infinite-scroll-content>
-        </ion-infinite-scroll>
-        <div *ngIf="config?.isSliding">
-          <ion-item-sliding class="page-list-sliding-item" *ngFor="let entity of entityList" #item>
-            <ion-item class="page-list-inner-item" (click)="config.onItemClick(entity)" >
-              <ng-template [ngTemplateOutlet]="template" [ngTemplateOutletContext]="{entity: entity}"></ng-template>
-            </ion-item>
-            <ion-item-options side="right">
-              <button ion-button color="danger"  *ngIf="config && config.canDelete" 
-                        (click)="delete(entity)">
-                <ion-icon name="trash"></ion-icon>Delete
-              </button>
-            </ion-item-options>
-          </ion-item-sliding>
-        </div> -->
-        <div *ngIf="!config?.isSliding">
-          <ng-template *ngFor="let entity of entityList" [ngTemplateOutlet]="template" [ngTemplateOutletContext]="{entity: entity}">
-          </ng-template>    
-        </div>
-        <ion-refresher (ionRefresh)="refresh($event)">
-            <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh"
-                                      refreshingSpinner="circles" refreshingText="Refreshing...">
-            </ion-refresher-content>
-        </ion-refresher>
-        <ion-infinite-scroll *ngIf="!config?.isReverse && !isPagingComplete" (ionInfinite)="loadData($event)" position="bottom">
-            <ion-infinite-scroll-content></ion-infinite-scroll-content>
-        </ion-infinite-scroll>
-      </ion-list>
+  <ion-list>
+    <div *ngIf="!config?.isSliding">
+      <ng-template *ngFor="let entity of entityList" [ngTemplateOutlet]="template" [ngTemplateOutletContext]="{entity: entity}">
+      </ng-template>
+    </div>
+  </ion-list>
+  <ion-refresher (ionRefresh)="refresh($event)">
+      <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh"
+                                refreshingSpinner="circles" refreshingText="Refreshing...">
+      </ion-refresher-content>
+  </ion-refresher>
+  <ion-infinite-scroll threshold="10%" *ngIf="!config?.isReverse && !isPagingComplete" 
+    (ionInfinite)="loadData($event)" position="bottom">
+      <ion-infinite-scroll-content 
+        loadingSpinner="bubbles"
+        loadingText="Loading more data">
+      </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

@@ -20,7 +20,7 @@ export class UsersListPage implements OnInit {
     defaultPagingInfo: new PagingInfo(3),
     // TODO: refresh should wait before refreshes to avoid duplicates
     refresh: new EventEmitter<any>(),
-    isSliding: true,
+    isSliding: false,
     isReverse: false,
     isSinglePage: false,
   };

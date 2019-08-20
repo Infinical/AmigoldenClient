@@ -135,7 +135,7 @@ export class ListBaseComponent<T extends IHasId> implements OnInit, DoCheck {
 
   getNextPage(infiniteScroll?: any) {
     if (this.canPage()) {
-        infiniteScroll.complete();
+        infiniteScroll.target.complete();
         return;
     }
 
@@ -163,7 +163,7 @@ export class ListBaseComponent<T extends IHasId> implements OnInit, DoCheck {
         () => {
             this.isPagingEnabled = true;
             if (infiniteScroll) {
-                infiniteScroll.complete();
+                infiniteScroll.target.complete();
             }
         });
   }
