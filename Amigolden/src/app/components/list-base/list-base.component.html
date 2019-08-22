@@ -1,29 +1,18 @@
-<!-- The header should be it's own component -->
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-searchbar></ion-searchbar>
-  </ion-toolbar>
-</ion-header>
-<ion-content>
-  <ion-list>
-    <div *ngIf="!config?.isSliding">
-      <ng-template *ngFor="let entity of entityList" [ngTemplateOutlet]="template" [ngTemplateOutletContext]="{entity: entity}">
-      </ng-template>
-    </div>
-  </ion-list>
-  <ion-refresher (ionRefresh)="refresh($event)">
-      <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh"
-                                refreshingSpinner="circles" refreshingText="Refreshing...">
-      </ion-refresher-content>
-  </ion-refresher>
-  <ion-infinite-scroll threshold="10%" *ngIf="!config?.isReverse && !isPagingComplete" 
-    (ionInfinite)="loadData($event)" position="bottom">
-      <ion-infinite-scroll-content 
-        loadingSpinner="bubbles"
-        loadingText="Loading more data">
-      </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
-</ion-content>
+<ion-list>
+  <div *ngIf="!config?.isSliding">
+    <ng-template *ngFor="let entity of entityList" [ngTemplateOutlet]="template" [ngTemplateOutletContext]="{entity: entity}">
+    </ng-template>
+  </div>
+</ion-list>
+<ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh"
+                              refreshingSpinner="circles" refreshingText="Refreshing...">
+    </ion-refresher-content>
+</ion-refresher>
+<ion-infinite-scroll threshold="10%" *ngIf="!config?.isReverse && !isPagingComplete" 
+  (ionInfinite)="loadData($event)" position="bottom">
+    <ion-infinite-scroll-content 
+      loadingSpinner="bubbles"
+      loadingText="Loading more data">
+    </ion-infinite-scroll-content>
+</ion-infinite-scroll>
