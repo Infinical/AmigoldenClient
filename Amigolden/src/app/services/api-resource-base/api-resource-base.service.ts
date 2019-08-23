@@ -15,7 +15,7 @@ export class ApiResourceBaseService<T extends IHasId> {
   apiUrl = environment.apiUrl;
   route: string;
 
-  constructor(private http: HttpClient, routeName: string) {
+  constructor(protected http: HttpClient, routeName: string) {
       this.route = routeName;
   }
 
@@ -34,47 +34,44 @@ export class ApiResourceBaseService<T extends IHasId> {
   }
 
   getDynamicList(filter: string, pageSize?: number, pageNumber?: number): Observable<T[]> {
-      const params = new HttpParams();
+      let params = new HttpParams();
       if (filter) {
-          params.set('$filter', filter);
+        params = params.set('$filter', filter);
       }
       if (pageNumber) {
           const skip = pageSize == null ? 0 : (pageNumber - 1) * pageSize;
-          params.set('$orderby', 'Id desc');
-          params.set('$skip', skip.toString());
+          params = params.set('$orderby', 'Id desc');
+          params = params.set('$skip', skip.toString());
       }
       if (pageSize) {
-          params.append('$top', pageSize.toString());
+        params = params.append('$top', pageSize.toString());
       }
 
-      return this.http.get(`${this.apiUrl}/${this.route}/OData`, { params })
-              .map(res => {
-                  const entities = res.json() as T[];
-                  return entities.map(e => this.mapEntity(e));
-              });
+      return this.http.get<T[]>(`${this.apiUrl}/${this.route}/OData`, { params })
+        .pipe(map(entities => entities.map(e => this.mapEntity(e))));
   }
 
   getList(pageSize?: number, pageNumber?: number): Observable<Page<T>> {
-      const params = new HttpParams();
+      let params = new HttpParams();
       if (pageSize) {
-        params.set('pageSize', pageSize.toString());
+        params = params.set('pageSize', pageSize.toString());
       }
       if (pageNumber) {
-        params.set('pageNumber', pageNumber.toString());
+        params = params.set('pageNumber', pageNumber.toString());
       }
 
-      return this.http.get(`${this.apiUrl}/${this.route}`, { params }).map(res => {
+      return this.http.get<T[]>(`${this.apiUrl}/${this.route}`, { params, observe: 'response' }).pipe(map(res => {
 
           const pageSizeHeader: number = +res.headers.get('Page-Size');
           const pageNumberHeader = +res.headers.get('Page-Number');
           const totalNumberOfResults = +res.headers.get('Total-Number-Of-Result');
-          const items = res.json() as T[];
+          const items = res.body;
           const mappedItems = items.map(e => this.mapEntity(e));
 
           const page: Page<T> = new Page<T>(pageSizeHeader, pageNumberHeader, totalNumberOfResults, mappedItems);
           return page;
 
-      });
+      }));
   }
 
   // virtual

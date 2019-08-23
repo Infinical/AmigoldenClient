@@ -3,6 +3,7 @@ import { ListConfiguration, PagingInfo } from 'src/app/models/list-configuration
 import { User } from 'src/app/models/user';
 import { Router, NavigationExtras } from '@angular/router';
 import { Observable, of } from 'rxjs';
+import { UsersEndpointService } from 'src/app/services/endpoints/users-endpoint.service';
 
 @Component({
   selector: 'app-users-list',
@@ -11,13 +12,14 @@ import { Observable, of } from 'rxjs';
 })
 export class UsersListPage implements OnInit {
 
+  filter = '';
   public config: ListConfiguration<User> = {
     canDelete: false,
     onItemClick: (entity) => this.navigateToDetail(entity),
     getList: (pagingInfo: PagingInfo) =>
-       this.getUsers(pagingInfo.pageSize,
+       this.userService.getDynamicList(this.filter, pagingInfo.pageSize,
                     pagingInfo.pageNumber),
-    defaultPagingInfo: new PagingInfo(3),
+    defaultPagingInfo: new PagingInfo(50),
     // TODO: refresh should wait before refreshes to avoid duplicates
     refresh: new EventEmitter<any>(),
     isSliding: false,
@@ -25,15 +27,9 @@ export class UsersListPage implements OnInit {
     isSinglePage: false,
   };
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, protected userService: UsersEndpointService) { }
 
   ngOnInit() {
-  }
-
-  getUsers(pageSize: number, pageNumber: number): Observable<User[]> {
-      let users: Array<User>;
-      users =  [...Array<User>(pageSize)].map((_, i) => new User((pageNumber * pageSize) + i));
-      return of(users);
   }
 
   navigateToDetail(entity: User) {

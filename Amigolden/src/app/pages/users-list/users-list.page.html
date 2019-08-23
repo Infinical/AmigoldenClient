@@ -10,8 +10,11 @@
   <app-list-base [config]="config" [template]="itemTemplate"></app-list-base>
 </ion-content>
 <ng-template #itemTemplate let-entity="entity">
-  <ion-item> 
-    <ion-label>Entity: {{ entity.id }}</ion-label>
-    <ion-icon name="arrow-forward" item-end></ion-icon>
+  <ion-item no-lines> 
+    <ion-avatar slot="start">
+      <img [src]=entity.profilePictureUrl>
+    </ion-avatar>
+    <ion-label>{{ entity.email }}</ion-label>
+    <ion-icon name="arrow-forward" slot="end"></ion-icon>
   </ion-item>
 </ng-template>
