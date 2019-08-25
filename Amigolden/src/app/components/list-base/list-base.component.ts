@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter,
          TemplateRef, Input, ElementRef,
          IterableDiffers, DoCheck } from '@angular/core';
-import { ListConfiguration } from 'src/app/models/list-configuration';
+import { ListConfiguration } from 'src/app/components/search/data/list-configuration';
 import { IHasId } from 'src/app/models/interfaces/interfaces';
 
 @Component({
