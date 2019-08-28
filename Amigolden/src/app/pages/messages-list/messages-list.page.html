@@ -1,9 +1,26 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>messages-list</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <app-search (searchFilter)="this.config.filter=$event"></app-search>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
-
+  <app-list-base [config]="config" [template]="itemTemplate"></app-list-base>
 </ion-content>
+<ng-template #itemTemplate let-entity="entity">
+  <ion-item no-lines class="conversation-item">
+    <ion-avatar item-start>
+      <img [src]="entity.primaryRecipient.profilePictureUrl">
+    </ion-avatar>
+    <ion-row>
+      <small item-start>{{entity.primaryRecipient.firstName}} </small>
+      <small item-end>{{getMomentDate(entity.lastMessage?.created)}}</small>
+    </ion-row>
+    <ion-row>
+    <h2>{{entity.lastMessage && entity.lastMessage.messageText}}</h2>
+  </ion-row>    
+    <ion-icon name="arrow-forward" item-end></ion-icon>
+  </ion-item>
+</ng-template>

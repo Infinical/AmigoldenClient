@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter,
          TemplateRef, Input, ElementRef,
          IterableDiffers, DoCheck } from '@angular/core';
-import { ListConfiguration } from 'src/app/components/search/data/list-configuration';
+import { ListConfiguration } from 'src/app/components/list-base/data/list-configuration';
 import { IHasId } from 'src/app/models/interfaces/interfaces';
 
 @Component({
@@ -175,8 +175,8 @@ export class ListBaseComponent<T extends IHasId> implements OnInit, DoCheck {
   }
 
   delete(entity: number) {
-    if (this.config.onDelete != null) {
-        this.config.onDelete(entity).subscribe(x => this.removeItemFromList(entity));
+    if (this.config.slidingListConfig.onDelete != null) {
+        this.config.slidingListConfig.onDelete(entity).subscribe(x => this.removeItemFromList(entity));
         return;
     }
 

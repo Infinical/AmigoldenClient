@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
-import { ListConfiguration, PagingInfo } from 'src/app/components/search/data/list-configuration';
+import { ListConfiguration, PagingInfo } from 'src/app/components/list-base/data/list-configuration';
 import { User } from 'src/app/models/user';
 import { Router, NavigationExtras } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -14,30 +14,15 @@ import { ODataDynamicFilterBuilder, ODataPropertyPath } from 'src/app/models/oda
 })
 export class UsersListPage implements OnInit {
 
-  // public config1 = new ListConfiguration<User>({
-  //   getList: (pagingInfo: PagingInfo) =>
-  //     this.userService.getDynamicList(this.config.filter, pagingInfo.pageSize,
-  //     pagingInfo.pageNumber),
-  //   onItemClick: (entity) => this.navigateToDetail(entity)
-  // });
-
-  public config: ListConfiguration<User> = {
-    canDelete: false,
-    onItemClick: (entity) => this.navigateToDetail(entity),
-    getList: (pagingInfo: PagingInfo) =>
-       this.userService.getDynamicList(this.config.filter, pagingInfo.pageSize,
-                    pagingInfo.pageNumber),
-    defaultPagingInfo: new PagingInfo(50),
-    // TODO: refresh should wait before refreshes to avoid duplicates
-    refresh: new EventEmitter<any>(),
-    isSliding: false,
-    isReverse: false,
-    isSinglePage: false,
-    _filter: '',
-    filter: ''
-  };
-
-  searchSettings = new SearchSettings(1000);
+  public config = new ListConfiguration<User>(
+    (pagingInfo: PagingInfo) =>
+      this.userService.getDynamicList(this.config.filter, pagingInfo.pageSize,
+      pagingInfo.pageNumber),
+    {
+      onItemClick: (entity) => this.navigateToDetail(entity),
+      applyODataFilter: (searchTerm) => this.defaultSearchFilter(searchTerm)
+    }
+  );
 
   constructor(private router: Router, protected userService: UsersEndpointService) { }
 
@@ -47,12 +32,11 @@ export class UsersListPage implements OnInit {
   defaultSearchFilter(value: string): string {
     const filterBuilder = ODataDynamicFilterBuilder.build(builder =>
         builder.or(
-            builder.or(
-                builder.contains(new ODataPropertyPath('FirstName'), value),
-                builder.contains(new ODataPropertyPath('LastName'), value)
-            ),
+            builder.contains(new ODataPropertyPath('FirstName'), value),
+            builder.contains(new ODataPropertyPath('LastName'), value),
             builder.contains(new ODataPropertyPath('Email'), value)
-        ));
+        )
+    );
     return filterBuilder.getString();
   }
 

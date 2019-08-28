@@ -1,6 +1,4 @@
-export interface Type<T> {
-  new (...args: any[]): T;
-}
+export type Type<T> = new (...args: any[]) => T;
 
 export class ODataPropertyPath {
    constructor(public path: string) {
@@ -18,7 +16,7 @@ export type BasicDynamicBuilderArg<TBuilder extends IBasicDynamicFilterBuilder> 
   BasicDynamicBuilderArgFunc<TBuilder> |
   IDynamicFilterExpressionResult |
   BasicBuilderProp<TBuilder> |
-  String | Number | Boolean | Date;
+  string | number | boolean | Date;
 
 export type BasicDynamicBuilderArgFunc<TBuilder extends IBasicDynamicFilterBuilder> =
   (arg: TBuilder, props: any) => BasicDynamicBuilderArg<TBuilder>;

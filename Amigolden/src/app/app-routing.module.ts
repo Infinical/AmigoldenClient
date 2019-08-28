@@ -25,6 +25,7 @@ const routes: Routes = [
   { path: 'events/:id/payments', loadChildren: './pages/payment/payment.module#PaymentPageModule' },
   { path: 'messages', loadChildren: './pages/messages-list/messages-list.module#MessagesListPageModule' },
   { path: 'messages/:id', loadChildren: './pages/messages/messages.module#MessagesPageModule' },
+  { path: 'conversations', loadChildren: './pages/conversations/conversations.module#ConversationsPageModule' },
 ];
 
 @NgModule({

@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { UsersListPage } from './users-list.page';
 import { ListBaseComponent } from 'src/app/components/list-base/list-base.component';
 import { SharedComponentsModule } from 'src/app/components/shared.components.module';
+import { SearchComponent } from 'src/app/components/search/search.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [UsersListPage, ListBaseComponent]
+  declarations: [UsersListPage, ListBaseComponent, SearchComponent]
 })
 export class UsersListPageModule {}
