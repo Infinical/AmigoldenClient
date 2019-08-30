@@ -19,12 +19,12 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    // SharedComponentsModule,
+    SharedComponentsModule,
     CommonModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [UsersListPage, ListBaseComponent, SearchComponent]
+  declarations: [UsersListPage]
 })
 export class UsersListPageModule {}

@@ -12,8 +12,16 @@ export class ListConfigurationOptionalArgs {
 }
 
 export class SlidingListConfiguration {
-    isSliding = false;
-    onDelete?: (entity: any) => Observable<any>;
+
+    public isSliding = false;
+    public onDelete?: (entity: any) => Observable<any>;
+
+    constructor(onDelete?: (entity: any) => Observable<any>) {
+        if (onDelete) {
+            this.onDelete = onDelete;
+            this.isSliding = true;
+        }
+    }
 }
 
 export class ListConfiguration<T> extends ListConfigurationOptionalArgs {

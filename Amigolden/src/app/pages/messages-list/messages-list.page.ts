@@ -1,5 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, KeyValueDiffers, NgZone, ViewChild } from '@angular/core';
 import { HubServiceBase } from 'src/app/services/hubs/hub-base.service';
+import { Conversation } from 'src/app/models/conversation';
+import { ListBaseComponent } from 'src/app/components/list-base/list-base.component';
+import moment from 'moment';
+import { ConversationsService } from 'src/app/services/endpoints/conversations-endpoint.service';
+import { ListConfiguration, SlidingListConfiguration, PagingInfo } from 'src/app/components/list-base/data/list-configuration';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-messages-list',
@@ -9,9 +15,42 @@ import { HubServiceBase } from 'src/app/services/hubs/hub-base.service';
 })
 export class MessagesListPage implements OnInit {
 
-  constructor() { }
+  @ViewChild('pageListBase', undefined) pageListBase: ListBaseComponent<any>;
+
+  config = new ListConfiguration<Conversation>((pagingInfo: PagingInfo) =>
+    this.baseProvider.getList(pagingInfo.pageSize, pagingInfo.pageNumber).pipe(map(t => t.items)),
+    {
+      onItemClick: (entity) => this.navigateToDetail(entity),
+      slidingListConfig: new SlidingListConfiguration((entityId) =>  this.baseProvider.unsubscribe(entityId))
+    });
+
+  constructor(public baseProvider: ConversationsService, public differs: KeyValueDiffers,
+              public hubService: HubServiceBase, private ngZone: NgZone) {
+    this.hubService.initialize('conversations').then(() => {
+      this.hubService.registerOnServerEvents();
+      this.subscribeToHubEvents();
+    });
+  }
+
+  getMomentDate(date: Date) {
+    if (date == null) {
+      return '';
+    }
+
+    return moment(date).fromNow();
+  }
+
+  navigateToDetail(entity: Conversation) {
+  }
+
+  private subscribeToHubEvents(): void {
+    this.hubService.onCreate.subscribe((entity: Conversation) => {
+        this.ngZone.run(() => {
+            this.pageListBase.entityList.push(entity);
+        });
+    });
+}
 
   ngOnInit() {
   }
-
 }

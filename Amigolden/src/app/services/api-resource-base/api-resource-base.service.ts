@@ -82,7 +82,7 @@ export class ApiResourceBaseService<T extends IHasId> {
   create(resource: T): Observable<T> {
       const headers = new HttpHeaders();
       headers.append('Content-Type', 'application/json');
-      return this.http.post<T>(`${this.apiUrl}/${this.route}`, resource, { headers});
+      return this.http.post<T>(`${this.apiUrl}/${this.route}`, resource, { headers });
   }
 
   update(resource: T): Observable<T> {
