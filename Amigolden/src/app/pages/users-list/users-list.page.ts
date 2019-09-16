@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
 import { UsersEndpointService } from 'src/app/services/endpoints/users-endpoint.service';
 import { SearchSettings } from 'src/app/components/search/data/search-settings';
 import { ODataDynamicFilterBuilder, ODataPropertyPath } from 'src/app/models/odata/filter/ts-odata-dynamic-filter';
+import { RouteNames } from 'src/app/app-routing.module';
 
 @Component({
   selector: 'app-users-list',
@@ -49,6 +50,6 @@ export class UsersListPage implements OnInit {
       }
     };
 
-    this.router.navigate(['users', entity.id], navigationExtras);
+    this.router.navigate([RouteNames.users, entity.id], navigationExtras);
   }
 }
