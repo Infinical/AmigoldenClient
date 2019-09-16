@@ -10,19 +10,13 @@
   <app-list-base [config]="config" [template]="itemTemplate"></app-list-base>
 </ion-content>
 <ng-template #itemTemplate let-entity="entity">
-  <ion-item no-lines> 
-    <ion-avatar slot="start">
-      <img [src]=entity.profilePictureUrl>
-    </ion-avatar>
-    <ion-label>{{ entity.email }}</ion-label>
-    <ion-icon name="arrow-forward" slot="end"></ion-icon>
-  </ion-item>
   <ion-card>
-    <img [src]=entity.imageSrc />
+    <img *ngIf="entity.imageSrc" [src]="entity.imageSrc" />
+    <img src='https://ionicframework.com/docs/demos/api/card/madison.jpg' />
     <ion-card-header>
       <ion-card-subtitle>Destination</ion-card-subtitle>
       <ion-card-title>{{ displayLocation(entity.locationId) }}</ion-card-title>
     </ion-card-header>
-    <ion-card-content> {{ entity.description }} </ion-card-content>
+    <ion-card-content> {{ entity.description }} vero eos et accusamus et iusto odio dignissimos ducimus, qui blanditiis praesentium voluptatum deleniti atque corrupti, quos dolores et quas molestias excepturi sint, obcaecati cupiditate non provident, similique sunt in culpa, qui officia deserunt mollitia </ion-card-content>
   </ion-card>
 </ng-template>
