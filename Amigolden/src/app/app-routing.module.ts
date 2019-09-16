@@ -35,13 +35,41 @@ const routes: Routes = [
     loadChildren: () => import('./list/list.module').then(m => m.ListPageModule)
   },
   { path: RouteNames.login, loadChildren: './pages/login/login.module#LoginPageModule' },
-  { path: RouteNames.users, loadChildren: './pages/users-list/users-list.module#UsersListPageModule', canActivate: [AuthGuard] },
-  { path: RouteNames.userDetail, loadChildren: './pages/user-detail/user-detail.module#UserDetailPageModule' },
-  { path: RouteNames.userEvents, loadChildren: './pages/user-events-list/user-events-list.module#UserEventsListPageModule' },
-  { path: RouteNames.events, loadChildren: './pages/events-list/events-list.module#EventsListPageModule' },
-  { path: RouteNames.eventDetail, loadChildren: './pages/payment/payment.module#PaymentPageModule' },
-  { path: RouteNames.messages, loadChildren: './pages/messages-list/messages-list.module#MessagesListPageModule' },
-  { path: RouteNames.messageDetail, loadChildren: './pages/messages/messages.module#MessagesPageModule' },
+  {
+    path: RouteNames.users,
+    loadChildren: './pages/users-list/users-list.module#UsersListPageModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: RouteNames.userDetail,
+    loadChildren: './pages/user-detail/user-detail.module#UserDetailPageModule',
+    canActivate: [AuthGuard],
+  },
+  {
+    path: RouteNames.userEvents,
+    loadChildren: './pages/user-events-list/user-events-list.module#UserEventsListPageModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: RouteNames.events,
+    loadChildren: './pages/events-list/events-list.module#EventsListPageModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: RouteNames.eventDetail,
+    loadChildren: './pages/payment/payment.module#PaymentPageModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: RouteNames.messages,
+    loadChildren: './pages/messages-list/messages-list.module#MessagesListPageModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: RouteNames.messageDetail,
+    loadChildren: './pages/messages/messages.module#MessagesPageModule',
+    canActivate: [AuthGuard]
+  },
 ];
 
 @NgModule({
