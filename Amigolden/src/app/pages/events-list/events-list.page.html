@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <!-- <app-search (searchFilter)="this.config.filter=$event"></app-search> -->
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <app-list-base [config]="config" [template]="itemTemplate"></app-list-base>
+</ion-content>
+<ng-template #itemTemplate let-entity="entity">
+  <ion-item no-lines> 
+    <ion-avatar slot="start">
+      <img [src]=entity.profilePictureUrl>
+    </ion-avatar>
+    <ion-label>{{ entity.email }}</ion-label>
+    <ion-icon name="arrow-forward" slot="end"></ion-icon>
+  </ion-item>
+  <ion-card>
+    <img [src]=entity.imageSrc />
+    <ion-card-header>
+      <ion-card-subtitle>Destination</ion-card-subtitle>
+      <ion-card-title>{{ displayLocation(entity.locationId) }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content> {{ entity.description }} </ion-card-content>
+  </ion-card>
+</ng-template>
