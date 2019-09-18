@@ -13,5 +13,5 @@ export class User implements IHasId {
     birthday = new Date();
     uniqueIdentifier = '';
     profilePictureId?: number = null;
-    profilePictureUrl?: string = null;
+    profilePictureUrl?: string | ArrayBuffer = null;
 }

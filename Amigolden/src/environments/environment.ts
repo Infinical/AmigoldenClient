@@ -9,7 +9,10 @@ export const environment = {
   apiUrl: 'https://localhost:44377/api',
   authentication: {
     userTokenName: 'UT-8675309'
-  }
+  },
+  data: {
+    currentUser: 'CurrentUser',
+  },
 };
 
 /*

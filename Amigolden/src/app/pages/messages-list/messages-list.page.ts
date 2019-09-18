@@ -3,7 +3,7 @@ import { HubServiceBase } from 'src/app/services/hubs/hub-base.service';
 import { Conversation } from 'src/app/models/conversation';
 import { ListBaseComponent } from 'src/app/components/list-base/list-base.component';
 import moment from 'moment';
-import { ConversationsService } from 'src/app/services/endpoints/conversations-endpoint.service';
+import { ConversationsService } from 'src/app/services/endpoints/conversations.service';
 import { ListConfiguration, SlidingListConfiguration, PagingInfo } from 'src/app/components/list-base/data/list-configuration';
 import { map } from 'rxjs/operators';
 
