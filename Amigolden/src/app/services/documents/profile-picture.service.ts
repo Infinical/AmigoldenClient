@@ -8,7 +8,7 @@ import { User } from 'src/app/models/user';
 @Injectable({
     providedIn: 'root'
 })
-export class ProfilePictureProvider  {
+export class ProfilePictureService  {
   constructor(public http: HttpClient, public fileService: FileService) {
 
   }

@@ -5,3 +5,7 @@ export interface IHasId {
 export interface IHasCreated {
   created: Date;
 }
+
+export interface IEditController {
+  isEditing: boolean;
+}

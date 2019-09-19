@@ -24,12 +24,14 @@ export class FileService {
 
     // TODO: refactor this use: https://brianflove.com/2017/11/02/angular-http-client-blob/
     download(documentId: number): Observable<File> {
-        return this.http.get<File>(`${this.uploadRoute}/${documentId}`,
-        { observe: 'response', responseType: ResponseContentType.Blob })
-            .map((res: Response) => {
-                const filename = this.getFileNameFromHttpResponse(res);
-                return from(this.blobToFile(res.blob(), filename));
-            });
+        // return this.http.get<File>(`${this.uploadRoute}/${documentId}`,
+        // { observe: 'response', responseType: ResponseContentType.Blob })
+        //     .map((res: Response) => {
+        //         const filename = this.getFileNameFromHttpResponse(res);
+        //         return from(this.blobToFile(res.blob(), filename));
+        //     });
+
+        return null;
     }
 
     protected getFileNameFromHttpResponse(httpResponse: Response): string {

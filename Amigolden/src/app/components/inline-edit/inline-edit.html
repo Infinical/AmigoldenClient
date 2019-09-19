@@ -1,0 +1,35 @@
+﻿<div [(ngSwitch)]="componentType">
+  <div *ngSwitchCase="'input'">
+    <ion-item [hidden]="editOptions.isEditing">
+      <ion-note color="primary">{{label}}</ion-note>
+      <ion-note class="inline-edit"> {{value}}&nbsp;</ion-note>
+    </ion-item>
+    <ion-item [hidden]="!editOptions.isEditing">
+      <ion-label stacked color="primary">{{label}}</ion-label>
+      <ion-input [(ngModel)]="value" [required]="required" [type]="type" [name]="value"></ion-input>
+    </ion-item>
+  </div>
+  <div *ngSwitchCase="'textarea'">
+    <ion-item [hidden]="editOptions.isEditing">
+      <ion-note stacked color="primary">{{label}}</ion-note>
+      <ion-note class="inline-edit"> {{value}}&nbsp;</ion-note>
+    </ion-item>
+    <ion-item [hidden]="!editOptions.isEditing">
+      <ion-label stacked color="primary">{{label}}</ion-label>
+      <ion-textarea [(ngModel)]="value" [required]="required" [name]="value"></ion-textarea>
+    </ion-item>
+  </div>
+  <div *ngSwitchCase="'select'">
+    <ion-item [hidden]="editOptions.isEditing">
+      <ion-note stacked color="primary">{{label}}</ion-note>
+      <ion-note class="inline-edit"> {{getOptionNameById(value)}}&nbsp;</ion-note>
+    </ion-item>
+    <ion-item [hidden]="!editOptions.isEditing">
+      <ion-label stacked color="primary">{{label}}</ion-label>
+      <ion-select [(ngModel)]="value" [required]="required" [name]="value">
+        <ion-select-option>Empty</ion-select-option>
+        <ion-select-option *ngFor="let option of additionalData.options" [value]="option.id">{{option.name}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+</div>

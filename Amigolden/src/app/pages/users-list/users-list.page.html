@@ -10,7 +10,7 @@
   <app-list-base [config]="config" [template]="itemTemplate"></app-list-base>
 </ion-content>
 <ng-template #itemTemplate let-entity="entity">
-  <ion-item no-lines> 
+  <ion-item no-lines (click)="navigateToDetail(entity)"> 
     <ion-avatar slot="start">
       <img [src]=entity.profilePictureUrl>
     </ion-avatar>

@@ -1,11 +1,59 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>user-detail</ion-title>
-      <ion-title>{{user.id}}</ion-title>
-      <ion-title>{{user.firstName}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <button [hidden]="!editOptions.canCreate" (click)="onCreate()" ion-button>
+          <ion-icon name="create"></ion-icon>
+          &nbsp;Create
+      </button>      
+      <button [hidden]="!editOptions.canEdit || editOptions.isEditing" (click)="toggleEdit()" ion-button>
+        <ion-icon name="create"></ion-icon>
+        &nbsp;Edit
+      </button>
+      <button [hidden]="!editOptions.isEditing" class="success" (click)="save()" ion-button>
+        <ion-icon name="save"></ion-icon>
+        &nbsp;Save
+      </button>
+      <button [hidden]="!editOptions.isEditing" class="warn" (click)="toggleEdit()" ion-button>
+        <ion-icon name="save"></ion-icon>
+        &nbsp;Cancel
+      </button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
-<ion-content>
-
+<ion-content padding-horizontal class="fix-header no-scroll">
+  <ion-grid>
+    <ion-row>
+      <ion-col text-center>
+        <div class="profile-picture-mask">
+          <span>
+              <img class="img-circle" [src]="entity?.profilePictureUrl" width="250" height="250">
+          </span>
+          <a class="change-picture-link" *ngIf="editOptions.canEdit" (click)="showProfilePictureModal()">Change Profile Picture</a>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-list>
+    <inline-edit [(ngModel)]="entity && entity.firstName"
+                  label="First Name:" [editOptions]="editOptions"
+                  [required]="true" type="text">
+    </inline-edit>
+    <inline-edit [(ngModel)]="entity && entity.lastName"
+                  label="Last Name:" [editOptions]="editOptions"
+                  [required]="true" type="text">
+    </inline-edit>
+    <inline-edit [(ngModel)]="entity && entity.email"
+                  label="Email:" [editOptions]="editOptions"
+                  [required]="true" type="text" padding-bottom>
+    </inline-edit>
+  </ion-list>
+  <ion-list-header>
+    <button (click)="navigateToMessages(entityId)" ion-button full color="secondary">
+      Message
+      <ion-icon name="Chatboxes"></ion-icon>
+    </button>
+  </ion-list-header>
 </ion-content>
