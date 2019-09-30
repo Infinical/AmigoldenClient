@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { IonicStorageModule } from '@ionic/storage';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './services/interceptors/auth-interceptor';
+import { AuthorizationInterceptor } from './services/interceptors/authorization-Interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +29,11 @@ import { AuthInterceptor } from './services/interceptors/auth-interceptor';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthorizationInterceptor,
       multi: true,
     },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
