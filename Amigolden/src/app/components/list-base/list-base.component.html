@@ -10,7 +10,7 @@
     </ion-refresher-content>
 </ion-refresher>
 <ion-infinite-scroll threshold="10%" *ngIf="!config?.isReverse && !isPagingComplete" 
-  (ionInfinite)="loadData($event)" position="bottom">
+  (ionInfinite)="loadData($event)" [position]="config?.isReverse ? 'top' : 'bottom'"> 
     <ion-infinite-scroll-content 
       loadingSpinner="bubbles"
       loadingText="Loading more data">

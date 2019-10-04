@@ -51,6 +51,7 @@ export class UserDetailPage extends DetailPageBase<User> implements OnInit {
       this.profilePictureProvider.setProfilePictureUrl(this.entity);
   }
 
+  // TODO: fix the profile picture modal
   showProfilePictureModal() {
       // const modal = this.modalCtrl.create(ProfilePictureUploadComponent, {
       //      fileProvider: this.fileService,

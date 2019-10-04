@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <app-list-base [config]="config" [template]="itemTemplate"></app-list-base>
+  <app-list-base #pageListBase [config]="config" [template]="itemTemplate"></app-list-base>
 </ion-content>
 <ng-template #itemTemplate let-entity="entity">
   <ion-item no-lines class="conversation-item">
