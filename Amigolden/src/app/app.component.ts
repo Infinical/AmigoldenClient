@@ -93,7 +93,7 @@ export class AppComponent {
                 console.warn('restoring navigation id:', event.restoredState.navigationId);
               }
               console.groupEnd();
-            });
+          });
   }
 
   initializeApp() {

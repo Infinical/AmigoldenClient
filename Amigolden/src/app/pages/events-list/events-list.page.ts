@@ -6,7 +6,10 @@ import { SearchSettings } from 'src/app/components/search/data/search-settings';
 import { ODataDynamicFilterBuilder, ODataPropertyPath } from 'src/app/models/odata/filter/ts-odata-dynamic-filter';
 import { RouteNames } from 'src/app/app-routing.module';
 import { Meeting } from 'src/app/models/meetings';
+import { Location } from 'src/app/models/location';
 import { EventsService } from 'src/app/services/endpoints/events.service';
+import { LocationsService } from 'src/app/services/endpoints/locations.service';
+
 
 @Component({
   selector: 'app-events-list',
@@ -14,6 +17,9 @@ import { EventsService } from 'src/app/services/endpoints/events.service';
   styleUrls: ['./events-list.page.scss'],
 })
 export class EventsListPage implements OnInit {
+
+  locationId = 0;
+  locations: Location[];
 
   public config = new ListConfiguration<Meeting>(
     (pagingInfo: PagingInfo) =>
@@ -24,13 +30,22 @@ export class EventsListPage implements OnInit {
     }
   );
 
-  constructor(private router: Router, protected eventService: EventsService) { }
+  constructor(private router: Router, protected locationService: LocationsService, protected eventService: EventsService) {
+    this.loadLocations();
+  }
 
   ngOnInit() {
   }
 
-  public displayLocation(locationId: number) {
-    return locationId;
+  loadLocations() {
+    this.locationService.getList().subscribe(t => {
+      this.locations = t.items;
+    });
+  }
+
+  public displayLocation(meeting: Meeting) {
+    const location = this.locations.find(loc => loc.id === meeting.locationId);
+    return `${location.name} on ${meeting.meetTime.toLocaleDateString()}/ at ${meeting.meetTime.toLocaleTimeString()}`;
   }
 
   // defaultSearchFilter(value: string): string {
@@ -56,4 +71,3 @@ export class EventsListPage implements OnInit {
     this.router.navigate([RouteNames.eventDetail, entity.id], navigationExtras);
   }
 }
-
