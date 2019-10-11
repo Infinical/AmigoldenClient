@@ -12,6 +12,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './services/interceptors/auth-interceptor';
 import { AuthorizationInterceptor } from './services/interceptors/authorization-Interceptor';
+import { ModelBinderInterceptor } from './services/interceptors/model-binder-interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,6 +30,11 @@ import { AuthorizationInterceptor } from './services/interceptors/authorization-
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ModelBinderInterceptor,
       multi: true,
     },
     {

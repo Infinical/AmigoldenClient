@@ -55,7 +55,7 @@ export class EventDetailPage implements OnInit {
           }
 
           // TODO: should we navigate to meeting or should we just change the view state of the current page
-          this.navigateToMeeting(this.meetingId);
+          // this.navigateToMeeting(this.meetingId);
       });
     });
   }

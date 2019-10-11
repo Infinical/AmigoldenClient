@@ -44,6 +44,9 @@ export class EventsListPage implements OnInit {
   }
 
   public displayLocation(meeting: Meeting) {
+    if (!this.locations) {
+      return;
+    }
     const location = this.locations.find(loc => loc.id === meeting.locationId);
     return `${location.name} on ${meeting.meetTime.toLocaleDateString()}/ at ${meeting.meetTime.toLocaleTimeString()}`;
   }
