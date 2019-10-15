@@ -13,6 +13,10 @@ export const environment = {
   data: {
     currentUser: 'CurrentUser',
   },
+  eventCosts: {
+    platform: 2500,
+    direct: 2000
+  },
 };
 
 /*

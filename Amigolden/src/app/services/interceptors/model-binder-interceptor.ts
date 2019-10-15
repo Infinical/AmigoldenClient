@@ -9,8 +9,6 @@ import { isString } from 'util';
 export class ModelBinderInterceptor implements HttpInterceptor {
 
     // regex of ISO 8601 Date.
-    // it only catches full dates
-    // (Year, Date and Time, optional ms, Timezone offset
     DATE_TIME_TIMEZONE_REGEXP =
     /^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(.[0-9]+)?(Z)?$/;
 
@@ -43,7 +41,7 @@ export class ModelBinderInterceptor implements HttpInterceptor {
 
             if (isString(value) &&  (this.DATE_TIME_TIMEZONE_REGEXP.test(value))) {
                 date = new Date(value);
-                // the parsing above may fail, in which case we use isNaN to check if the date is valid, otherwise leave the data as is.
+                // the parsing above may fail, in which case we use isNaN to check if the date is valid
                 if (isNaN(date.getTime())) {
                     return;
                 }
@@ -55,5 +53,3 @@ export class ModelBinderInterceptor implements HttpInterceptor {
         return obj;
     }
 }
-
-

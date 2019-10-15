@@ -13,11 +13,15 @@ export class RouteNames {
   public static readonly events = 'events';
   public static readonly users = 'users';
 
-  public static readonly messageDetail = RouteNames.messages + '/' + RouteParams.id;
-  public static readonly eventDetail = RouteNames.events + '/' + RouteParams.id;
-  public static readonly userDetail = RouteNames.users + '/' + RouteParams.id;
+  public static readonly messageDetail = RouteNames.messages + '/';
+  public static readonly eventDetail = RouteNames.events + '/';
+  public static readonly userDetail = RouteNames.users + '/';
 
-  public static readonly userEvents = RouteNames.userDetail + '/' + RouteNames.events;
+  public static readonly messageDetailFormat = RouteNames.messageDetail + RouteParams.id;
+  public static readonly eventDetailFormat = RouteNames.eventDetail + RouteParams.id;
+  public static readonly userDetailFormat = RouteNames.userDetail + RouteParams.id;
+
+  public static readonly userEvents = RouteNames.userDetailFormat + '/' + RouteNames.events;
 }
 
 const routes: Routes = [
@@ -41,7 +45,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: RouteNames.userDetail,
+    path: RouteNames.userDetailFormat,
     loadChildren: './pages/user-detail/user-detail.module#UserDetailPageModule',
     canActivate: [AuthGuard],
   },
@@ -56,8 +60,8 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: RouteNames.eventDetail,
-    loadChildren: './pages/payment/payment.module#PaymentPageModule',
+    path: RouteNames.eventDetailFormat,
+    loadChildren: './pages/event-detail/event-detail.module#EventDetailPageModule',
     canActivate: [AuthGuard]
   },
   {
@@ -66,7 +70,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: RouteNames.messageDetail,
+    path: RouteNames.messageDetailFormat,
     loadChildren: './pages/messages/messages.module#MessagesPageModule',
     canActivate: [AuthGuard]
   },

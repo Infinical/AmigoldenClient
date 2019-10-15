@@ -26,6 +26,8 @@
       <ion-card-subtitle>Destination</ion-card-subtitle>
       <ion-card-title>{{ displayLocation(entity) }}</ion-card-title>
     </ion-card-header>
-    <ion-card-content> {{ entity.description }} vero eos et accusamus et iusto odio dignissimos ducimus, qui blanditiis praesentium voluptatum deleniti atque corrupti, quos dolores et quas molestias excepturi sint, obcaecati cupiditate non provident, similique sunt in culpa, qui officia deserunt mollitia </ion-card-content>
+    <ion-card-content> {{ entity.description }} 
+      <ion-button (click)="navigateToDetail(entity)">Learn More...</ion-button>
+    </ion-card-content>
   </ion-card>
 </ng-template>

@@ -5,7 +5,6 @@ export class ListConfigurationOptionalArgs {
     isSliding?: boolean;
     isReverse?: boolean;
     isSinglePage?: boolean;
-    onItemClick: (entity: any) => void;
     defaultPagingInfo?: PagingInfo;
     slidingListConfig?: SlidingListConfiguration;
     applyODataFilter?: (searchTerm: string) => string;
@@ -45,7 +44,6 @@ export class ListConfiguration<T> extends ListConfigurationOptionalArgs {
         isSliding = false,
         isReverse = false,
         isSinglePage = false,
-        onItemClick = (entity: any) => {},
         defaultPagingInfo = new PagingInfo(),
         slidingListConfig = new SlidingListConfiguration(),
         applyODataFilter,
@@ -56,7 +54,6 @@ export class ListConfiguration<T> extends ListConfigurationOptionalArgs {
         this.isSliding = isSliding;
         this.isReverse = isReverse;
         this.isSinglePage = isSinglePage;
-        this.onItemClick = onItemClick;
         this.defaultPagingInfo = defaultPagingInfo;
         this.slidingListConfig = slidingListConfig;
         this.applyODataFilter = applyODataFilter;
