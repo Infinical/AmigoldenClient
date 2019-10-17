@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DestinationTransactionOptions, TransactionOptions, CardInfo } from 'src/app/models/transactions-info';

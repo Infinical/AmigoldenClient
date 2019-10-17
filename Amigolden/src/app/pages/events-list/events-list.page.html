@@ -16,7 +16,16 @@
       </ion-segment-button>
     </ion-segment>
   <app-list-base *ngIf="viewController.value == 'list'" [config]="config" [template]="itemTemplate"></app-list-base>
-  <div *ngIf="viewController.value == 'map'">Map View </div>
+  <div *ngIf="viewController.value == 'map'">
+    <!-- <agm-map [latitude]="position.latitude" [longitude]="position.longitude" [zoom]="zoom">
+      <agm-marker *ngFor="let loc of locations; let i = index" (markerClick)="clickedMarker(loc)" 
+                    [latitude]="loc.latitude" [longitude]="loc.longitude">
+        <agm-info-window>
+          <strong>{{loc.name}}</strong>
+        </agm-info-window>
+      </agm-marker>
+    </agm-map> -->
+  </div>
 </ion-content>
 <ng-template #itemTemplate let-entity="entity">
   <ion-card>

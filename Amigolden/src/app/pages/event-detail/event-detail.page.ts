@@ -4,6 +4,9 @@ import { StripePaymentsService } from 'src/app/services/endpoints/stripe-payment
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventsService } from 'src/app/services/endpoints/events.service';
+import { Meeting } from 'src/app/models/meetings';
+import { Identity } from 'src/app/services/identity/identity.service';
+import { EditOptions } from 'src/app/models/edit-options';
 
 @Component({
   selector: 'app-event-detail',
@@ -15,15 +18,26 @@ export class EventDetailPage implements OnInit {
 
   hasExistingCard = false;
   platformAmount = environment.eventCosts.platform;
-  meetingId = 0;
+  entityId: number = null;
+  entity: Meeting;
+
+  editOptions: EditOptions = {
+    isEditing: false,
+    canEdit: false,
+    // TODO: use this.save() when once inherited from DetailPageBase
+    save: () => {}
+  };
 
   constructor(protected stripePayments: StripePaymentsService, protected eventService: EventsService,
-              protected route: ActivatedRoute, protected router: Router) {
+              protected route: ActivatedRoute, protected router: Router, protected identity: Identity) {
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
-        this.meetingId = this.router.getCurrentNavigation().extras.state.entity.id;
+        this.entity = this.router.getCurrentNavigation().extras.state.entity;
+        this.entityId = this.entity.id;
       }
     });
+
+    this.identity.getCurrentUser().then((u) => { this.editOptions.canEdit = this.entityId === u.id; });
   }
 
   ngOnInit() {
@@ -46,10 +60,10 @@ export class EventDetailPage implements OnInit {
 
     // TODO: the amount should not be hardcoded
     transactionOptions.amountInCents = this.platformAmount;
-    transactionOptions.meetingId = this.meetingId;
+    transactionOptions.meetingId = this.entityId;
     // TODO: Don't rely on the server to ignore duplicate transactions
     this.stripePayments.authorizeTransaction(transactionOptions).subscribe(t => {
-      this.eventService.enroll(this.meetingId).subscribe(r => {
+      this.eventService.enroll(this.entityId).subscribe(r => {
           if (!r) {
             console.log('User is already enrolled');
           }

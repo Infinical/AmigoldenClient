@@ -6,29 +6,25 @@
     <ion-title>Select a location</ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-content padding>
-  <agm-map [latitude]="position.latitude" [longitude]="position.longitude" [zoom]="zoom">
-    <agm-marker *ngFor="let loc of locations; let i = index" (markerClick)="clickedMarker(loc)" 
-                 [latitude]="loc.latitude" [longitude]="loc.longitude">
-      <agm-info-window>
-        <strong>{{loc.name}}</strong>
-      </agm-info-window>
-    </agm-marker>
-  </agm-map>
-  <ion-item>
-    <ion-label>Location</ion-label>
-    <ion-select [(ngModel)]="locationId" (ionChange)="onLocationChange($event)">
-      <ion-option *ngFor="let loc of locations;" [value]="loc.id">{{loc.name}}</ion-option>
-    </ion-select>
-  </ion-item>
-  <ion-item *ngIf="meetings">
+  <!-- <ion-item *ngIf="meetings">
     <ion-label>Time</ion-label>
     <ion-select [(ngModel)]="meetingId">
       <ion-option *ngFor="let meet of meetings;" [value]="meet.id">{{getTime(meet.meetTime)}}</ion-option>
     </ion-select>
-  </ion-item>
-  <ion-item *ngIf="meetingId">
+  </ion-item> -->
+    <ion-list>
+        <inline-edit [(ngModel)]="entity && entity.name"
+                      label="Event Name:" [editOptions]="editOptions"
+                      [required]="true" type="text">
+        </inline-edit>
+        <inline-edit [(ngModel)]="entity && entity.description"
+                      label="Description:" [editOptions]="editOptions"
+                      [required]="true" type="text">
+        </inline-edit>
+    </ion-list>    
+
+  <ion-item *ngIf="entityId">
       <stripe-card (cardToken)="onTokenReceived($event)" [amount]="platformAmount" [hasExistingCard]="hasExistingCard">
       </stripe-card>
       <button *ngIf="hasExistingCard" ion-button block (click)="enroll()">Enroll</button>
