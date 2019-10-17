@@ -13,6 +13,8 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './services/interceptors/auth-interceptor';
 import { AuthorizationInterceptor } from './services/interceptors/authorization-Interceptor';
 import { ModelBinderInterceptor } from './services/interceptors/model-binder-interceptor';
+import { environment } from 'src/environments/environment';
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,6 +24,9 @@ import { ModelBinderInterceptor } from './services/interceptors/model-binder-int
     IonicModule.forRoot(),
     AppRoutingModule,
     IonicStorageModule.forRoot(),
+    AgmCoreModule.forRoot({
+      apiKey: environment.googleMaps.apiKey
+    }),
     HttpClientModule
   ],
   providers: [

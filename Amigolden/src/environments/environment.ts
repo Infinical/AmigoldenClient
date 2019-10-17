@@ -10,6 +10,9 @@ export const environment = {
   authentication: {
     userTokenName: 'UT-8675309'
   },
+  googleMaps: {
+    apiKey: 'AIzaSyCXBaTUeO21FjzLJnghunS7CkDnLcLnYm4'
+  },
   data: {
     currentUser: 'CurrentUser',
   },
