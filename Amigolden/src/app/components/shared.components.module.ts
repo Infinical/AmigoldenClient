@@ -6,12 +6,16 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { InlineEditComponent } from './inline-edit/inline-edit';
 import { StripeCardComponent } from './stripe-card/stripe-card.component';
+import { AgmCoreModule } from '@agm/core';
+import { MapComponent } from './map/map.component';
 
 @NgModule({
     imports: [CommonModule,
         FormsModule,
-        IonicModule],
-    declarations: [ListBaseComponent, SearchComponent, InlineEditComponent, StripeCardComponent],
-    exports: [ListBaseComponent, SearchComponent, InlineEditComponent, StripeCardComponent]
+        IonicModule,
+        AgmCoreModule
+    ],
+    declarations: [ListBaseComponent, SearchComponent, InlineEditComponent, StripeCardComponent, MapComponent],
+    exports: [ListBaseComponent, SearchComponent, InlineEditComponent, StripeCardComponent, MapComponent]
 })
 export class SharedComponentsModule {}

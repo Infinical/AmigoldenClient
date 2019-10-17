@@ -25,7 +25,8 @@ import { AgmCoreModule } from '@agm/core';
     AppRoutingModule,
     IonicStorageModule.forRoot(),
     AgmCoreModule.forRoot({
-      apiKey: environment.googleMaps.apiKey
+      apiKey: environment.googleMaps.apiKey,
+      libraries: ['places']
     }),
     HttpClientModule
   ],
