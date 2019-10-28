@@ -47,6 +47,7 @@ export class MapComponent implements OnInit {
           // set latitude, longitude and zoom
           this.latitude = place.geometry.location.lat();
           this.longitude = place.geometry.location.lng();
+          this.address = place.formatted_address;
           this.zoom = 12;
         });
       });

@@ -20,7 +20,6 @@ export class UsersListPage implements OnInit {
       this.userService.getDynamicList(this.config.filter, pagingInfo.pageSize,
       pagingInfo.pageNumber),
     {
-      onItemClick: (entity) => this.navigateToDetail(entity),
       applyODataFilter: (searchTerm) => this.defaultSearchFilter(searchTerm)
     }
   );

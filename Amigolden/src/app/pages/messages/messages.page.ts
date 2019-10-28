@@ -45,7 +45,6 @@ export class MessagesPage implements OnInit {
             return message;
         })),
       {
-        onItemClick: (entity) => {},
         isReverse: true
       }
     );

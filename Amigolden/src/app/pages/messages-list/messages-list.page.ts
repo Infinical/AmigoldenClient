@@ -20,7 +20,6 @@ export class MessagesListPage implements OnInit {
   config = new ListConfiguration<Conversation>((pagingInfo: PagingInfo) =>
     this.baseProvider.getList(pagingInfo.pageSize, pagingInfo.pageNumber).pipe(map(t => t.items)),
     {
-      onItemClick: (entity) => this.navigateToDetail(entity),
       slidingListConfig: new SlidingListConfiguration((entityId) =>  this.baseProvider.unsubscribe(entityId))
     });
 
