@@ -7,6 +7,8 @@ import { EventsService } from 'src/app/services/endpoints/events.service';
 import { Meeting } from 'src/app/models/meetings';
 import { Identity } from 'src/app/services/identity/identity.service';
 import { EditOptions } from 'src/app/models/edit-options';
+import { ModalController } from '@ionic/angular';
+import { MapComponent } from 'src/app/components/map/map.component';
 
 @Component({
   selector: 'app-event-detail',
@@ -29,7 +31,8 @@ export class EventDetailPage implements OnInit {
   };
 
   constructor(protected stripePayments: StripePaymentsService, protected eventService: EventsService,
-              protected route: ActivatedRoute, protected router: Router, protected identity: Identity) {
+              protected route: ActivatedRoute, protected router: Router, protected identity: Identity,
+              protected  modalController: ModalController) {
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.entity = this.router.getCurrentNavigation().extras.state.entity;
@@ -53,6 +56,17 @@ export class EventDetailPage implements OnInit {
     cardInfo.expirationYear = stripeTokenResponse.card.exp_year;
     cardInfo.expirationMonth = stripeTokenResponse.card.exp_month;
     this.stripePayments.createCustomer(cardInfo).subscribe(_ => this.hasExistingCard = true);
+  }
+
+  async pickALocationModal() {
+    const modal = await this.modalController.create({
+      component: MapComponent
+    });
+    return await modal.present();
+  }
+
+  closeModal() {
+    this.modalController.dismiss();
   }
 
   enroll() {

@@ -4,4 +4,5 @@ export class Location implements IHasId {
     latitude = 0.0;
     longitude = 0.0;
     name = '';
+    formattedAddress = '';
 }

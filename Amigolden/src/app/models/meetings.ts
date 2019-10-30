@@ -8,4 +8,5 @@ export class Meeting implements IHasId {
     imageId: number = null;
     description = '';
     name = '';
+    ownerId = 0;
 }

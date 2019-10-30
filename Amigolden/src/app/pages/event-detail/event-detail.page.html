@@ -22,6 +22,7 @@
                       label="Description:" [editOptions]="editOptions"
                       [required]="true" type="text">
         </inline-edit>
+        <ion-button expand="full" (click)="pickALocationModal()">Set Location</ion-button>
     </ion-list>    
 
   <ion-item *ngIf="entityId">

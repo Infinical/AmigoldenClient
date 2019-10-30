@@ -1,3 +1,13 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+        <ion-button color="dark" (click)="closeModal()">
+            <ion-icon name="arrow-back"></ion-icon>
+          </ion-button>
+    </ion-buttons>
+   <ion-title>Pick a location</ion-title> 
+  </ion-toolbar>
+</ion-header>
 <div>
   <div class="form-group">
       <label>Enter address</label>
@@ -7,7 +17,7 @@
   <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
       <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
         (dragEnd)="markerDragEnd($event)"></agm-marker>
-    </agm-map>
+  </agm-map>
 
   <h5>Address: {{address}}</h5>
   <div>Latitude: {{latitude}}</div>

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-map',
@@ -20,9 +21,13 @@ export class MapComponent implements OnInit {
 
   constructor(
     private mapsAPILoader: MapsAPILoader,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    protected modalController: ModalController
   ) { }
 
+  closeModal() {
+    this.modalController.dismiss();
+  }
 
   ngOnInit() {
     // load Places Autocomplete

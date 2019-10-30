@@ -15,6 +15,7 @@ import { MapComponent } from './map/map.component';
         IonicModule,
         AgmCoreModule
     ],
+    entryComponents: [MapComponent],
     declarations: [ListBaseComponent, SearchComponent, InlineEditComponent, StripeCardComponent, MapComponent],
     exports: [ListBaseComponent, SearchComponent, InlineEditComponent, StripeCardComponent, MapComponent]
 })
