@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone, Input, Output, EventEmitter } from '@angular/core';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
 import { ModalController } from '@ionic/angular';
-import { IEditController } from 'src/app/models/interfaces/interfaces';
 import { Location } from 'src/app/models/location';
 import { MapOptions } from 'src/app/models/map/map-options';
-import { AnyARecord } from 'dns';
 
 @Component({
   selector: 'app-map',
@@ -13,9 +11,10 @@ import { AnyARecord } from 'dns';
 })
 export class MapComponent implements OnInit {
 
-  @Output() locationSelected = new EventEmitter<{key: Location, value: any}>();
+  @Output() locationSelected = new EventEmitter<any>();
   @Input() options: MapOptions<any>;
 
+  selectedLocation: Location;
   latitude: number;
   longitude: number;
   zoom: number;
@@ -44,6 +43,17 @@ export class MapComponent implements OnInit {
   clickedMarker(location: Location) {
   }
 
+  create() {
+    this.isCreating = true;
+  }
+
+  save() {
+    this.locationSelected.emit({ key: this.selectedLocation });
+  }
+
+  cancel() {
+  }
+
   ngOnInit() {
     // load Places Autocomplete
     this.mapsAPILoader.load().then(() => {
@@ -63,6 +73,12 @@ export class MapComponent implements OnInit {
           if (place.geometry === undefined || place.geometry === null) {
             return;
           }
+
+          this.selectedLocation = new Location();
+          this.selectedLocation.latitude = place.geometry.location.lat();
+          this.selectedLocation.longitude = place.geometry.location.lng();
+          this.selectedLocation.formattedAddress = place.formatted_address;
+          // TODO: add a way to save the name
 
           // set latitude, longitude and zoom
           this.latitude = place.geometry.location.lat();

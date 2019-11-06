@@ -2,8 +2,8 @@
   <ion-toolbar>
     <ion-buttons slot="start">
         <ion-button color="dark" (click)="closeModal()">
-            <ion-icon name="arrow-back"></ion-icon>
-          </ion-button>
+          <ion-icon name="arrow-back"></ion-icon>
+        </ion-button>
     </ion-buttons>
    <ion-title>Pick a location</ion-title> 
   </ion-toolbar>
@@ -13,7 +13,9 @@
       <label>Enter address</label>
       <input type="text" class="form-control" (keydown.enter)="$event.preventDefault()" placeholder="Search Nearest Location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
   </div>
-  
+  <ion-button *ngIf="!isCreating && options.canCreate" (click)="create()"> Create </ion-button>
+  <ion-button *ngIf="isCreating" (click)="save()"> Select </ion-button>
+  <ion-button *ngIf="isCreating" (click)="cancel()"> Cancel </ion-button>
   <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
       <ng-container *ngIf="!isCreating">
         <agm-marker color="Blue" *ngFor="let locationPair of options.locationEntityMap" (markerClick)="clickedMarker(locationPair.key)" 
