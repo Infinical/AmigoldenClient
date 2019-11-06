@@ -9,6 +9,7 @@ import { Meeting } from 'src/app/models/meetings';
 import { Location } from 'src/app/models/location';
 import { EventsService } from 'src/app/services/endpoints/events.service';
 import { LocationsService } from 'src/app/services/endpoints/locations.service';
+import { MapOptions } from 'src/app/models/map/map-options';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class EventsListPage implements OnInit {
 
   locationId = 0;
   locations: Location[];
+  mapOptions = new MapOptions<Meeting>('View Event');
 
   public config = new ListConfiguration<Meeting>(
     (pagingInfo: PagingInfo) =>
@@ -39,6 +41,12 @@ export class EventsListPage implements OnInit {
   loadLocations() {
     this.locationService.getList().subscribe(t => {
       this.locations = t.items;
+      // TODO: This needs to be loaded by the map this is just used as a test
+      this.eventService.getDynamicList(this.config.filter, 50, 1).subscribe(e => {
+        this.mapOptions.locationEntityMap = e.map(m =>
+           ({ key: this.locations.find(l => l.id === m.id), value: m })
+        );
+      });
     });
   }
 

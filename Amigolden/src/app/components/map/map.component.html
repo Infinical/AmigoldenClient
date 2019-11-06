@@ -15,8 +15,20 @@
   </div>
   
   <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
-      <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
-        (dragEnd)="markerDragEnd($event)"></agm-marker>
+      <ng-container *ngIf="!isCreating">
+        <agm-marker color="Blue" *ngFor="let locationPair of options.locationEntityMap" (markerClick)="clickedMarker(locationPair.key)" 
+          [latitude]="locationPair?.key?.latitude" [longitude]="locationPair?.key?.longitude">
+          
+          <agm-info-window>
+              <ion-label>Location: </ion-label>
+              <ion-label>{{locationPair?.key?.name}} </ion-label>
+              <ion-button (click)="selectLocation(locationPair)">{{options.selectLabel}}</ion-button>
+          </agm-info-window>
+        </agm-marker>
+    </ng-container>
+      <agm-marker *ngIf="isCreating" [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
+        (dragEnd)="markerDragEnd($event)">
+      </agm-marker>
   </agm-map>
 
   <h5>Address: {{address}}</h5>

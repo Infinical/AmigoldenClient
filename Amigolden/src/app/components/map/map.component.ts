@@ -1,6 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, Input, Output, EventEmitter } from '@angular/core';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
 import { ModalController } from '@ionic/angular';
+import { IEditController } from 'src/app/models/interfaces/interfaces';
+import { Location } from 'src/app/models/location';
+import { MapOptions } from 'src/app/models/map/map-options';
+import { AnyARecord } from 'dns';
 
 @Component({
   selector: 'app-map',
@@ -9,11 +13,15 @@ import { ModalController } from '@ionic/angular';
 })
 export class MapComponent implements OnInit {
 
+  @Output() locationSelected = new EventEmitter<{key: Location, value: any}>();
+  @Input() options: MapOptions<any>;
+
   latitude: number;
   longitude: number;
   zoom: number;
   address: string;
   private geoCoder;
+  isCreating = false;
 
   @ViewChild('search', {static: false })
   public searchElementRef: ElementRef;
@@ -27,6 +35,13 @@ export class MapComponent implements OnInit {
 
   closeModal() {
     this.modalController.dismiss();
+  }
+
+  selectLocation(locationPair: {key: Location, value: any}) {
+    this.locationSelected.emit(locationPair);
+  }
+
+  clickedMarker(location: Location) {
   }
 
   ngOnInit() {
