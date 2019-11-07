@@ -12,7 +12,17 @@ import { MapOptions } from 'src/app/models/map/map-options';
 export class MapComponent implements OnInit {
 
   @Output() locationSelected = new EventEmitter<any>();
-  @Input() options: MapOptions<any>;
+
+  // tslint:disable-next-line:variable-name
+  _options: MapOptions<any>;
+  @Input() set options(options: MapOptions<any>) {
+    this._options = options;
+    this.isCreating = options.startInCreateMode;
+  }
+
+  get options() {
+    return this._options;
+  }
 
   selectedLocation: Location;
   latitude: number;

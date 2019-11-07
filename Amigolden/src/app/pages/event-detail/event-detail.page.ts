@@ -9,6 +9,7 @@ import { Identity } from 'src/app/services/identity/identity.service';
 import { EditOptions } from 'src/app/models/edit-options';
 import { ModalController } from '@ionic/angular';
 import { MapComponent } from 'src/app/components/map/map.component';
+import { MapOptions } from 'src/app/models/map/map-options';
 
 @Component({
   selector: 'app-event-detail',
@@ -60,7 +61,10 @@ export class EventDetailPage implements OnInit {
 
   async pickALocationModal() {
     const modal = await this.modalController.create({
-      component: MapComponent
+      component: MapComponent,
+       componentProps: { // <----------
+        options: new MapOptions<Location>('Select', true, true)
+      }
     });
     return await modal.present();
   }
