@@ -3,6 +3,7 @@ import { Meeting } from 'src/app/models/meetings';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ApiResourceBaseService } from '../api-resource-base/api-resource-base.service';
+import { Location } from 'src/app/models/location';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,14 @@ export class EventsService extends ApiResourceBaseService<Meeting>  {
 
         const url = `${this.apiUrl}/${this.route}/user-meetings/`;
 
+        return this.http.get<Meeting[]>(url, { headers});
+    }
+
+    getMeetingWithinRange(lat: number, lon: number, withinMiles: number) {
+        const headers = new HttpHeaders();
+        headers.append('Content-Type', 'application/json');
+
+        const url = `${this.apiUrl}/${this.route}/user-meetings?lat=${lat}&lon=${lon}&withinMiles=withinMiles${withinMiles}`;
         return this.http.get<Meeting[]>(url, { headers});
     }
 }

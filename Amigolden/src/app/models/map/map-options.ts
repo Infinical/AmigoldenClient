@@ -8,7 +8,7 @@ export class MapOptions<T> {
         this.startInCreateMode = startInCreateMode;
     }
 
-    locationEntityMap: {key: Location, value: T}[] = new Array<{key: Location, value: T}>();
+    locationEntityMap: {location: Location, data: T}[] = new Array<{location: Location, data: T}>();
     selectLabel = 'Select';
     canCreate = false;
     startInCreateMode = false;

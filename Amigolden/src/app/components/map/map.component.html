@@ -18,12 +18,12 @@
   <ion-button *ngIf="isCreating" (click)="cancel()"> Cancel </ion-button>
   <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
       <ng-container *ngIf="!isCreating">
-        <agm-marker color="Blue" *ngFor="let locationPair of options.locationEntityMap" (markerClick)="clickedMarker(locationPair.key)" 
-          [latitude]="locationPair?.key?.latitude" [longitude]="locationPair?.key?.longitude">
+        <agm-marker color="Blue" *ngFor="let locationPair of options.locationEntityMap" (markerClick)="clickedMarker(locationPair)" 
+          [latitude]="locationPair?.location?.latitude" [longitude]="locationPair?.location?.longitude">
           
           <agm-info-window>
               <ion-label>Location: </ion-label>
-              <ion-label>{{locationPair?.key?.name}} </ion-label>
+              <ion-label>{{locationPair?.location?.name}} </ion-label>
               <ion-button (click)="selectLocation(locationPair)">{{options.selectLabel}}</ion-button>
           </agm-info-window>
         </agm-marker>

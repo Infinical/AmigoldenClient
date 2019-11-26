@@ -46,11 +46,11 @@ export class MapComponent implements OnInit {
     this.modalController.dismiss();
   }
 
-  selectLocation(locationPair: {key: Location, value: any}) {
+  selectLocation(locationPair: {location: Location, data: any}) {
     this.locationSelected.emit(locationPair);
   }
 
-  clickedMarker(location: Location) {
+  clickedMarker(locationPair: {location: Location, data: any}) {
   }
 
   create() {
@@ -58,7 +58,7 @@ export class MapComponent implements OnInit {
   }
 
   save() {
-    this.locationSelected.emit({ key: this.selectedLocation });
+    this.locationSelected.emit({ location: this.selectedLocation });
   }
 
   cancel() {

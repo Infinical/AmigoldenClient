@@ -20,7 +20,7 @@
       <p>
           map view works        
       </p>
-      <app-map [options]="mapOptions" (locationSelected)="navigateToDetail($event.value)" ></app-map>
+      <app-map [options]="mapOptions" (locationSelected)="navigateToDetail($event.data)" ></app-map>
   </div>
 </ion-content>
 <ng-template #itemTemplate let-entity="entity">
