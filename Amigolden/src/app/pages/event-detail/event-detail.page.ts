@@ -10,6 +10,7 @@ import { EditOptions } from 'src/app/models/edit-options';
 import { ModalController } from '@ionic/angular';
 import { MapComponent } from 'src/app/components/map/map.component';
 import { MapOptions } from 'src/app/models/map/map-options';
+import { Location } from 'src/app/models/location';
 
 @Component({
   selector: 'app-event-detail',
@@ -63,7 +64,7 @@ export class EventDetailPage implements OnInit {
     const modal = await this.modalController.create({
       component: MapComponent,
        componentProps: { // <----------
-        options: new MapOptions<Location>('Select', true, true)
+        options: new MapOptions<Location>('Select', true, true, (lat, lon) => null, x => x)
       }
     });
     return await modal.present();

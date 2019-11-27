@@ -20,8 +20,10 @@ import { MapOptions } from 'src/app/models/map/map-options';
 export class EventsListPage implements OnInit {
 
   locationId = 0;
-  locations: Location[];
-  mapOptions = new MapOptions<Meeting>('View Event');
+  locations: Location[] = [];
+  mapOptions = new MapOptions<Meeting>('View Event', false, false,
+    (lat, lon, dist) => this.eventService.getMeetingWithinRange(lat, lon, dist),
+    x => this.resolveLocation(x));
 
   public config = new ListConfiguration<Meeting>(
     (pagingInfo: PagingInfo) =>
@@ -36,6 +38,10 @@ export class EventsListPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  resolveLocation(meeting: Meeting): Location {
+    return this.locations.find(l => l.id === meeting.locationId);
   }
 
   loadLocations() {

@@ -3,6 +3,7 @@ import { MapsAPILoader, MouseEvent } from '@agm/core';
 import { ModalController } from '@ionic/angular';
 import { Location } from 'src/app/models/location';
 import { MapOptions } from 'src/app/models/map/map-options';
+import * as _ from 'underscore';
 
 @Component({
   selector: 'app-map',
@@ -15,22 +16,24 @@ export class MapComponent implements OnInit {
 
   // tslint:disable-next-line:variable-name
   _options: MapOptions<any>;
-  @Input() set options(options: MapOptions<any>) {
-    this._options = options;
-    this.isCreating = options.startInCreateMode;
-  }
-
   get options() {
     return this._options;
   }
+  @Input() set options(options: MapOptions<any>) {
+    this._options = options;
+    this.isCreating = options.startInCreateMode;
+    this.resolveMapData();
+  }
 
   selectedLocation: Location;
-  latitude: number;
-  longitude: number;
+  withinMiles = 10;
+  latitude = 40.7362942;
+  longitude = -73.9921495;
   zoom: number;
   address: string;
-  private geoCoder;
   isCreating = false;
+  locationEntitiesMap = new Array<{location: Location, data: Array<any>}>();
+  private geoCoder;
 
   @ViewChild('search', {static: false })
   public searchElementRef: ElementRef;
@@ -41,6 +44,24 @@ export class MapComponent implements OnInit {
     private ngZone: NgZone,
     protected modalController: ModalController
   ) { }
+
+  resolveMapData() {
+    this.options.getData(this.latitude, this.longitude, this.withinMiles).subscribe(entities => {
+      const entitiesMap = entities.map(e => ({ location: this.options.locationResolver(e), data: e}));
+      const group = (array, prop) => array.reduce((g, item) => {
+        const propVal = item[prop];
+        if (g[propVal]) {
+          g[propVal].push(item);
+        } else {
+          g[propVal] = [item];
+        }
+        return g;
+      }, {});
+      const groups = group(entitiesMap, 'location');
+      this.locationEntitiesMap =  Object.keys(groups).map(key => groups[key])[0]
+        || new Array<{location: Location, data: Array<any>}>();
+    });
+  }
 
   closeModal() {
     this.modalController.dismiss();
