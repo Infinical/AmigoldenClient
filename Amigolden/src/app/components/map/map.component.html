@@ -19,17 +19,25 @@
   <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
       <ng-container *ngIf="!isCreating">
         <agm-marker color="Blue" *ngFor="let locationGroup of locationEntitiesMap" (markerClick)="clickedMarker(locationGroup)" 
-          [latitude]="locationGroup.location.latitude" [longitude]="locationGroup.location.longitude">
+          [latitude]="locationGroup?.location?.latitude" [longitude]="locationGroup?.location?.longitude">
           
-          <agm-info-window>
-            <ng-container *ngFor="let locationData of locationGroup.Data">
-              <ion-label>Location: </ion-label>
-              <ion-label>{{locationGroup.location.name}} </ion-label>
-              <ion-button (click)="selectLocation({location: locationGroup.location, data: locationData})">
-                {{options.selectLabel}}
-              </ion-button>
-            </ng-container>
-          </agm-info-window>
+          <agm-snazzy-info-window [closeWhenOthersOpen]="true">
+              <ng-template> 
+                  <ng-template [ngTemplateOutlet]="infoWindowTemplate || defaultTemplate" [ngTemplateOutletContext]="{group: locationGroup}">
+                  </ng-template>
+                  <ng-template #defaultTemplate let-group="group"> 
+                    <ng-container *ngIf="group">
+                      <ng-container *ngFor="let data of group.data">
+                        <ion-label>Location: </ion-label>
+                        <ion-label>{{group.location.name}} </ion-label>
+                        <ion-button (click)="selectLocation(group.location, data)">
+                          {{options.selectLabel}}
+                        </ion-button>
+                      </ng-container>
+                    </ng-container>
+                  </ng-template>
+              </ng-template>
+          </agm-snazzy-info-window>
         </agm-marker>
     </ng-container>
       <agm-marker *ngIf="isCreating" [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"

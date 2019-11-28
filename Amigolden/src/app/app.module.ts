@@ -15,6 +15,7 @@ import { AuthorizationInterceptor } from './services/interceptors/authorization-
 import { ModelBinderInterceptor } from './services/interceptors/model-binder-interceptor';
 import { environment } from 'src/environments/environment';
 import { AgmCoreModule } from '@agm/core';
+import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +29,7 @@ import { AgmCoreModule } from '@agm/core';
       apiKey: environment.googleMaps.apiKey,
       libraries: ['places']
     }),
+    AgmSnazzyInfoWindowModule,
     HttpClientModule
   ],
   providers: [

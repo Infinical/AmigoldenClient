@@ -8,12 +8,14 @@ import { InlineEditComponent } from './inline-edit/inline-edit';
 import { StripeCardComponent } from './stripe-card/stripe-card.component';
 import { AgmCoreModule } from '@agm/core';
 import { MapComponent } from './map/map.component';
+import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
 
 @NgModule({
     imports: [CommonModule,
         FormsModule,
         IonicModule,
-        AgmCoreModule
+        AgmCoreModule,
+        AgmSnazzyInfoWindowModule,
     ],
     entryComponents: [MapComponent],
     declarations: [ListBaseComponent, SearchComponent, InlineEditComponent, StripeCardComponent, MapComponent],

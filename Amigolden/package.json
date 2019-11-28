@@ -13,7 +13,8 @@
   },
   "private": true,
   "dependencies": {
-    "@agm/core": "^1.0.0",
+    "@agm/core": "^1.1.0",
+    "@agm/snazzy-info-window": "^1.1.0",
     "@angular/common": "~8.1.2",
     "@angular/compiler": "~8.1.2",
     "@angular/core": "~8.1.2",
@@ -32,6 +33,7 @@
     "moment": "^2.24.0",
     "ngx-image-cropper": "^1.4.1",
     "rxjs": "~6.5.1",
+    "snazzy-info-window": "^1.1.1",
     "tslib": "^1.9.0",
     "underscore": "^1.9.1",
     "x2js": "^3.3.1",

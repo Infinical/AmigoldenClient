@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
 import { ModalController } from '@ionic/angular';
 import { Location } from 'src/app/models/location';
@@ -12,6 +12,7 @@ import * as _ from 'underscore';
 })
 export class MapComponent implements OnInit {
 
+  @Input() infoWindowTemplate: TemplateRef<any>;
   @Output() locationSelected = new EventEmitter<any>();
 
   // tslint:disable-next-line:variable-name
@@ -50,16 +51,20 @@ export class MapComponent implements OnInit {
       const entitiesMap = entities.map(e => ({ location: this.options.locationResolver(e), data: e}));
       const group = (array, prop) => array.reduce((g, item) => {
         const propVal = item[prop];
-        if (g[propVal]) {
-          g[propVal].push(item);
+        const identifier = propVal.id;
+        const entry = g[identifier];
+        const data = item.data;
+
+        if (entry) {
+          entry.data.push(data);
         } else {
-          g[propVal] = [item];
+          g[identifier] = {location: propVal, data: [data]};
         }
         return g;
       }, {});
       const groups = group(entitiesMap, 'location');
-      this.locationEntitiesMap =  Object.keys(groups).map(key => groups[key])[0]
-        || new Array<{location: Location, data: Array<any>}>();
+      this.locationEntitiesMap = Object.keys(groups).map((key) => groups[key])
+            || new Array<{location: Location, data: Array<any>}>();
     });
   }
 
@@ -67,11 +72,11 @@ export class MapComponent implements OnInit {
     this.modalController.dismiss();
   }
 
-  selectLocation(locationPair: {location: Location, data: any}) {
-    this.locationSelected.emit(locationPair);
+  selectLocation(location: Location, data: any) {
+    this.locationSelected.emit({location, data});
   }
 
-  clickedMarker(locationPair: {location: Location, data: any}) {
+  clickedMarker(locationPair: {location: Location, data: any[]}) {
   }
 
   create() {
@@ -89,8 +94,7 @@ export class MapComponent implements OnInit {
     // load Places Autocomplete
     this.mapsAPILoader.load().then(() => {
       this.setCurrentLocation();
-      // tslint:disable-next-line:new-parens
-      this.geoCoder = new google.maps.Geocoder;
+      this.geoCoder = new google.maps.Geocoder();
 
       const autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
         types: ['address']
@@ -127,7 +131,7 @@ export class MapComponent implements OnInit {
       navigator.geolocation.getCurrentPosition((position) => {
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
-        this.zoom = 8;
+        this.zoom = 10;
         this.getAddress(this.latitude, this.longitude);
       });
     }
