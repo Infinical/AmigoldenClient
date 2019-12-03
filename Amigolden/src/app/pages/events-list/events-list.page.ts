@@ -70,6 +70,9 @@ export class EventsListPage implements OnInit {
       return;
     }
     const location = this.locations.find(loc => loc.id === meeting.locationId);
+    if (!location) {
+      return '';
+    }
     return `${location.name} on ${meeting.meetTime.toLocaleDateString()}/ at ${meeting.meetTime.toLocaleTimeString()}`;
   }
 

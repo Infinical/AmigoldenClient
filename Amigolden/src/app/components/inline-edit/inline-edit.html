@@ -32,4 +32,14 @@
       </ion-select>
     </ion-item>
   </div>
+  <div *ngSwitchCase="'date'">
+    <ion-item [hidden]="editOptions.isEditing">
+      <ion-note stacked color="primary">{{label}}</ion-note>
+      <ion-note class="inline-edit"> {{value}}&nbsp;</ion-note>
+    </ion-item>
+    <ion-item [hidden]="!editOptions.isEditing">
+      <ion-label stacked color="primary">{{label}}</ion-label>
+      <ion-datetime displayFormat="MM DD YY" placeholder="Select Date"></ion-datetime>
+    </ion-item>
+  </div>
 </div>

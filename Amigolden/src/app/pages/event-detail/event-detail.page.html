@@ -22,10 +22,14 @@
                       label="Description:" [editOptions]="editOptions"
                       [required]="true" type="text">
         </inline-edit>
-        <ion-button expand="full" (click)="pickALocationModal()">Set Location</ion-button>
+        <inline-edit [(ngModel)]="entity && entity.description"
+          label="Event Time:" [editOptions]="editOptions"
+          [required]="true" type="date">
+        </inline-edit>
+        <ion-button expand="full" *ngIf="editOptions.canEdit" (click)="pickALocationModal()">Set Location</ion-button>
     </ion-list>    
 
-  <ion-item *ngIf="entityId">
+  <ion-item *ngIf="entityId && !editOptions.canEdit">
       <stripe-card (cardToken)="onTokenReceived($event)" [amount]="platformAmount" [hasExistingCard]="hasExistingCard">
       </stripe-card>
       <button *ngIf="hasExistingCard" ion-button block (click)="enroll()">Enroll</button>

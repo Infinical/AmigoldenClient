@@ -33,14 +33,3 @@
     </ion-card-content>
   </ion-card>
 </ng-template>
-<ng-template #mapTemplate let-group="group"> 
-    <ng-container *ngIf="group">
-      <ng-container *ngFor="let data of group.data">
-        <ion-label>Location: </ion-label>
-        <ion-label>{{group.location.name}} 5 </ion-label>
-        <ion-button (click)="selectLocation(group.location, data)">
-          {{options.selectLabel}}
-        </ion-button>
-      </ng-container>
-    </ng-container>
-  </ng-template>
