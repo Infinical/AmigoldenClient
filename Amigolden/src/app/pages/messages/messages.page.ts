@@ -60,14 +60,13 @@ export class MessagesPage implements OnInit {
     }
 
     ngOnInit() {
-      this.route.queryParams.subscribe(params => {
         if (this.router.getCurrentNavigation().extras.state) {
-          this.conversation = this.router.getCurrentNavigation().extras.state.entity;
-          // Have the conversations controller handle creating conversation
-          this.filterByConversationId = ODataDynamicFilterBuilder.build(builder =>
-            builder.eq(new ODataPropertyPath('ConversationId'), this.conversation.id)).getString();
+            this.conversation = this.router.getCurrentNavigation().extras.state.entity;
+            // Have the conversations controller handle creating conversation
+            this.filterByConversationId = ODataDynamicFilterBuilder.build(builder =>
+                builder.eq(new ODataPropertyPath('ConversationId'), this.conversation.id)
+            ).getString();
         }
-      });
     }
 
     scrollToBottom() {

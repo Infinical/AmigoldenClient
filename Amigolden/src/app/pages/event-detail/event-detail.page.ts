@@ -20,8 +20,6 @@ import { Location } from 'src/app/models/location';
 // TODO: this should probably inherit from DetailPageBase when we support event creation
 export class EventDetailPage implements OnInit {
 
-  hasExistingCard = false;
-  platformAmount = environment.eventCosts.platform;
   entityId: number = null;
   entity: Meeting;
 
@@ -32,15 +30,17 @@ export class EventDetailPage implements OnInit {
     save: () => {}
   };
 
-  constructor(protected stripePayments: StripePaymentsService, protected eventService: EventsService,
+  constructor(protected eventService: EventsService,
               protected route: ActivatedRoute, protected router: Router, protected identity: Identity,
               protected  modalController: ModalController) {
     this.route.queryParams.subscribe(params => {
-      if (this.router.getCurrentNavigation().extras.state) {
-        this.entity = this.router.getCurrentNavigation().extras.state.entity;
-        this.entityId = this.entity.id;
-      }
+      this.entityId = this.entity.id;
     });
+
+    if (this.router.getCurrentNavigation().extras.state) {
+      this.entity = this.router.getCurrentNavigation().extras.state.entity;
+    }
+
 
     this.identity.getCurrentUser().then((u) => { this.editOptions.canEdit = this.entityId === u.id; });
   }
@@ -48,17 +48,6 @@ export class EventDetailPage implements OnInit {
   ngOnInit() {
   }
 
-  onTokenReceived(stripeTokenResponse: any) {
-
-    const cardInfo = new CardInfo();
-    cardInfo.token = stripeTokenResponse.id;
-    cardInfo.paymentMethodId = stripeTokenResponse.card.id;
-    cardInfo.last4 = stripeTokenResponse.card.last4;
-    cardInfo.zip = stripeTokenResponse.card.address_zip;
-    cardInfo.expirationYear = stripeTokenResponse.card.exp_year;
-    cardInfo.expirationMonth = stripeTokenResponse.card.exp_month;
-    this.stripePayments.createCustomer(cardInfo).subscribe(_ => this.hasExistingCard = true);
-  }
 
   async pickALocationModal() {
     const modal = await this.modalController.create({
@@ -72,24 +61,5 @@ export class EventDetailPage implements OnInit {
 
   closeModal() {
     this.modalController.dismiss();
-  }
-
-  enroll() {
-    const transactionOptions = new TransactionOptions();
-
-    // TODO: the amount should not be hardcoded
-    transactionOptions.amountInCents = this.platformAmount;
-    transactionOptions.meetingId = this.entityId;
-    // TODO: Don't rely on the server to ignore duplicate transactions
-    this.stripePayments.authorizeTransaction(transactionOptions).subscribe(t => {
-      this.eventService.enroll(this.entityId).subscribe(r => {
-          if (!r) {
-            console.log('User is already enrolled');
-          }
-
-          // TODO: should we navigate to meeting or should we just change the view state of the current page
-          // this.navigateToMeeting(this.meetingId);
-      });
-    });
   }
 }
