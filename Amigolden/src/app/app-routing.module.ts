@@ -12,14 +12,17 @@ export class RouteNames {
   public static readonly messages = 'messages';
   public static readonly events = 'events';
   public static readonly users = 'users';
+  public static readonly enrollments = 'enrollments';
 
   public static readonly messageDetail = RouteNames.messages + '/';
   public static readonly eventDetail = RouteNames.events + '/';
   public static readonly userDetail = RouteNames.users + '/';
+  public static readonly enrollmentDetail = RouteNames.enrollments + '/';
 
   public static readonly messageDetailFormat = RouteNames.messageDetail + RouteParams.id;
   public static readonly eventDetailFormat = RouteNames.eventDetail + RouteParams.id;
   public static readonly userDetailFormat = RouteNames.userDetail + RouteParams.id;
+  public static readonly enrollmentDetailFormat = RouteNames.enrollmentDetail + RouteParams.id;
 
   public static readonly userEvents = RouteNames.userDetailFormat + '/' + RouteNames.events;
 }
@@ -62,6 +65,11 @@ const routes: Routes = [
   {
     path: RouteNames.eventDetailFormat,
     loadChildren: './pages/event-detail/event-detail.module#EventDetailPageModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: RouteNames.enrollmentDetailFormat,
+    loadChildren: './pages/enrollment/enrollment.module#EnrollmentPageModule',
     canActivate: [AuthGuard]
   },
   {

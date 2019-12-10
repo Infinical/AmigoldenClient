@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { EnrollmentPage } from './enrollment.page';
+import { SharedComponentsModule } from 'src/app/components/shared.components.module';
 
 const routes: Routes = [
   {
@@ -16,6 +17,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    SharedComponentsModule,
     CommonModule,
     FormsModule,
     IonicModule,

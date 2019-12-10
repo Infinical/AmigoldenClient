@@ -12,13 +12,12 @@ export class DetailPageBase<T extends IHasId> {
     entity: T;
     entityId: number;
     constructor(protected route: ActivatedRoute, protected router: Router, protected baseProvider: ApiResourceBaseService<T>) {
-      this.route.queryParams.subscribe(params => {
-        this.entityId = params.id;
-      });
-
-      if (this.router.getCurrentNavigation().extras.state) {
-        this.entity = this.router.getCurrentNavigation().extras.state.entity;
-      }
+        this.entityId = +this.route.snapshot.paramMap.get('id');
+        if (this.router.getCurrentNavigation().extras.state) {
+            this.entity = this.router.getCurrentNavigation().extras.state.entity;
+        } else if (!this.entity) {
+            baseProvider.get(this.entityId).subscribe(entity => this.entity = entity);
+        }
     }
 
     public onEntityLoadCallBack(entity: T) {

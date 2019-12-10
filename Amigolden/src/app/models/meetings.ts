@@ -1,5 +1,10 @@
 import { IHasId } from './interfaces/interfaces';
 
+export enum MeetingType {
+   Vote,
+   PerEvent
+}
+
 export class Meeting implements IHasId {
     id = 0;
     locationId = 0;
@@ -9,4 +14,5 @@ export class Meeting implements IHasId {
     description = '';
     name = '';
     ownerId = 0;
+    meetingType = MeetingType.Vote;
 }

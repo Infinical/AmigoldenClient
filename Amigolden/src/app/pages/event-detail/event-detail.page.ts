@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { CardInfo, TransactionOptions } from 'src/app/models/transactions-info';
-import { StripePaymentsService } from 'src/app/services/endpoints/stripe-payments.service';
-import { environment } from 'src/environments/environment';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { EventsService } from 'src/app/services/endpoints/events.service';
-import { Meeting } from 'src/app/models/meetings';
+import { Meeting, MeetingType } from 'src/app/models/meetings';
 import { Identity } from 'src/app/services/identity/identity.service';
 import { EditOptions } from 'src/app/models/edit-options';
 import { ModalController } from '@ionic/angular';
 import { MapComponent } from 'src/app/components/map/map.component';
 import { MapOptions } from 'src/app/models/map/map-options';
 import { Location } from 'src/app/models/location';
+import { EnrollmentPage } from '../enrollment/enrollment.page';
+import { RouteNames } from 'src/app/app-routing.module';
 
 @Component({
   selector: 'app-event-detail',
@@ -22,6 +21,8 @@ export class EventDetailPage implements OnInit {
 
   entityId: number = null;
   entity: Meeting;
+  isEnrolled = false;
+  isCurrentUserOwner = false;
 
   editOptions: EditOptions = {
     isEditing: false,
@@ -33,23 +34,61 @@ export class EventDetailPage implements OnInit {
   constructor(protected eventService: EventsService,
               protected route: ActivatedRoute, protected router: Router, protected identity: Identity,
               protected  modalController: ModalController) {
-    this.route.queryParams.subscribe(params => {
-      this.entityId = this.entity.id;
-    });
+    this.entityId = +this.route.snapshot.paramMap.get('id');
 
     if (this.router.getCurrentNavigation().extras.state) {
       this.entity = this.router.getCurrentNavigation().extras.state.entity;
+    } else if (!this.entity) {
+      eventService.get(this.entityId).subscribe(entity => this.entity = entity);
     }
 
+    this.eventService.isEnrolled(this.entityId).subscribe(isEnrolled => this.isEnrolled = isEnrolled);
 
-    this.identity.getCurrentUser().then((u) => { this.editOptions.canEdit = this.entityId === u.id; });
+    this.identity.getCurrentUser().then((u) => {
+      this.isCurrentUserOwner = this.entityId === u.id;
+      this.editOptions.canEdit = this.isCurrentUserOwner;
+    });
+
   }
 
   ngOnInit() {
   }
 
+  navigateToEnrollments() {
+    this.router.navigate([RouteNames.eventDetail, this.entity.id]);
+  }
 
-  async pickALocationModal() {
+  isEventActive() {
+    return true;
+    return this.addDays(this.entity.meetTime, 1) >= new Date();
+  }
+
+  addDays(date, days) {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }
+
+  canEnroll() {
+    return this.entityId
+      && !this.isCurrentUserOwner
+      && !this.isEnrolled
+      && this.isEventActive();
+  }
+
+  isVoteBased() {
+    return this.entityId
+      && !this.isCurrentUserOwner
+      && this.isEnrolled
+      && this.entity
+      && this.entity.meetingType === MeetingType.Vote;
+  }
+
+  async openVoteModal() {
+    console.log('opening vote modal');
+  }
+
+  async openLocationPickerModal() {
     const modal = await this.modalController.create({
       component: MapComponent,
        componentProps: { // <----------

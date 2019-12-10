@@ -21,7 +21,7 @@ export class EventsService extends ApiResourceBaseService<Meeting>  {
         return  this.http.post<boolean>(`${this.apiUrl}/${this.route}/enroll/${meetingId}`, null, { headers});
     }
 
-    isEnroll(meetingId: number): Observable<boolean> {
+    isEnrolled(meetingId: number): Observable<boolean> {
 
         const headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
