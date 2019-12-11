@@ -3,7 +3,8 @@ import { CardInfo, TransactionOptions } from 'src/app/models/transactions-info';
 import { environment } from 'src/environments/environment';
 import { StripePaymentsService } from 'src/app/services/endpoints/stripe-payments.service';
 import { EventsService } from 'src/app/services/endpoints/events.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Meeting } from 'src/app/models/meetings';
 
 @Component({
   selector: 'app-enrollment',
@@ -13,16 +14,24 @@ import { ActivatedRoute } from '@angular/router';
 export class EnrollmentPage implements OnInit {
 
   hasExistingCard = false;
-  platformAmount = environment.eventCosts.platform;
   entityId: number;
+  entity: Meeting;
+  eventCostInCents: number;
 
   constructor(protected stripePayments: StripePaymentsService,
               protected eventService: EventsService,
-              protected route: ActivatedRoute) {
+              protected route: ActivatedRoute,
+              protected router: Router) {
 
-    this.route.queryParams.subscribe(params => {
-      this.entityId = params.id;
-    });
+    this.entityId = +this.route.snapshot.paramMap.get('id');
+
+    eventService.getEventCost(this.entityId).subscribe(eventCost => this.eventCostInCents = eventCost);
+
+    if (this.router.getCurrentNavigation().extras.state) {
+      this.entity = this.router.getCurrentNavigation().extras.state.entity;
+    } else if (!this.entity) {
+      eventService.get(this.entityId).subscribe(entity => this.entity = entity);
+    }
   }
 
   ngOnInit() {
@@ -40,11 +49,11 @@ export class EnrollmentPage implements OnInit {
     this.stripePayments.createCustomer(cardInfo).subscribe(_ => this.hasExistingCard = true);
   }
 
-  enroll() {
+  enroll(eventCostInCents) {
     const transactionOptions = new TransactionOptions();
 
     // TODO: the amount should not be hardcoded
-    transactionOptions.amountInCents = this.platformAmount;
+    transactionOptions.amountInCents = eventCostInCents;
     transactionOptions.meetingId = this.entityId;
     // TODO: Don't rely on the server to ignore duplicate transactions
     this.stripePayments.authorizeTransaction(transactionOptions).subscribe(t => {

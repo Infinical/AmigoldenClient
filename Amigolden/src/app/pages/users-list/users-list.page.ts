@@ -43,10 +43,7 @@ export class UsersListPage implements OnInit {
   navigateToDetail(entity: User) {
 
     const navigationExtras: NavigationExtras = {
-      state: {
-        entity,
-        entityId: entity.id
-      }
+      state: { entity }
     };
 
     this.router.navigate([RouteNames.users, entity.id], navigationExtras);

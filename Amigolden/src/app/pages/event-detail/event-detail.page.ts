@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { EventsService } from 'src/app/services/endpoints/events.service';
-import { Meeting, MeetingType } from 'src/app/models/meetings';
+import { Meeting, EventType } from 'src/app/models/meetings';
 import { Identity } from 'src/app/services/identity/identity.service';
 import { EditOptions } from 'src/app/models/edit-options';
 import { ModalController } from '@ionic/angular';
@@ -55,7 +55,8 @@ export class EventDetailPage implements OnInit {
   }
 
   navigateToEnrollments() {
-    this.router.navigate([RouteNames.eventDetail, this.entity.id]);
+    const navigationExtras: NavigationExtras = { state: { entity: this.entity } };
+    this.router.navigate([RouteNames.enrollmentDetail, this.entity.id], navigationExtras);
   }
 
   isEventActive() {
@@ -81,7 +82,7 @@ export class EventDetailPage implements OnInit {
       && !this.isCurrentUserOwner
       && this.isEnrolled
       && this.entity
-      && this.entity.meetingType === MeetingType.Vote;
+      && this.entity.eventType === EventType.Vote;
   }
 
   async openVoteModal() {

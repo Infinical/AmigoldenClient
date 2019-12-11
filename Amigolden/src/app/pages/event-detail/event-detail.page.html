@@ -3,16 +3,10 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Select a location</ion-title>
+    <ion-title>Event Details</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
-  <!-- <ion-item *ngIf="meetings">
-    <ion-label>Time</ion-label>
-    <ion-select [(ngModel)]="meetingId">
-      <ion-option *ngFor="let meet of meetings;" [value]="meet.id">{{getTime(meet.meetTime)}}</ion-option>
-    </ion-select>
-  </ion-item> -->
     <ion-list>
       <ng-container *ngIf="entity">  
         <inline-edit [(ngModel)]="entity.name"
@@ -32,13 +26,11 @@
     </ion-list>    
 
   <ion-item *ngIf="canEnroll()">
-      <ion-button (click)="openEnrollmentsModal(entityId)">Enroll</ion-button>
+      <ion-button (click)="navigateToEnrollments()">Enroll</ion-button>
   </ion-item>
   <ion-item *ngIf="isVoteBased()">
       <ion-button *ngIf="isEventActive()" (click)="openVoteModal()">Vote</ion-button>
       <ion-label *ngIf="!isEventActive()">Vote Casted</ion-label>
   </ion-item>
-  
-
 </ion-content>
 

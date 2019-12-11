@@ -90,10 +90,7 @@ export class EventsListPage implements OnInit {
   navigateToDetail(entity: Meeting) {
 
     const navigationExtras: NavigationExtras = {
-      state: {
-        entity,
-        entityId: entity.id
-      }
+      state: { entity }
     };
 
     this.router.navigate([RouteNames.eventDetail, entity.id], navigationExtras);

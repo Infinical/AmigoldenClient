@@ -1,8 +1,9 @@
 import { IHasId } from './interfaces/interfaces';
+import { environment } from 'src/environments/environment';
 
-export enum MeetingType {
+export enum EventType {
    Vote,
-   PerEvent
+   AlaCarte
 }
 
 export class Meeting implements IHasId {
@@ -14,5 +15,6 @@ export class Meeting implements IHasId {
     description = '';
     name = '';
     ownerId = 0;
-    meetingType = MeetingType.Vote;
+    eventType = EventType.Vote;
+    eventCostInCents = 0;
 }
