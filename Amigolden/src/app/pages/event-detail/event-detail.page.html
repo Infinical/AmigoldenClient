@@ -28,7 +28,7 @@
   <ion-item *ngIf="canEnroll()">
       <ion-button (click)="navigateToEnrollments()">Enroll</ion-button>
   </ion-item>
-  <ion-item *ngIf="isVoteBased()">
+  <ion-item *ngIf="isVoteable()">
       <ion-button *ngIf="isEventActive()" (click)="openVoteModal()">Vote</ion-button>
       <ion-label *ngIf="!isEventActive()">Vote Casted</ion-label>
   </ion-item>

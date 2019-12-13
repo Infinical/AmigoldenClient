@@ -5,13 +5,14 @@ import { StripePaymentsService } from 'src/app/services/endpoints/stripe-payment
 import { EventsService } from 'src/app/services/endpoints/events.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Meeting } from 'src/app/models/meetings';
+import { EntityPageBase } from '../detail-page-base';
 
 @Component({
   selector: 'app-enrollment',
   templateUrl: './enrollment.page.html',
   styleUrls: ['./enrollment.page.scss'],
 })
-export class EnrollmentPage implements OnInit {
+export class EnrollmentPage extends EntityPageBase<Meeting> implements OnInit {
 
   hasExistingCard = false;
   entityId: number;
@@ -22,16 +23,8 @@ export class EnrollmentPage implements OnInit {
               protected eventService: EventsService,
               protected route: ActivatedRoute,
               protected router: Router) {
-
-    this.entityId = +this.route.snapshot.paramMap.get('id');
-
-    eventService.getEventCost(this.entityId).subscribe(eventCost => this.eventCostInCents = eventCost);
-
-    if (this.router.getCurrentNavigation().extras.state) {
-      this.entity = this.router.getCurrentNavigation().extras.state.entity;
-    } else if (!this.entity) {
-      eventService.get(this.entityId).subscribe(entity => this.entity = entity);
-    }
+    super(route, router, eventService);
+    eventService.getDefaultEventCost(this.entityId).subscribe(eventCost => this.eventCostInCents = eventCost);
   }
 
   ngOnInit() {

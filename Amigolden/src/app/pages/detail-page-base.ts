@@ -7,17 +7,35 @@ import { ApiResourceBaseService } from '../services/api-resource-base/api-resour
 @Injectable({
     providedIn: 'root'
 })
-export class DetailPageBase<T extends IHasId> {
-
-    entity: T;
+export class PageBase {
     entityId: number;
-    constructor(protected route: ActivatedRoute, protected router: Router, protected baseProvider: ApiResourceBaseService<T>) {
+    constructor(protected route: ActivatedRoute, protected router: Router) {
         this.entityId = +this.route.snapshot.paramMap.get('id');
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class EntityPageBase<T extends IHasId> extends PageBase {
+    entity: T;
+    constructor(protected route: ActivatedRoute, protected router: Router, protected baseProvider: ApiResourceBaseService<T>) {
+        super(route, router);
+
         if (this.router.getCurrentNavigation().extras.state) {
             this.entity = this.router.getCurrentNavigation().extras.state.entity;
         } else if (!this.entity) {
             baseProvider.get(this.entityId).subscribe(entity => this.entity = entity);
         }
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class DetailPageBase<T extends IHasId> extends EntityPageBase<T> {
+    constructor(protected route: ActivatedRoute, protected router: Router, protected baseProvider: ApiResourceBaseService<T>) {
+        super(route, router, baseProvider);
     }
 
     public onEntityLoadCallBack(entity: T) {

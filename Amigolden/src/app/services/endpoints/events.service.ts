@@ -29,12 +29,20 @@ export class EventsService extends ApiResourceBaseService<Meeting>  {
         return  this.http.post<boolean>(`${this.apiUrl}/${this.route}/is-enrolled/${meetingId}`, null, { headers});
     }
 
-    getEventCost(meetingId: number): Observable<number> {
+    getDefaultEventCost(meetingId: number): Observable<number> {
 
         const headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
 
-        return  this.http.post<number>(`${this.apiUrl}/${this.route}/event-amount/${meetingId}`, null, { headers});
+        return  this.http.post<number>(`${this.apiUrl}/${this.route}/default-event-amount/${meetingId}`, null, { headers});
+    }
+
+    getDirectChargeEventCost(meetingId: number): Observable<number> {
+
+        const headers = new HttpHeaders();
+        headers.append('Content-Type', 'application/json');
+
+        return  this.http.post<number>(`${this.apiUrl}/${this.route}/direct-event-amount/${meetingId}`, null, { headers});
     }
 
     meetingsBetween(locationId: number, startDate?: Date, endDate?: Date): Observable<Meeting[]> {

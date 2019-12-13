@@ -4,6 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { Location } from 'src/app/models/location';
 import { MapOptions } from 'src/app/models/map/map-options';
 import * as _ from 'underscore';
+declare var google;
 
 @Component({
   selector: 'app-map',

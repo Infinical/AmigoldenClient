@@ -10,6 +10,7 @@ import { MapOptions } from 'src/app/models/map/map-options';
 import { Location } from 'src/app/models/location';
 import { EnrollmentPage } from '../enrollment/enrollment.page';
 import { RouteNames } from 'src/app/app-routing.module';
+import { EntityPageBase } from '../detail-page-base';
 
 @Component({
   selector: 'app-event-detail',
@@ -17,10 +18,7 @@ import { RouteNames } from 'src/app/app-routing.module';
   styleUrls: ['./event-detail.page.scss'],
 })
 // TODO: this should probably inherit from DetailPageBase when we support event creation
-export class EventDetailPage implements OnInit {
-
-  entityId: number = null;
-  entity: Meeting;
+export class EventDetailPage extends EntityPageBase<Meeting> implements OnInit {
   isEnrolled = false;
   isCurrentUserOwner = false;
 
@@ -34,13 +32,7 @@ export class EventDetailPage implements OnInit {
   constructor(protected eventService: EventsService,
               protected route: ActivatedRoute, protected router: Router, protected identity: Identity,
               protected  modalController: ModalController) {
-    this.entityId = +this.route.snapshot.paramMap.get('id');
-
-    if (this.router.getCurrentNavigation().extras.state) {
-      this.entity = this.router.getCurrentNavigation().extras.state.entity;
-    } else if (!this.entity) {
-      eventService.get(this.entityId).subscribe(entity => this.entity = entity);
-    }
+    super(route, router, eventService);
 
     this.eventService.isEnrolled(this.entityId).subscribe(isEnrolled => this.isEnrolled = isEnrolled);
 
@@ -48,7 +40,6 @@ export class EventDetailPage implements OnInit {
       this.isCurrentUserOwner = this.entityId === u.id;
       this.editOptions.canEdit = this.isCurrentUserOwner;
     });
-
   }
 
   ngOnInit() {
@@ -77,7 +68,7 @@ export class EventDetailPage implements OnInit {
       && this.isEventActive();
   }
 
-  isVoteBased() {
+  isVoteable() {
     return this.entityId
       && !this.isCurrentUserOwner
       && this.isEnrolled
