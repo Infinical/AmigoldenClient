@@ -5,5 +5,15 @@
 </ion-header>
 
 <ion-content>
-
+  <app-list-base [config]="config" [template]="itemTemplate"></app-list-base>
 </ion-content>
+<ng-template #itemTemplate let-entity="entity">
+  <ion-item no-lines> 
+    <ion-avatar slot="start">
+      <img [src]=entity.profilePictureUrl>
+    </ion-avatar>
+    <ion-label>{{ entity?.email }}</ion-label>
+    <ion-button (click)="vote(entity)" shape="round" item-right [fill]="outline"  
+      [color]="isVotedCastedFor(entity) ? 'primary' : 'secondary' ">Vote</ion-button>
+  </ion-item>
+</ng-template>

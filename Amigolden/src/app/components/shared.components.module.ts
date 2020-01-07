@@ -9,6 +9,7 @@ import { StripeCardComponent } from './stripe-card/stripe-card.component';
 import { AgmCoreModule } from '@agm/core';
 import { MapComponent } from './map/map.component';
 import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
+import { VoteListPage } from '../pages/vote/vote-list/vote-list.page';
 
 @NgModule({
     imports: [CommonModule,
@@ -17,8 +18,8 @@ import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
         AgmCoreModule,
         AgmSnazzyInfoWindowModule,
     ],
-    entryComponents: [MapComponent],
-    declarations: [ListBaseComponent, SearchComponent, InlineEditComponent, StripeCardComponent, MapComponent],
-    exports: [ListBaseComponent, SearchComponent, InlineEditComponent, StripeCardComponent, MapComponent]
+    entryComponents: [MapComponent, VoteListPage],
+    declarations: [ListBaseComponent, SearchComponent, InlineEditComponent, StripeCardComponent, MapComponent, VoteListPage],
+    exports: [ListBaseComponent, SearchComponent, InlineEditComponent, StripeCardComponent, MapComponent, VoteListPage]
 })
 export class SharedComponentsModule {}

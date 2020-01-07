@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Input } from '@angular/core';
 import { IHasId } from '../models/interfaces/interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -8,9 +8,25 @@ import { ApiResourceBaseService } from '../services/api-resource-base/api-resour
     providedIn: 'root'
 })
 export class PageBase {
-    entityId: number;
+
+    // tslint:disable-next-line:variable-name
+    private _entityId: number;
+    @Input() set entityId(eid: number) {
+        this._entityId = eid;
+    }
+
+    get entityId(): number {
+        return this._entityId;
+    }
+
     constructor(protected route: ActivatedRoute, protected router: Router) {
-        this.entityId = +this.route.snapshot.paramMap.get('id');
+        const id = this.route.snapshot.paramMap.get('id');
+
+        // HACK: since modals don't set the parameters, only set the parameters if the id is not null
+        // Modals will set the input manually from the modal controller
+        if (null != id) {
+          this.entityId = +id;
+        }
     }
 }
 

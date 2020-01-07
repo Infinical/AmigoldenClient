@@ -12,11 +12,11 @@ export class UsersEndpointService extends ApiResourceBaseService<User>  {
         super(http, 'users');
   }
 
-  getByMeetingId(meetingId: number): Observable<User[]> {
+  getVoteCandidates(meetingId: number): Observable<User[]> {
     const headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
 
-    const url = `${this.apiUrl}/${this.route}/ByMeeting/${meetingId}?`;
+    const url = `${this.apiUrl}/${this.route}/vote-candidates/${meetingId}?`;
 
     return this.http.get<User[]>(url, { headers });
   }

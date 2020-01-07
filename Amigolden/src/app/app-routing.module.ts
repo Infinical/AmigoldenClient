@@ -82,6 +82,7 @@ const routes: Routes = [
     loadChildren: './pages/messages/messages.module#MessagesPageModule',
     canActivate: [AuthGuard]
   },
+  { path: 'vote-list', loadChildren: './pages/vote/vote-list/vote-list.module#VoteListPageModule' },
 ];
 
 @NgModule({

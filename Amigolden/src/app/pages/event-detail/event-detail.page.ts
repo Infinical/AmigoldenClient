@@ -11,6 +11,7 @@ import { Location } from 'src/app/models/location';
 import { EnrollmentPage } from '../enrollment/enrollment.page';
 import { RouteNames } from 'src/app/app-routing.module';
 import { EntityPageBase } from '../detail-page-base';
+import { VoteListPage } from '../vote/vote-list/vote-list.page';
 
 @Component({
   selector: 'app-event-detail',
@@ -33,16 +34,15 @@ export class EventDetailPage extends EntityPageBase<Meeting> implements OnInit {
               protected route: ActivatedRoute, protected router: Router, protected identity: Identity,
               protected  modalController: ModalController) {
     super(route, router, eventService);
+  }
 
+  ngOnInit() {
     this.eventService.isEnrolled(this.entityId).subscribe(isEnrolled => this.isEnrolled = isEnrolled);
 
     this.identity.getCurrentUser().then((u) => {
       this.isCurrentUserOwner = this.entityId === u.id;
       this.editOptions.canEdit = this.isCurrentUserOwner;
     });
-  }
-
-  ngOnInit() {
   }
 
   navigateToEnrollments() {
@@ -78,12 +78,19 @@ export class EventDetailPage extends EntityPageBase<Meeting> implements OnInit {
 
   async openVoteModal() {
     console.log('opening vote modal');
+    const modal = await this.modalController.create({
+      component: VoteListPage,
+      componentProps: {
+        entityId: this.entityId
+      }
+    });
+    return await modal.present();
   }
 
   async openLocationPickerModal() {
     const modal = await this.modalController.create({
       component: MapComponent,
-       componentProps: { // <----------
+      componentProps: {
         options: new MapOptions<Location>('Select', true, true, (lat, lon) => null, x => x)
       }
     });

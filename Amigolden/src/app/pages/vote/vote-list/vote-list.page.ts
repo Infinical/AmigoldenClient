@@ -18,7 +18,7 @@ export class VoteListPage extends PageBase implements OnInit {
   eventCostInCents: number;
   transactionOptions: DestinationTransactionOptions;
   public config = new ListConfiguration<User>(
-    (pagingInfo: PagingInfo) => this.userService.getByMeetingId(this.entityId),
+    (pagingInfo: PagingInfo) => this.userService.getVoteCandidates(this.entityId),
     { isSinglePage: true }
   );
 
@@ -27,16 +27,20 @@ export class VoteListPage extends PageBase implements OnInit {
               protected stripePayments: StripePaymentsService,
               protected eventService: EventsService) {
       super(route, router);
-      stripePayments.getTransaction(this.entityId).subscribe(t => this.transactionOptions = t);
-      eventService.getDefaultEventCost(this.entityId).subscribe(eventCost => this.eventCostInCents = eventCost);
    }
 
   ngOnInit() {
+    this.stripePayments.getTransaction(this.entityId).subscribe(t => this.transactionOptions = t);
+    this.eventService.getDirectChargeEventCost(this.entityId).subscribe(eventCost => this.eventCostInCents = eventCost);
   }
 
   isVotedCastedFor(user: User) {
+    // TODO: remove this when we support loading screens
+    if (!this.transactionOptions) {
+      return;
+    }
      // TODO: check vote api
-     return user.id === this.transactionOptions.userId;
+    return user.id === this.transactionOptions.userId;
   }
 
 
