@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { Router } from '@angular/router';
+import { Identity } from 'src/app/services/identity/identity.service';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,7 @@ import { Router } from '@angular/router';
 export class LoginPage implements OnInit {
 
   loginUrl = environment.apiUrl + '/Account/ExternalLogin';
-  constructor(private authManager: AuthenticationService, private router: Router) { }
+  constructor(private authManager: AuthenticationService, private identity: Identity, private router: Router) { }
 
   ngOnInit() {
     let qs = window.location.search;
@@ -25,7 +26,10 @@ export class LoginPage implements OnInit {
     if (accessToken) {
         params.delete(accessTokenParamName);
         this.authManager.setAccessToken(accessToken).then(v => {
-           this.router.navigate(['users']);
+           this.identity.getCurrentUser().then(u => {
+            this.identity.userId = u.id;
+            this.router.navigate(['users']);
+          });
         });
     }
   }

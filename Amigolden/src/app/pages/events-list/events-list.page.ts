@@ -34,10 +34,10 @@ export class EventsListPage implements OnInit {
   );
 
   constructor(private router: Router, protected locationService: LocationsService, protected eventService: EventsService) {
-    this.loadLocations();
   }
 
   ngOnInit() {
+    this.loadLocations();
   }
 
   resolveLocation(meeting: Meeting): Location {

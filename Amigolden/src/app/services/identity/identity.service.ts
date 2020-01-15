@@ -11,6 +11,7 @@ import { User } from 'src/app/models/user';
 })
 export class Identity {
 
+    userId: number;
     constructor(public usersProvider: UsersEndpointService, public events: Events, protected storage: Storage) {
     }
 

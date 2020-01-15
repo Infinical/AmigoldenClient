@@ -25,6 +25,9 @@ export class MessagesListPage implements OnInit {
 
   constructor(public baseProvider: ConversationsService, public differs: KeyValueDiffers,
               public hubService: HubServiceBase, private ngZone: NgZone) {
+  }
+
+  ngOnInit() {
     this.hubService.initialize('conversations').then(() => {
       this.hubService.registerOnServerEvents();
       this.subscribeToHubEvents();
@@ -48,8 +51,5 @@ export class MessagesListPage implements OnInit {
             this.pageListBase.entityList.push(entity);
         });
     });
-}
-
-  ngOnInit() {
   }
 }

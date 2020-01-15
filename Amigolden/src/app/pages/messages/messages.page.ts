@@ -52,14 +52,16 @@ export class MessagesPage implements OnInit {
     constructor(protected baseProvider: MessagesService, protected identityProvider: Identity,
                 protected hubService: HubServiceBase, protected ngZone: NgZone,
                 protected route: ActivatedRoute, protected router: Router) {
+    }
+
+    ngOnInit() {
+
         this.hubService.initialize('messages').then(() => {
             this.hubService.registerOnServerEvents();
             this.subscribeToHubEvents();
             this.canSendMessage = this.hubService.connectionExists;
         });
-    }
 
-    ngOnInit() {
         if (this.router.getCurrentNavigation().extras.state) {
             this.conversation = this.router.getCurrentNavigation().extras.state.entity;
             // Have the conversations controller handle creating conversation

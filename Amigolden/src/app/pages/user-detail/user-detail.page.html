@@ -8,15 +8,15 @@
           <ion-icon name="create"></ion-icon>
           &nbsp;Create
       </button>      
-      <button [hidden]="!editOptions.canEdit || editOptions.isEditing" (click)="toggleEdit()" ion-button>
+      <button [hidden]="!editOptions.canEdit || editOptions.isEditing" (click)="editOptions.toggleEdit()" ion-button>
         <ion-icon name="create"></ion-icon>
         &nbsp;Edit
       </button>
-      <button [hidden]="!editOptions.isEditing" class="success" (click)="save()" ion-button>
+      <button [hidden]="!editOptions.isEditing" class="success" (click)="editOptions.save()" ion-button>
         <ion-icon name="save"></ion-icon>
         &nbsp;Save
       </button>
-      <button [hidden]="!editOptions.isEditing" class="warn" (click)="toggleEdit()" ion-button>
+      <button [hidden]="!editOptions.isEditing" class="warn" (click)="editOptions.toggleEdit()" ion-button>
         <ion-icon name="save"></ion-icon>
         &nbsp;Cancel
       </button>

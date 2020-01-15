@@ -24,10 +24,10 @@ export class EnrollmentPage extends EntityPageBase<Meeting> implements OnInit {
               protected route: ActivatedRoute,
               protected router: Router) {
     super(route, router, eventService);
-    eventService.getDefaultEventCost(this.entityId).subscribe(eventCost => this.eventCostInCents = eventCost);
   }
 
   ngOnInit() {
+    this.eventService.getDefaultEventCost(this.entityId).subscribe(eventCost => this.eventCostInCents = eventCost);
   }
 
   onTokenReceived(stripeTokenResponse: any) {

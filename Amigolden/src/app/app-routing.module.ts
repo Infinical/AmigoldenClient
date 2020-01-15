@@ -37,10 +37,6 @@ const routes: Routes = [
     path: 'home',
     loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
   },
-  {
-    path: 'list',
-    loadChildren: () => import('./list/list.module').then(m => m.ListPageModule)
-  },
   { path: RouteNames.login, loadChildren: './pages/login/login.module#LoginPageModule' },
   {
     path: RouteNames.users,
@@ -82,7 +78,7 @@ const routes: Routes = [
     loadChildren: './pages/messages/messages.module#MessagesPageModule',
     canActivate: [AuthGuard]
   },
-  { path: 'vote-list', loadChildren: './pages/vote/vote-list/vote-list.module#VoteListPageModule' },
+  { path: 'vote-list', loadChildren: './pages/vote/vote-list/vote-list.module#VoteListPageModule', canActivate: [AuthGuard] },
 ];
 
 @NgModule({

@@ -20,23 +20,17 @@ import { RouteNames } from 'src/app/app-routing.module';
 export class UserDetailPage extends DetailPageBase<User> implements OnInit {
   pageName = 'Profile';
 
-  editOptions: EditOptions = {
-      isEditing: false,
-      canEdit: false,
-      save: () => this.save()
-  };
-
+  editOptions = new EditOptions(() => this.save());
 
   constructor(protected route: ActivatedRoute, protected router: Router, protected usersService: UsersEndpointService,
               protected fileService: FileService, protected conversationService: ConversationsService,
               protected modalCtrl: ModalController, protected profilePictureProvider: ProfilePictureService,
               protected identity: Identity) {
     super(route, router, usersService);
-
-    this.identity.getCurrentUser().then((u) => { this.editOptions.canEdit = this.entityId === u.id; });
   }
 
   ngOnInit() {
+    this.identity.getCurrentUser().then((u) => { this.editOptions.canEdit = this.entityId === u.id; });
   }
 
   onEntityLoadCallBack(entity: User) {

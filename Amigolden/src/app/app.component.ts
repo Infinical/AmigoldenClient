@@ -5,6 +5,8 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { filter } from 'rxjs/operators';
+import { Identity } from './services/identity/identity.service';
+import { identity } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -12,40 +14,31 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-  public appPages = [
+
+  public appPages: Array<{title: string, icon: string, url(): string}> = [
     {
       title: 'Home',
-      url: '/home',
+      url() { return '/home'; },
       icon: 'home'
     },
     {
-      title: 'List',
-      url: '/list',
-      icon: 'list'
-    },
-    {
-      title: 'My Profile',
-      url: '/users/5',
-      icon: 'person'
-    },
-    {
       title: 'Users',
-      url: '/users',
+      url() { return '/users'; },
       icon: 'Contacts'
     },
     {
       title: 'Events',
-      url: '/events',
+      url() { return '/events'; },
       icon: 'ice-cream'
     },
     {
       title: 'Messages',
-      url: '/messages',
+      url() { return '/messages'; },
       icon: 'chatbubbles'
     },
     {
       title: 'Logout',
-      url: '/login',
+      url() { return '/login'; },
       icon: 'log-out'
     },
   ];
@@ -54,10 +47,16 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private router: Router
+    private router: Router,
+    private userIdentity: Identity,
   ) {
     this.initializeApp();
     this.handleNavigation();
+    this.appPages.push({
+      title: 'My Profile',
+      url() { return '/users/' + userIdentity.userId; },
+      icon: 'person'
+    });
   }
 
   handleNavigation() {
