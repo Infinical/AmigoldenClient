@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import 'rxjs/add/operator/map';
 import { FileService } from 'src/app/services/documents/file.service';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { ModalController } from '@ionic/angular';
 // import { ImageCropperComponent, CropperSettings, Bounds} from 'ng2-img-cropper';
 // import { Headers, RequestOptions } from '@angular/http';
 // import { Observable } from 'rxjs/Rx';
@@ -16,6 +17,32 @@ import { FileService } from 'src/app/services/documents/file.service';
 export class ProfilePictureUploadComponent {
 
   @Input() fileProvider: FileService;
+
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
+
+  constructor(protected modalController: ModalController) {
+  }
+
+  closeModal() {
+    this.modalController.dismiss();
+  }
+
+  fileChangeEvent(event: any): void {
+      this.imageChangedEvent = event;
+  }
+  imageCropped(event: ImageCroppedEvent) {
+      this.croppedImage = event.base64;
+  }
+  imageLoaded() {
+      // show cropper
+  }
+  cropperReady() {
+      // cropper ready
+  }
+  loadImageFailed() {
+      // show message
+  }
 
   // hasChanged = false;
 

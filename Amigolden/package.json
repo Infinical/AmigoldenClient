@@ -31,7 +31,7 @@
     "@types/jest": "^24.0.18",
     "core-js": "^2.5.4",
     "moment": "^2.24.0",
-    "ngx-image-cropper": "^1.4.1",
+    "ngx-image-cropper": "^1.5.1",
     "rxjs": "~6.5.1",
     "snazzy-info-window": "^1.1.1",
     "tslib": "^1.9.0",
@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@angular-devkit/architect": "~0.801.2",
-    "@angular-devkit/build-angular": "~0.801.2",
+    "@angular-devkit/build-angular": "^0.803.23",
     "@angular-devkit/core": "~8.1.2",
     "@angular-devkit/schematics": "~8.1.2",
     "@angular/cli": "~8.1.2",

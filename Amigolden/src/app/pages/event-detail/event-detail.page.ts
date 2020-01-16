@@ -23,12 +23,8 @@ export class EventDetailPage extends EntityPageBase<Meeting> implements OnInit {
   isEnrolled = false;
   isCurrentUserOwner = false;
 
-  editOptions: EditOptions = {
-    isEditing: false,
-    canEdit: false,
-    // TODO: use this.save() when once inherited from DetailPageBase
-    save: () => {}
-  };
+  // TODO: use this.save() when once inherited from DetailPageBase
+  editOptions = new EditOptions();
 
   constructor(protected eventService: EventsService,
               protected route: ActivatedRoute, protected router: Router, protected identity: Identity,

@@ -16,6 +16,7 @@ import { ModelBinderInterceptor } from './services/interceptors/model-binder-int
 import { environment } from 'src/environments/environment';
 import { AgmCoreModule } from '@agm/core';
 import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,7 +31,8 @@ import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
       libraries: ['places']
     }),
     AgmSnazzyInfoWindowModule,
-    HttpClientModule
+    HttpClientModule,
+    ImageCropperModule
   ],
   providers: [
     StatusBar,

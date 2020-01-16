@@ -31,7 +31,9 @@
           <span>
               <img class="img-circle" [src]="entity?.profilePictureUrl" width="250" height="250">
           </span>
-          <a class="change-picture-link" *ngIf="editOptions.canEdit" (click)="showProfilePictureModal()">Change Profile Picture</a>
+          <button class="change-picture-link" *ngIf="editOptions.canEdit" (click)="showProfilePictureModal()">
+            Change Profile Picture
+          </button>
         </div>
       </ion-col>
     </ion-row>

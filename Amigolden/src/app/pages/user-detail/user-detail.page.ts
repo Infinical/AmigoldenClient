@@ -11,6 +11,7 @@ import { ModalController } from '@ionic/angular';
 import { EditOptions } from 'src/app/models/edit-options';
 import { ProfilePictureService } from 'src/app/services/documents/profile-picture.service';
 import { RouteNames } from 'src/app/app-routing.module';
+import { ProfilePictureUploadComponent } from 'src/app/components/profile-picture-upload/profile-picture-upload';
 
 @Component({
   selector: 'app-user-detail',
@@ -46,34 +47,16 @@ export class UserDetailPage extends DetailPageBase<User> implements OnInit {
   }
 
   // TODO: fix the profile picture modal
-  showProfilePictureModal() {
-      // const modal = this.modalCtrl.create(ProfilePictureUploadComponent, {
-      //      fileProvider: this.fileService,
-      //      profilePictureUrl: this.entity.profilePictureUrl});
+  async showProfilePictureModal() {
+    const modal = await this.modalCtrl.create({
+      component: ProfilePictureUploadComponent,
+      componentProps: {
+        fileProvider: this.fileService,
+      }
+    });
 
-      //      modal.onDidDismiss(data => {
-      //         if (data == null) {
-      //             return;
-      //         }
-
-      //         const profilePictureDocument: Document = data;
-
-      //         const oldId = this.entity.profilePictureId;
-      //         this.entity.profilePictureId = profilePictureDocument.id;
-      //         this.save().subscribe(u => {
-      //             this.entity = u;
-      //             this.reloadProfilePictureUrl();
-      //         }, error => {
-      //             this.entity.profilePictureId = oldId;
-      //             console.log(error);
-      //         });
-      //      });
-
-      // modal.present();
-
-      // return modal;
+    return await modal.present();
   }
-
 
   // id is the user id consider taking this from the base entityId
   navigateToMessages(id: number) {
