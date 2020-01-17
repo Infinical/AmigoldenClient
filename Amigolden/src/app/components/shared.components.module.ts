@@ -11,6 +11,7 @@ import { MapComponent } from './map/map.component';
 import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
 import { VoteListPage } from '../pages/vote/vote-list/vote-list.page';
 import { ProfilePictureUploadComponent } from './profile-picture-upload/profile-picture-upload';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 @NgModule({
     imports: [CommonModule,
@@ -18,6 +19,7 @@ import { ProfilePictureUploadComponent } from './profile-picture-upload/profile-
         IonicModule,
         AgmCoreModule,
         AgmSnazzyInfoWindowModule,
+        ImageCropperModule,
     ],
     entryComponents: [MapComponent, VoteListPage, ProfilePictureUploadComponent],
     declarations: [ListBaseComponent, SearchComponent, InlineEditComponent,

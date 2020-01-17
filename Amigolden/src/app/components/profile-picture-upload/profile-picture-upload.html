@@ -1,16 +1,16 @@
 <ion-header>
 <ion-toolbar align-title="center">
-      <ion-buttons left>
-      <button [disabled]="!hasChanged" class="success" (click)="saveAndClose()" ion-button>
+      <ion-buttons slot="start">
+      <ion-button [disabled]="!hasChanged" class="success" (click)="saveAndClose()">
           <ion-icon name="save"></ion-icon>
           Save
-      </button>
+      </ion-button>
     </ion-buttons>
     <ion-title> Profile Picture Modal </ion-title>        
-    <ion-buttons right>
-      <button class="warn" (click)="close()" icon-only ion-button>
+    <ion-buttons slot="end">
+      <ion-button class="warn" (click)="close()" icon-only>
           <ion-icon name="close"></ion-icon>
-      </button>
+      </ion-button>
     </ion-buttons>
     </ion-toolbar>
   </ion-header>
@@ -19,7 +19,7 @@
     <ion-row>
       <ion-col text-center>
           <!-- [image]="profilePictureOptions" -->
-        <image-cropper 
+        <image-cropper #cropper
           [imageChangedEvent]="imageChangedEvent" 
           [maintainAspectRatio]="true" 
           [aspectRatio]="4 / 4"
@@ -38,7 +38,7 @@
           <label for="custom-input" button class="custom-file-upload">
             Select a photo from your device
           </label>
-          <input hidden="true" id="custom-input" type="file" (change)="fileChangeListener($event)" />
+          <input hidden="true" id="custom-input" type="file" (change)="fileChangeEvent($event)" />
         </div>
       </ion-col>
     </ion-row>
