@@ -4,6 +4,8 @@ import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { ModalController } from '@ionic/angular';
 import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { AMGDocument } from 'src/app/models/document';
 // import { ImageCropperComponent, CropperSettings, Bounds} from 'ng2-img-cropper';
 // import { Headers, RequestOptions } from '@angular/http';
 // import { Observable } from 'rxjs/Rx';
@@ -38,7 +40,7 @@ export class ProfilePictureUploadComponent {
     }
   }
 
-  close(profilePictureDocument?: Document)  {
+  close(profilePictureDocument?: AMGDocument)  {
     this.modalController.dismiss(profilePictureDocument);
   }
 
@@ -52,18 +54,16 @@ export class ProfilePictureUploadComponent {
     const headers = new HttpHeaders();
     /** In Angular 5, including the header ContentType can invalidate your request */
     headers.append('Accept', 'application/json');
-
-    // const options = new RequestOptions({ headers: headers });
-    // this.fileProvider.uploadProfilePicture(formData, options)
-    //     .catch(error => Observable.throw(error))
-    //     .subscribe(
-    //         data => {
-    //           const profilePictureDocument = data[0];
-    //           this.hasChanged = false;
-    //           this.close(profilePictureDocument);
-    //         },
-    //         error => console.log(error)
-    //     );
+    this.fileProvider.uploadProfilePicture(formData, headers)
+      .pipe(catchError(error => Observable.throw(error)))
+      .subscribe(
+          data => {
+            const profilePictureDocument = data[0];
+            this.hasChanged = false;
+            this.close(profilePictureDocument);
+          },
+          error => console.log(error)
+      );
   }
 
   fileChangeEvent($event) {

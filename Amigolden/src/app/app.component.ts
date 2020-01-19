@@ -61,7 +61,8 @@ export class AppComponent {
 
   handleNavigation() {
     this.router.events
-            .pipe(filter((event: NavigationEvent) => (event instanceof NavigationStart)))
+            .pipe(
+              filter((event: NavigationEvent) => (event instanceof NavigationStart)))
             .subscribe(( event: NavigationStart ) => {
 
               console.group( 'NavigationStart Event' );

@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AMGDocument } from 'src/app/models/document';
+
 
 @Injectable({
     providedIn: 'root'
@@ -14,9 +16,9 @@ export class FileService {
     constructor(public http: HttpClient) {
     }
 
-    // uploadProfilePicture(formData: FormData, options: any): Observable<Document[]> {
-    //     return this.http.post<Document[]>(this.uploadRoute, formData, options);
-    // }
+    uploadProfilePicture(formData: FormData, headers: HttpHeaders): Observable<AMGDocument[]> {
+        return this.http.post<AMGDocument[]>(this.uploadRoute, formData, { headers });
+    }
 
     // upload(formData: FormData, options: RequestOptions): Observable<Document[]> {
     //     return this.http.post<Document[]>(this.uploadRoute, formData, options);
