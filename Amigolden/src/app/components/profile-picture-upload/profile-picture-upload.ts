@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild, OnInit } from '@angular/core';
 import { FileService } from 'src/app/services/documents/file.service';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { ModalController } from '@ionic/angular';
@@ -19,11 +19,10 @@ import { AMGDocument } from 'src/app/models/document';
   templateUrl: './profile-picture-upload.html'
 })
 // https://github.com/Mawi137/ngx-image-cropper/issues/100
-export class ProfilePictureUploadComponent {
+export class ProfilePictureUploadComponent implements OnInit {
 
   @Input() fileProvider: FileService;
   @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
-
 
   profilePictureOptions = {
     image: '',
@@ -32,11 +31,14 @@ export class ProfilePictureUploadComponent {
 
   hasChanged = false;
   imageChangedEvent: any = '';
-  croppedImage: any = '';
+  profilePictureUrl = '';
 
   constructor(protected modalController: ModalController) {
-    if (this.profilePictureOptions.image) {
-      this.setCropperImageFromUri(this.profilePictureOptions.image);
+  }
+
+  ngOnInit() {
+    if (this.profilePictureUrl) {
+      this.setCropperImageFromUri(this.profilePictureUrl);
     }
   }
 
@@ -67,33 +69,30 @@ export class ProfilePictureUploadComponent {
   }
 
   fileChangeEvent($event) {
-    const image: any = new Image();
-
     const file: File = $event.target.files[0];
     this.profilePictureOptions.filename = file.name;
+    this.imageChangedEvent = event;
 
-    const scope = this;
+    // const scope = this;
 
     // https://github.com/Mawi137/ngx-image-cropper/issues/100
-    const profilePictureReader: FileReader = new FileReader();
-    profilePictureReader.onloadend = (loadEvent: any) => {
-        // image.src = loadEvent.target.result;
-        // scope.cropper.setImage(image);
-        scope.cropper.imageBase64 = loadEvent.target.result;
-        scope.hasChanged = true;
-    };
+    // const profilePictureReader: FileReader = new FileReader();
+    // profilePictureReader.onloadend = (loadEvent: any) => {
+    //     // image.src = loadEvent.target.result;
+    //     // scope.cropper.setImage(image);
+    //     scope.profilePictureOptions.image = loadEvent.target.result;
+    //     scope.cropper.imageBase64 = loadEvent.target.result;
+    //     scope.hasChanged = true;
+    // };
 
-    profilePictureReader.readAsDataURL(file);
-  }
-
-  fileChangeEvent1(event: any): void {
-    this.imageChangedEvent = event;
-    this.hasChanged = true;
+    // profilePictureReader.readAsDataURL(file);
   }
 
   imageCropped(event: ImageCroppedEvent) {
-      this.croppedImage = event.base64;
+      this.profilePictureOptions.image = event.base64;
+      this.hasChanged = true;
   }
+
   imageLoaded() {
       // show cropper
   }
@@ -104,12 +103,24 @@ export class ProfilePictureUploadComponent {
       // show message
   }
 
-  setCropperImageFromUri(uri: string) {
-    const scope = this;
-    const image: any = new Image();
+  setCropperImageFromUri(url: string) {
+    this.toDataUrl(url, (result) => {
+      this.cropper.imageBase64 = result;
+    });
+  }
 
-    image.src = uri;
-    // image.onload = (event) => scope.cropper.setImage(image);
+  toDataUrl(url, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            callback(reader.result);
+        };
+        reader.readAsDataURL(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
   }
 
   dataURItoBlob(dataURI) {
@@ -132,16 +143,4 @@ export class ProfilePictureUploadComponent {
 
     return new Blob([ia], {type: mimeString});
   }
-
-  // constructor(params: NavParams, public viewCtrl: ViewController) {
-  //   // TODO: Move parameter names to a const file
-  //   this.fileProvider = this.fileProvider || params.get('fileProvider');
-  //   this.profilePictureOptions.image = params.get('profilePictureUrl');
-
-  //   this.initializeCropperSettings();
-
-  //   if (this.profilePictureOptions.image) {
-  //      this.setCropperImageFromUri(this.profilePictureOptions.image);
-  //   }
-  // }
 }

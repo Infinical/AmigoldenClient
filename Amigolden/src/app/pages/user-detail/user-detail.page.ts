@@ -52,6 +52,7 @@ export class UserDetailPage extends DetailPageBase<User> implements OnInit {
       component: ProfilePictureUploadComponent,
       componentProps: {
         fileProvider: this.fileService,
+        profilePictureUrl: this.entity.profilePictureUrl
       }
     });
 
