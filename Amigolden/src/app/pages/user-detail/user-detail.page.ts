@@ -12,6 +12,7 @@ import { EditOptions } from 'src/app/models/edit-options';
 import { ProfilePictureService } from 'src/app/services/documents/profile-picture.service';
 import { RouteNames } from 'src/app/app-routing.module';
 import { ProfilePictureUploadComponent } from 'src/app/components/profile-picture-upload/profile-picture-upload';
+import { AMGDocument } from 'src/app/models/document';
 
 @Component({
   selector: 'app-user-detail',
@@ -46,7 +47,6 @@ export class UserDetailPage extends DetailPageBase<User> implements OnInit {
       this.profilePictureProvider.setProfilePictureUrl(this.entity);
   }
 
-  // TODO: fix the profile picture modal
   async showProfilePictureModal() {
     const modal = await this.modalCtrl.create({
       component: ProfilePictureUploadComponent,
@@ -55,6 +55,24 @@ export class UserDetailPage extends DetailPageBase<User> implements OnInit {
         profilePictureUrl: this.entity.profilePictureUrl
       }
     });
+
+    modal.onDidDismiss().then(data => {
+
+      const profilePictureDocument: AMGDocument = data.data;
+      if (profilePictureDocument == null) {
+          return;
+      }
+
+      const oldId = this.entity.profilePictureId;
+      this.entity.profilePictureId = profilePictureDocument.id;
+      this.save().subscribe(u => {
+          this.entity = u;
+          this.reloadProfilePictureUrl();
+      }, error => {
+          this.entity.profilePictureId = oldId;
+          console.log(error);
+      });
+   });
 
     return await modal.present();
   }

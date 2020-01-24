@@ -41,8 +41,14 @@ export class EntityPageBase<T extends IHasId> extends PageBase {
         if (this.router.getCurrentNavigation().extras.state) {
             this.entity = this.router.getCurrentNavigation().extras.state.entity;
         } else if (!this.entity) {
-            baseProvider.get(this.entityId).subscribe(entity => this.entity = entity);
+            baseProvider.get(this.entityId).subscribe(entity => {
+                 this.entity = entity;
+                 this.onEntityLoadCallBack(entity);
+            });
         }
+    }
+
+    public onEntityLoadCallBack(entity: T) {
     }
 }
 
@@ -52,10 +58,6 @@ export class EntityPageBase<T extends IHasId> extends PageBase {
 export class DetailPageBase<T extends IHasId> extends EntityPageBase<T> {
     constructor(protected route: ActivatedRoute, protected router: Router, protected baseProvider: ApiResourceBaseService<T>) {
         super(route, router, baseProvider);
-    }
-
-    public onEntityLoadCallBack(entity: T) {
-
     }
 
     get(entityId: number): Observable<T> {

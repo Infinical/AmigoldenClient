@@ -3,6 +3,7 @@ import { Observable, from } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AMGDocument } from 'src/app/models/document';
+import { map } from 'rxjs/operators';
 
 
 @Injectable({
@@ -20,20 +21,18 @@ export class FileService {
         return this.http.post<AMGDocument[]>(this.uploadRoute, formData, { headers });
     }
 
-    // upload(formData: FormData, options: RequestOptions): Observable<Document[]> {
-    //     return this.http.post<Document[]>(this.uploadRoute, formData, options);
-    // }
+    download(documentId: number): Observable<Blob> {
+        return this.http.get(`${this.uploadRoute}/${documentId}`, { responseType: 'blob' });
+    }
 
-    // TODO: refactor this use: https://brianflove.com/2017/11/02/angular-http-client-blob/
-    download(documentId: number): Observable<File> {
-        // return this.http.get<File>(`${this.uploadRoute}/${documentId}`,
-        // { observe: 'response', responseType: ResponseContentType.Blob })
-        //     .map((res: Response) => {
-        //         const filename = this.getFileNameFromHttpResponse(res);
-        //         return from(this.blobToFile(res.blob(), filename));
-        //     });
+    protected blobToFile = (theBlob: Blob, fileName: string): File => {
+        const b: any = theBlob;
+        // A Blob() is almost a File() - it's just missing the two properties below which we will add
+        b.lastModifiedDate = new Date();
+        b.name = fileName;
 
-        return null;
+        // Cast to a File() type
+        return theBlob as File;
     }
 
     protected getFileNameFromHttpResponse(httpResponse: Response): string {
@@ -45,13 +44,5 @@ export class FileService {
 
         const result = contentDispositionHeader.split(';')[1].trim().split('=')[1];
         return result.replace(/"/g, '');
-    }
-
-    protected blobToFile = (theBlob: Promise<Blob>, fileName: string): Promise<File> => {
-        return theBlob.then((b: any) => {
-            b.lastModifiedDate = new Date();
-            b.name = fileName;
-            return b;
-        });
     }
 }
