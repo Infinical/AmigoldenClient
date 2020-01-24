@@ -20,17 +20,14 @@ export class ApiResourceBaseService<T extends IHasId> {
   }
 
   // TODO: remove this and make this a method where its needed
-  getIdByRoute(subRoute: string): Observable<number> {
-      return this.http.get<number>(`${this.apiUrl}/${this.route}/${subRoute}`);
-  }
-
-  // TODO: remove this and make this a method where its needed
   getByRoute(subRoute: string): Observable<T> {
-      return this.http.get<T>(`${this.apiUrl}/${this.route}/${subRoute}`);
+      return this.http.get<T>(`${this.apiUrl}/${this.route}/${subRoute}`)
+      .pipe(map(entity => this.mapEntity(entity)));
   }
 
   get(id: number): Observable<T> {
-      return this.http.get<T>(`${this.apiUrl}/${this.route}/${id}`);
+      return this.http.get<T>(`${this.apiUrl}/${this.route}/${id}`)
+        .pipe(map(entity => this.mapEntity(entity)));
   }
 
   getDynamicList(filter: string, pageSize?: number, pageNumber?: number): Observable<T[]> {

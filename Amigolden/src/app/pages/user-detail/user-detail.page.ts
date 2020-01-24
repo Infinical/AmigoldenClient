@@ -26,7 +26,7 @@ export class UserDetailPage extends DetailPageBase<User> implements OnInit {
 
   constructor(protected route: ActivatedRoute, protected router: Router, protected usersService: UsersEndpointService,
               protected fileService: FileService, protected conversationService: ConversationsService,
-              protected modalCtrl: ModalController, protected profilePictureProvider: ProfilePictureService,
+              protected modalCtrl: ModalController, protected profilePictureService: ProfilePictureService,
               protected identity: Identity) {
     super(route, router, usersService);
   }
@@ -35,16 +35,12 @@ export class UserDetailPage extends DetailPageBase<User> implements OnInit {
     this.identity.getCurrentUser().then((u) => { this.editOptions.canEdit = this.entityId === u.id; });
   }
 
-  onEntityLoadCallBack(entity: User) {
-      this.profilePictureProvider.setProfilePictureUrl(entity);
-  }
-
   reloadProfilePictureUrl() {
       if (this.entity.profilePictureId == null) {
           return;
       }
 
-      this.profilePictureProvider.setProfilePictureUrl(this.entity);
+      this.profilePictureService.setProfilePictureUrl(this.entity);
   }
 
   async showProfilePictureModal() {

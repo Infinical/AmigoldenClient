@@ -15,6 +15,7 @@ import { RouteNames } from 'src/app/app-routing.module';
 })
 export class UsersListPage implements OnInit {
 
+  // TODO: we should provide events on user added to set the profile picture
   public config = new ListConfiguration<User>(
     (pagingInfo: PagingInfo) =>
       this.userService.getDynamicList(this.config.filter, pagingInfo.pageSize,
