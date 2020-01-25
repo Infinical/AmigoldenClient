@@ -1,0 +1,16 @@
+.profile-picture-mask{
+    -webkit-clip-path: circle(128px at 50% 45%);
+    clip-path: circle(128px at 50% 45%);
+}
+
+.img-circle {
+    border-radius:50%;
+}
+
+.change-picture-link{
+    display:block;
+    background: rgba(0, 255, 255, .6);
+    position: relative;
+    top: -40px;
+    margin: auto;
+}

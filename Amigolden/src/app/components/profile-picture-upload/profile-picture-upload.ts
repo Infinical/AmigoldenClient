@@ -29,6 +29,7 @@ export class ProfilePictureUploadComponent implements OnInit {
     filename: ''
   };
 
+  isRound = true;
   hasChanged = false;
   imageChangedEvent: any = '';
   profilePictureUrl = '';
@@ -72,20 +73,6 @@ export class ProfilePictureUploadComponent implements OnInit {
     const file: File = $event.target.files[0];
     this.profilePictureOptions.filename = file.name;
     this.imageChangedEvent = event;
-
-    // const scope = this;
-
-    // https://github.com/Mawi137/ngx-image-cropper/issues/100
-    // const profilePictureReader: FileReader = new FileReader();
-    // profilePictureReader.onloadend = (loadEvent: any) => {
-    //     // image.src = loadEvent.target.result;
-    //     // scope.cropper.setImage(image);
-    //     scope.profilePictureOptions.image = loadEvent.target.result;
-    //     scope.cropper.imageBase64 = loadEvent.target.result;
-    //     scope.hasChanged = true;
-    // };
-
-    // profilePictureReader.readAsDataURL(file);
   }
 
   imageCropped(event: ImageCroppedEvent) {
