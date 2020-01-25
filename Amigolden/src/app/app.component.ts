@@ -6,7 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { filter } from 'rxjs/operators';
 import { Identity } from './services/identity/identity.service';
-import { identity } from 'rxjs';
+import { RouteNames } from './app-routing.module';
 
 @Component({
   selector: 'app-root',
@@ -15,48 +15,53 @@ import { identity } from 'rxjs';
 })
 export class AppComponent {
 
-  public appPages: Array<{title: string, icon: string, url(): string}> = [
+  public appPages: Array<{title: string, icon: string, url: string}> = [
     {
       title: 'Home',
-      url() { return '/home'; },
+      url: '/home',
       icon: 'home'
     },
     {
       title: 'Users',
-      url() { return '/users'; },
+      url: '/users',
       icon: 'Contacts'
     },
     {
       title: 'Events',
-      url() { return '/events'; },
+      url: '/events',
       icon: 'ice-cream'
     },
     {
       title: 'Messages',
-      url() { return '/messages'; },
+      url: '/messages',
       icon: 'chatbubbles'
     },
     {
       title: 'Logout',
-      url() { return '/login'; },
+      url: '/login',
       icon: 'log-out'
-    },
+    }
   ];
+
+  profileMenuItem = {
+    title: 'My Profile',
+    icon: 'person',
+  };
 
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private router: Router,
-    private userIdentity: Identity,
+    protected userIdentity: Identity,
   ) {
     this.initializeApp();
     this.handleNavigation();
-    this.appPages.push({
-      title: 'My Profile',
-      url() { return '/users/' + userIdentity.userId; },
-      icon: 'person'
-    });
+    this.userIdentity.getCurrentUser();
+  }
+
+  navigateToProfile() {
+    this.router.navigate([RouteNames.users, this.userIdentity.userId]);
   }
 
   handleNavigation() {

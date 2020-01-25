@@ -30,8 +30,9 @@ export class Identity {
 
     getCurrentUser(): Promise<User> {
         return this.storage.ready().then(s => {
-            return this.storage.get(environment.data.currentUser).then(u => {
+            return this.storage.get(environment.data.currentUser).then((u: User) => {
                 if (u) {
+                    this.userId = u.id;
                     return u;
                 }
 

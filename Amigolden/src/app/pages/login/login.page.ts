@@ -27,7 +27,6 @@ export class LoginPage implements OnInit {
         params.delete(accessTokenParamName);
         this.authManager.setAccessToken(accessToken).then(v => {
            this.identity.getCurrentUser().then(u => {
-            this.identity.userId = u.id;
             this.router.navigate(['users']);
           });
         });
