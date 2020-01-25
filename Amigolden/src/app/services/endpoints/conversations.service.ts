@@ -3,12 +3,13 @@ import { Conversation } from '../../models/conversation';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ApiResourceBaseService } from '../api-resource-base/api-resource-base.service';
+import { ProfilePictureService } from '../documents/profile-picture.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConversationsService extends ApiResourceBaseService<Conversation>  {
-  constructor(public http: HttpClient) {
+  constructor(public http: HttpClient, protected profilePictureService: ProfilePictureService) {
       super(http, 'conversations');
   }
 
@@ -29,10 +30,7 @@ export class ConversationsService extends ApiResourceBaseService<Conversation>  
   }
 
   mapEntity(entity: Conversation): Conversation {
-    if (entity.primaryRecipient.profilePictureId == null) {
-        entity.primaryRecipient.profilePictureUrl = 'http://modexenergy.com/wp-content/themes/modex_wp/img/avatar.png';
-    }
-
+    this.profilePictureService.setProfilePictureUrl(entity.primaryRecipient);
     return entity;
   }
 }

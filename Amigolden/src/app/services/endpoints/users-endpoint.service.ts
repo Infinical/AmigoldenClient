@@ -9,7 +9,7 @@ import { ProfilePictureService } from '../documents/profile-picture.service';
   providedIn: 'root'
 })
 export class UsersEndpointService extends ApiResourceBaseService<User>  {
-    constructor(protected http: HttpClient, protected profilePictureService: ProfilePictureService) {
+  constructor(protected http: HttpClient, protected profilePictureService: ProfilePictureService) {
         super(http, 'users');
   }
 
@@ -23,12 +23,7 @@ export class UsersEndpointService extends ApiResourceBaseService<User>  {
   }
 
   mapEntity(entity: User): User {
-    if (entity.profilePictureId == null) {
-        entity.profilePictureUrl = 'http://modexenergy.com/wp-content/themes/modex_wp/img/avatar.png';
-    }
-
     this.profilePictureService.setProfilePictureUrl(entity);
-
     return entity;
   }
 }

@@ -14,12 +14,22 @@ export class ProfilePictureService  {
   }
 
   setProfilePictureUrl(user: User) {
-      if (!user || user.profilePictureId == null) {
-          return;
-      }
+    if (!user) {
+        return;
+    }
 
-      this.fileService.download(user.profilePictureId).subscribe(
-          file => this.setProfileImageFromBlob(file, user));
+    // TODO: consider setting the default url in the user dto,
+    // and just mapping the changes from loaded entity onto the default in the map entity
+    // Note: set the default profile picture url always
+    // so we don't see a broken image when waiting to load
+    user.profilePictureUrl = 'http://modexenergy.com/wp-content/themes/modex_wp/img/avatar.png';
+
+    if (user.profilePictureId == null) {
+        return;
+    }
+
+    this.fileService.download(user.profilePictureId).subscribe(
+        file => this.setProfileImageFromBlob(file, user));
   }
 
   setProfileImageFromBlob(image: Blob, user: User) {

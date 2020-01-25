@@ -6,6 +6,8 @@ import moment from 'moment';
 import { ConversationsService } from 'src/app/services/endpoints/conversations.service';
 import { ListConfiguration, SlidingListConfiguration, PagingInfo } from 'src/app/components/list-base/data/list-configuration';
 import { map } from 'rxjs/operators';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { RouteNames } from 'src/app/app-routing.module';
 
 @Component({
   selector: 'app-messages-list',
@@ -23,7 +25,8 @@ export class MessagesListPage implements OnInit {
       slidingListConfig: new SlidingListConfiguration((entityId) =>  this.baseProvider.unsubscribe(entityId))
     });
 
-  constructor(public baseProvider: ConversationsService, public differs: KeyValueDiffers,
+  constructor(protected route: ActivatedRoute, protected router: Router,
+              public baseProvider: ConversationsService, public differs: KeyValueDiffers,
               public hubService: HubServiceBase, private ngZone: NgZone) {
   }
 
@@ -43,6 +46,13 @@ export class MessagesListPage implements OnInit {
   }
 
   navigateToDetail(entity: Conversation) {
+    const navigationExtras: NavigationExtras = {
+      state: {
+        entity,
+        entityId: entity.id
+      }
+    };
+    this.router.navigate([RouteNames.messages, entity.id], navigationExtras);
   }
 
   private subscribeToHubEvents(): void {
