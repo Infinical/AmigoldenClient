@@ -4,7 +4,8 @@
     font-size: 2.4em;
 }
 
-.login-background{
+ion-content.login-background{
+    --background: none;
     background-image: url('../../../assets/images/login-page.jpg');
     background-size: cover;
 }
