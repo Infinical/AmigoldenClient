@@ -47,7 +47,6 @@ export class EventDetailPage extends EntityPageBase<Meeting> implements OnInit {
   }
 
   isEventActive() {
-    return true;
     return this.addDays(this.entity.meetTime, 1) >= new Date();
   }
 

@@ -4,10 +4,6 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <button [hidden]="!editOptions.canCreate" (click)="onCreate()" ion-button>
-          <ion-icon name="create"></ion-icon>
-          &nbsp;Create
-      </button>      
       <button [hidden]="!editOptions.canEdit || editOptions.isEditing" (click)="editOptions.toggleEdit()" ion-button>
         <ion-icon name="create"></ion-icon>
         &nbsp;Edit

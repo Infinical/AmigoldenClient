@@ -15,6 +15,6 @@ export class Meeting implements IHasId {
     description = '';
     name = '';
     ownerId = 0;
-    eventType = EventType.Vote;
+    eventType = EventType.AlaCarte;
     eventCostInCents = 0;
 }

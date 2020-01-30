@@ -10,6 +10,8 @@ import { Location } from 'src/app/models/location';
 import { EventsService } from 'src/app/services/endpoints/events.service';
 import { LocationsService } from 'src/app/services/endpoints/locations.service';
 import { MapOptions } from 'src/app/models/map/map-options';
+import { Identity } from 'src/app/services/identity/identity.service';
+import { HeaderOptions } from 'src/app/models/header-options';
 
 
 @Component({
@@ -24,6 +26,7 @@ export class EventsListPage implements OnInit {
   mapOptions = new MapOptions<Meeting>('View Event', false, false,
     (lat, lon, dist) => this.eventService.getMeetingWithinRange(lat, lon, dist),
     x => this.resolveLocation(x));
+  headerOptions = new HeaderOptions(true);
 
   public config = new ListConfiguration<Meeting>(
     (pagingInfo: PagingInfo) =>
@@ -33,7 +36,8 @@ export class EventsListPage implements OnInit {
     }
   );
 
-  constructor(private router: Router, protected locationService: LocationsService, protected eventService: EventsService) {
+  constructor(private router: Router, protected locationService: LocationsService,
+              protected eventService: EventsService, protected identity: Identity) {
   }
 
   ngOnInit() {
@@ -76,16 +80,11 @@ export class EventsListPage implements OnInit {
     return `${location.name} on ${meeting.meetTime.toLocaleDateString()}/ at ${meeting.meetTime.toLocaleTimeString()}`;
   }
 
-  // defaultSearchFilter(value: string): string {
-  //   const filterBuilder = ODataDynamicFilterBuilder.build(builder =>
-  //       builder.or(
-  //           builder.contains(new ODataPropertyPath('FirstName'), value),
-  //           builder.contains(new ODataPropertyPath('LastName'), value),
-  //           builder.contains(new ODataPropertyPath('Email'), value)
-  //       )
-  //   );
-  //   return filterBuilder.getString();
-  // }
+  onCreate() {
+    const meeting = new Meeting();
+    meeting.ownerId = this.identity.userId;
+    this.navigateToDetail(meeting);
+  }
 
   navigateToDetail(entity: Meeting) {
 
