@@ -7,7 +7,6 @@ export class ListConfigurationOptionalArgs {
     isSinglePage?: boolean;
     defaultPagingInfo?: PagingInfo;
     slidingListConfig?: SlidingListConfiguration;
-    applyODataFilter?: (searchTerm: string) => string;
 }
 
 export class SlidingListConfiguration {
@@ -24,21 +23,18 @@ export class SlidingListConfiguration {
 }
 
 export class ListConfiguration<T> extends ListConfigurationOptionalArgs {
-
-    // tslint:disable-next-line:variable-name
-    private _filter = '';
-    get filter() { return this._filter; }
-    set filter(value) {
-        if (this.applyODataFilter == null) {
-            return;
-        }
-
-        this._filter = this.applyODataFilter(value);
-        this.refresh.emit();
-    }
-
     getList: (pagingInfo: PagingInfo) => Observable<T[]>;
     refresh = new EventEmitter<any>();
+
+    // tslint:disable-next-line:variable-name
+    _filter = '';
+    get filter(): string {
+        return this._filter;
+    }
+    set filter(value) {
+        this._filter = value;
+        this.refresh.emit();
+    }
 
     constructor(getList: (pagingInfo: PagingInfo) => Observable<T[]>, {
         isSliding = false,
@@ -46,7 +42,6 @@ export class ListConfiguration<T> extends ListConfigurationOptionalArgs {
         isSinglePage = false,
         defaultPagingInfo = new PagingInfo(),
         slidingListConfig = new SlidingListConfiguration(),
-        applyODataFilter,
     }: ListConfigurationOptionalArgs) {
         super();
 
@@ -56,7 +51,6 @@ export class ListConfiguration<T> extends ListConfigurationOptionalArgs {
         this.isSinglePage = isSinglePage;
         this.defaultPagingInfo = defaultPagingInfo;
         this.slidingListConfig = slidingListConfig;
-        this.applyODataFilter = applyODataFilter;
     }
 }
 

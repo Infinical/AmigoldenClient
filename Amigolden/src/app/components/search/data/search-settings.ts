@@ -1,3 +1,6 @@
 export class SearchSettings {
-    constructor(public searchDelayMS = 1000) {}
+    constructor(
+        public applyODataFilter: (searchTerm: string) => string,
+        public searchDelayMS = 1000) {
+    }
 }

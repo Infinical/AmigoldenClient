@@ -8,11 +8,8 @@ import { SearchSettings } from './data/search-settings';
 })
 export class SearchComponent implements OnInit {
 
-  @Input() settings = new SearchSettings();
-
-  // we must rename the event search is an native
-  // event and will trigger when enter is pressed
-  @Output() searchFilter = new EventEmitter<any>();
+  @Input() settings: SearchSettings;
+  @Output() odataFilterChanged = new EventEmitter<string>();
 
   searchTerm = '';
   // Hack: Timer doesn't want to fucking install
@@ -23,7 +20,8 @@ export class SearchComponent implements OnInit {
   searchTermChange() {
     clearTimeout(this.searchDelayTimer);
     this.searchDelayTimer = setTimeout(() => {
-      this.searchFilter.emit(this.searchTerm);
+      const odataFilter = this.settings.applyODataFilter(this.searchTerm);
+      this.odataFilterChanged.emit(odataFilter);
     }, this.settings.searchDelayMS);
   }
 
