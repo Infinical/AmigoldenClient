@@ -4,7 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { Location } from 'src/app/models/location';
 import { MapOptions } from 'src/app/models/map/map-options';
 import * as _ from 'underscore';
-declare var google;
+declare var google: any;
 
 @Component({
   selector: 'app-map',
@@ -103,7 +103,7 @@ export class MapComponent implements OnInit {
       autocomplete.addListener('place_changed', () => {
         this.ngZone.run(() => {
           // get the place result
-          const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+          const place = autocomplete.getPlace();
 
           // verify result
           if (place.geometry === undefined || place.geometry === null) {
