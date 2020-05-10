@@ -11,6 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ListConfiguration, PagingInfo } from 'src/app/components/list-base/data/list-configuration';
 import { map } from 'rxjs/operators';
 import { ListBaseComponent } from 'src/app/components/list-base/list-base.component';
+import { PageBase } from '../detail-page-base';
 
 @Component({
   selector: 'app-messages',
@@ -18,7 +19,7 @@ import { ListBaseComponent } from 'src/app/components/list-base/list-base.compon
   styleUrls: ['./messages.page.scss'],
   providers: [ HubServiceBase ]
 })
-export class MessagesPage implements OnInit {
+export class MessagesPage extends PageBase implements OnInit {
 
     // @ViewChild('content') content: any;
 
@@ -26,8 +27,6 @@ export class MessagesPage implements OnInit {
 
     pageSize = 20;
     pageNumber = 1;
-
-    private conversation: Conversation;
 
     filterByConversationId: string;
 
@@ -52,6 +51,7 @@ export class MessagesPage implements OnInit {
     constructor(protected baseProvider: MessagesService, protected identityProvider: Identity,
                 protected hubService: HubServiceBase, protected ngZone: NgZone,
                 protected route: ActivatedRoute, protected router: Router) {
+                    super(route, router);
     }
 
     ngOnInit() {
@@ -62,13 +62,10 @@ export class MessagesPage implements OnInit {
             this.canSendMessage = this.hubService.connectionExists;
         });
 
-        if (this.router.getCurrentNavigation().extras.state) {
-            this.conversation = this.router.getCurrentNavigation().extras.state.entity;
-            // Have the conversations controller handle creating conversation
-            this.filterByConversationId = ODataDynamicFilterBuilder.build(builder =>
-                builder.eq(new ODataPropertyPath('ConversationId'), this.conversation.id)
-            ).getString();
-        }
+        // Have the conversations controller handle creating conversation
+        this.filterByConversationId = ODataDynamicFilterBuilder.build(builder =>
+            builder.eq(new ODataPropertyPath('ConversationId'), this.entityId)
+        ).getString();
     }
 
     scrollToBottom() {
@@ -116,7 +113,7 @@ export class MessagesPage implements OnInit {
         this.identityProvider.getCurrentUser().then(user => {
 
             const messageEntity = new Message();
-            messageEntity.conversationId = this.conversation.id;
+            messageEntity.conversationId = this.entityId;
             messageEntity.senderUserId = user.id;
             messageEntity.created = new Date();
             messageEntity.messageText = this.messageText;
