@@ -1,8 +1,7 @@
-declare var require: any;
 import { EventEmitter, Injectable } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { environment } from 'src/environments/environment';
-const { HubConnection, HubConnectionBuilder } =  require('@aspnet/signalr');
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +14,7 @@ export class HubBase {
     onNotify = new EventEmitter<any>();
 
     // tslint:disable-next-line:variable-name
-    protected _hubConnection: any;
+    protected _hubConnection: HubConnection;
 
     constructor(public authManager: AuthenticationService) {
     }
