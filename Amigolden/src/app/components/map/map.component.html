@@ -73,7 +73,22 @@
                           >
                         </ion-row>
                         <ion-row>
-                          <ion-col> </ion-col>
+                          <ion-col>Event Name: </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col>Event Date: </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col>Event Description: </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col>Event Organizer: </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col>Event Prize: </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col>Event Style: </ion-col>
                         </ion-row>
                         <ion-row>
                           <ion-col></ion-col>
@@ -81,16 +96,11 @@
                             <ion-button
                               (click)="selectLocation(group.location, data)"
                             >
-                              {{ options?.selectLabel || "Select" }}
+                              {{ options?.selectLabel || 'Select' }}
                             </ion-button>
                           </ion-col>
                         </ion-row>
                       </ion-grid>
-                      <!-- <ion-label>Location: </ion-label>
-                    <ion-label>{{ group.location.name }} 5 </ion-label>
-                    <ion-button (click)="selectLocation(group.location, data)">
-                      {{ options?.selectLabel || "Select" }}
-                    </ion-button> -->
                     </ion-slide>
                   </ion-slides>
                 </ion-card>
@@ -111,16 +121,14 @@
   </agm-map>
 
   <ion-grid>
-    <ion-row>
+    <ion-row class="ion-align-items-end">
       <ion-col>
-        <h6 *ngIf="this.address.length > 0" class="ion-text-center">
-          Address: {{ address + ", " + town + ", " + state }}
+        <h6 *ngIf="this.address.length > 0" class="ion-margin-horizontal">
+          Address: {{ address + ', ' + town + ', ' + state }}
         </h6></ion-col
       >
       <ion-col>
-        <ion-button color="primary" class="ion-text-left"
-          >Enroll</ion-button
-        ></ion-col
+        <ion-button color="primary" class="">Enroll</ion-button></ion-col
       >
     </ion-row>
   </ion-grid>
