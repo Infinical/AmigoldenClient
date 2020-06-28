@@ -8,17 +8,17 @@ export const environment = {
   baseUrl: 'https://localhost:44377/',
   apiUrl: 'https://localhost:44377/api',
   authentication: {
-    userTokenName: 'UT-8675309'
+    userTokenName: 'UT-8675309',
   },
   googleMaps: {
-    apiKey: 'AIzaSyCXBaTUeO21FjzLJnghunS7CkDnLcLnYm4'
+    apiKey: '',
   },
   data: {
     currentUser: 'CurrentUser',
   },
   eventCosts: {
     platform: 2500,
-    direct: 2000
+    direct: 2000,
   },
 };
 
