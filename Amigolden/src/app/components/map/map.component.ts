@@ -1,9 +1,20 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  NgZone,
+  Input,
+  Output,
+  EventEmitter,
+  TemplateRef,
+} from '@angular/core';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
 import { ModalController } from '@ionic/angular';
 import { Location } from 'src/app/models/location';
 import { MapOptions } from 'src/app/models/map/map-options';
 import * as _ from 'underscore';
+import { FormGroup, FormBuilder } from '@angular/forms';
 declare var google: any;
 
 @Component({
@@ -12,7 +23,6 @@ declare var google: any;
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit {
-
   @Input() infoWindowTemplate: TemplateRef<any>;
   @Output() locationSelected = new EventEmitter<any>();
 
@@ -31,42 +41,55 @@ export class MapComponent implements OnInit {
   withinMiles = 10;
   latitude = 40.7362942;
   longitude = -73.9921495;
+
   zoom: number;
-  address: string;
+  address: string = '';
+  town: string = '';
+  state: string = '';
   isCreating = false;
-  locationEntitiesMap = new Array<{location: Location, data: Array<any>}>();
+  searchForm: FormGroup;
+  locationEntitiesMap = new Array<{ location: Location; data: Array<any> }>();
   private geoCoder;
 
-  @ViewChild('search', {static: false })
+  @ViewChild('search', { static: false })
   public searchElementRef: ElementRef;
-
 
   constructor(
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
-    protected modalController: ModalController
-  ) { }
+    protected modalController: ModalController,
+    private fb: FormBuilder
+  ) {}
 
   resolveMapData() {
-    this.options.getData(this.latitude, this.longitude, this.withinMiles).subscribe(entities => {
-      const entitiesMap = entities.map(e => ({ location: this.options.locationResolver(e), data: e}));
-      const group = (array, prop) => array.reduce((g, item) => {
-        const propVal = item[prop];
-        const identifier = propVal.id;
-        const entry = g[identifier];
-        const data = item.data;
+    this.options
+      .getData(this.latitude, this.longitude, this.withinMiles)
+      .subscribe((entities) => {
+        const entitiesMap = entities.map((e) => ({
+          location: this.options.locationResolver(e),
+          data: e,
+        }));
 
-        if (entry) {
-          entry.data.push(data);
-        } else {
-          g[identifier] = {location: propVal, data: [data]};
-        }
-        return g;
-      }, {});
-      const groups = group(entitiesMap, 'location');
-      this.locationEntitiesMap = Object.keys(groups).map((key) => groups[key])
-            || new Array<{location: Location, data: Array<any>}>();
-    });
+        const group = (array, prop) =>
+          array.reduce((g, item) => {
+            const propVal = item[prop];
+            const identifier = propVal.id;
+            const entry = g[identifier];
+            const data = item.data;
+
+            if (entry) {
+              entry.data.push(data);
+            } else {
+              g[identifier] = { location: propVal, data: [data] };
+            }
+            return g;
+          }, {});
+
+        const groups = group(entitiesMap, 'location');
+        this.locationEntitiesMap =
+          Object.keys(groups).map((key) => groups[key]) ||
+          new Array<{ location: Location; data: Array<any> }>();
+      });
   }
 
   closeModal() {
@@ -74,11 +97,10 @@ export class MapComponent implements OnInit {
   }
 
   selectLocation(location: Location, data: any) {
-    this.locationSelected.emit({location, data});
+    this.locationSelected.emit({ location, data });
   }
 
-  clickedMarker(locationPair: {location: Location, data: any[]}) {
-  }
+  clickedMarker(locationPair: { location: Location; data: any[] }) {}
 
   create() {
     this.isCreating = true;
@@ -88,23 +110,30 @@ export class MapComponent implements OnInit {
     this.locationSelected.emit({ location: this.selectedLocation });
   }
 
-  cancel() {
-  }
+  cancel() {}
 
   ngOnInit() {
     // load Places Autocomplete
+    this.searchForm = this.fb.group({
+      autocomplete_input: [''],
+    });
+
     this.mapsAPILoader.load().then(() => {
       this.setCurrentLocation();
       this.geoCoder = new google.maps.Geocoder();
-
-      const autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
-        types: ['address']
+      const inputfield = document
+        .getElementById('autocomplete_input')
+        .getElementsByTagName('input')[0];
+      const autocomplete = new google.maps.places.Autocomplete(inputfield, {
+        types: ['address'],
       });
       autocomplete.addListener('place_changed', () => {
         this.ngZone.run(() => {
           // get the place result
           const place = autocomplete.getPlace();
-
+          this.address = '';
+          this.town = '';
+          this.state = '';
           // verify result
           if (place.geometry === undefined || place.geometry === null) {
             return;
@@ -118,14 +147,64 @@ export class MapComponent implements OnInit {
 
           // set latitude, longitude and zoom
           this.latitude = place.geometry.location.lat();
+
           this.longitude = place.geometry.location.lng();
-          this.address = place.formatted_address;
+          // this.address = place.formatted_address;
+          this.address = place.address_components[0].short_name;
+          this.town = place.address_components[1].short_name;
+          this.state = place.address_components[2].short_name;
+          // console.log(place);
           this.zoom = 12;
         });
       });
     });
   }
 
+  // listen to keyp and search google places
+
+  search() {
+    if (this.searchForm.value.autocomplete_input.length > 0) {
+      const inputfield = document
+        .getElementById('autocomplete_input')
+        .getElementsByTagName('input')[0];
+      this.mapsAPILoader.load().then(() => {
+        this.setCurrentLocation();
+        this.geoCoder = new google.maps.Geocoder();
+
+        const autocomplete = new google.maps.places.Autocomplete(
+          inputfield,
+
+          {
+            types: ['address'],
+          }
+        );
+
+        autocomplete.addListener('place_changed', () => {
+          this.ngZone.run(() => {
+            // get the place result
+            const place = autocomplete.getPlace();
+
+            // verify result
+            if (place.geometry === undefined || place.geometry === null) {
+              return;
+            }
+
+            this.selectedLocation = new Location();
+            this.selectedLocation.latitude = place.geometry.location.lat();
+            this.selectedLocation.longitude = place.geometry.location.lng();
+            this.selectedLocation.formattedAddress = place.formatted_address;
+            // TODO: add a way to save the name
+
+            // set latitude, longitude and zoom
+            this.latitude = place.geometry.location.lat();
+            this.longitude = place.geometry.location.lng();
+            this.address = place.formatted_address;
+            this.zoom = 12;
+          });
+        });
+      });
+    }
+  }
   // Get Current Location Coordinates
   private setCurrentLocation() {
     if ('geolocation' in navigator) {
@@ -138,28 +217,37 @@ export class MapComponent implements OnInit {
     }
   }
 
-
   markerDragEnd($event: MouseEvent) {
-    console.log($event);
+    // console.log($event);
     this.latitude = $event.coords.lat;
     this.longitude = $event.coords.lng;
     this.getAddress(this.latitude, this.longitude);
   }
 
   getAddress(latitude, longitude) {
-    this.geoCoder.geocode({ location: { lat: latitude, lng: longitude } }, (results, status) => {
-      console.log(results);
-      console.log(status);
-      if (status === 'OK') {
-        if (results[0]) {
-          this.zoom = 12;
-          this.address = results[0].formatted_address;
+    this.address = '';
+    this.town = '';
+    this.state = '';
+    this.geoCoder.geocode(
+      { location: { lat: latitude, lng: longitude } },
+      (results, status) => {
+        // console.log(results);
+        // console.log(status);
+        if (status === 'OK') {
+          if (results[0]) {
+            this.zoom = 12;
+            console.log(results[0].formatted_address[0]);
+            // this.address = results[0].formatted_address;
+            this.address = results[0].address_components[0].short_name;
+            this.town = results[0].address_components[1].short_name;
+            this.state = results[0].address_components[2].short_name;
+          } else {
+            window.alert('No results found');
+          }
         } else {
-          window.alert('No results found');
+          window.alert('Geocoder failed due to: ' + status);
         }
-      } else {
-        window.alert('Geocoder failed due to: ' + status);
       }
-    });
+    );
   }
 }
