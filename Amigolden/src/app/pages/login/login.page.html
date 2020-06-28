@@ -5,13 +5,18 @@
 	<ion-toolbar no-shadow position="bottom">
 		<form #form method="post" class="form-horizontal" [action]="loginUrl">
 			<div>
-				<p>
-          <button ion-button block [disabled]="isDisabled" (click)="form.submit()" type="submit" 
-            title="Log in using your Stripe account">
-						Stripe Connect
-					</button>
-					<input type="hidden" name="provider" value="StripeConnect">
-					<input type="text" name="entryCode" placeholder="Entry Code">
+			  <p>
+          		<button ion-button block (click)="loginProvider = 'StripeConnect';" title="Log in using Stripe">
+				  	Stripe Connect
+				</button>
+				<button ion-button block (click)="loginProvider = 'Google';" title="Log in using Stripe">
+					Google
+				</button>
+				<button ion-button block (click)="form.submit()" title="Log in using Stripe">
+					Login 
+				</button>
+				<input type="hidden" name="provider" [value]="loginProvider">
+				<input type="text" name="entryCode" placeholder="Entry Code">
 				</p>
 			</div>
 		</form>

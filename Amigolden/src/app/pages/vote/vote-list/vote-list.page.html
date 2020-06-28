@@ -13,7 +13,7 @@
       <img [src]=entity.profilePictureUrl>
     </ion-avatar>
     <ion-label>{{ entity?.email }}</ion-label>
-    <ion-button (click)="vote(entity)" shape="round" item-right [fill]="outline"  
+    <ion-button (click)="vote(entity)" shape="round" item-right fill="outline"  
       [color]="isVotedCastedFor(entity) ? 'primary' : 'secondary' ">Vote</ion-button>
   </ion-item>
 </ng-template>

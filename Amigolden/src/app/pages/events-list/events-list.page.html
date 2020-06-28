@@ -23,7 +23,7 @@
     </ion-segment>
   <app-list-base *ngIf="viewController.value == 'list'" [config]="config" [template]="itemTemplate"></app-list-base>
   <div *ngIf="viewController.value == 'map'">
-      <app-map [options]="mapOptions" [infoWindowTemplate]="mapTemplate" (locationSelected)="navigateToDetail($event.data)" ></app-map>
+      <app-map [options]="mapOptions" (locationSelected)="navigateToDetail($event.data)" ></app-map>
   </div>
 </ion-content>
 <ng-template #itemTemplate let-entity="entity">

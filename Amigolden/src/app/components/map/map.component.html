@@ -30,7 +30,7 @@
                         <ion-slides>
                           <ion-slide  *ngFor="let data of group.data">
                               <ion-label>Location: </ion-label>
-                              <ion-label>{{group.location.name}} 5 </ion-label>
+                              <ion-label>{{group.location.name}} </ion-label>
                               <ion-button (click)="selectLocation(group.location, data)">
                                 {{options?.selectLabel || 'Select'}}
                               </ion-button>
