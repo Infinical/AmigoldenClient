@@ -4,37 +4,50 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <button *ngIf="headerOptions.canCreate" (click)="onCreate()" ion-button>
-          <ion-icon name="create"></ion-icon>
-          &nbsp;Create
-      </button>
-    </ion-buttons>    
+      <ion-button
+        *ngIf="headerOptions.canCreate"
+        (click)="onCreate()"
+        ion-button
+      >
+        <ion-icon name="create"></ion-icon>
+        &nbsp;Create
+      </ion-button>
+    </ion-buttons>
     <!-- <app-search (searchFilter)="this.config.filter=$event"></app-search> -->
   </ion-toolbar>
 </ion-header>
 <ion-content>
   <ion-segment #viewController>
-      <ion-segment-button value="map">
-        <ion-label>Map</ion-label>
-      </ion-segment-button>
-      <ion-segment-button checked="true" value="list">
-        <ion-label>List</ion-label>
-      </ion-segment-button>
-    </ion-segment>
-  <app-list-base *ngIf="viewController.value == 'list'" [config]="config" [template]="itemTemplate"></app-list-base>
+    <ion-segment-button value="map">
+      <ion-label>Map</ion-label>
+    </ion-segment-button>
+    <ion-segment-button checked="true" value="list">
+      <ion-label>List</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <app-list-base
+    *ngIf="viewController.value == 'list'"
+    [config]="config"
+    [template]="itemTemplate"
+  ></app-list-base>
   <div *ngIf="viewController.value == 'map'">
-      <app-map [options]="mapOptions" [infoWindowTemplate]="mapTemplate" (locationSelected)="navigateToDetail($event.data)" ></app-map>
+    <app-map
+      [options]="mapOptions"
+      [infoWindowTemplate]="mapTemplate"
+      (locationSelected)="navigateToDetail($event.data)"
+    ></app-map>
   </div>
 </ion-content>
 <ng-template #itemTemplate let-entity="entity">
   <ion-card>
     <img *ngIf="entity.imageSrc" [src]="entity.imageSrc" />
-    <img src='https://ionicframework.com/docs/demos/api/card/madison.jpg' />
+    <img src="https://ionicframework.com/docs/demos/api/card/madison.jpg" />
     <ion-card-header>
       <ion-card-subtitle>Destination</ion-card-subtitle>
       <ion-card-title>{{ displayLocation(entity) }}</ion-card-title>
     </ion-card-header>
-    <ion-card-content> {{ entity.description }} 
+    <ion-card-content>
+      {{ entity.description }}
       <ion-button (click)="navigateToDetail(entity)">Learn More...</ion-button>
     </ion-card-content>
   </ion-card>
