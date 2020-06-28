@@ -14,6 +14,7 @@ import { ModalController } from "@ionic/angular";
 import { Location } from "src/app/models/location";
 import { MapOptions } from "src/app/models/map/map-options";
 import * as _ from "underscore";
+import { FormGroup, FormBuilder } from "@angular/forms";
 declare var google: any;
 
 @Component({
@@ -42,10 +43,11 @@ export class MapComponent implements OnInit {
   longitude = -73.9921495;
   zoom: number;
   address: string;
-  // isCreating = false;
-  isCreating = true;
+  isCreating = false;
+
   locationEntitiesMap = new Array<{ location: Location; data: Array<any> }>();
   private geoCoder;
+  searchForm: FormGroup;
 
   @ViewChild("search", { static: false })
   public searchElementRef: ElementRef;
@@ -53,7 +55,8 @@ export class MapComponent implements OnInit {
   constructor(
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
-    protected modalController: ModalController
+    protected modalController: ModalController,
+    private fb: FormBuilder
   ) {}
 
   resolveMapData() {
@@ -107,16 +110,23 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
     // load Places Autocomplete
+    this.searchForm = this.fb.group({
+      autocomplete_input: [""],
+    });
     this.mapsAPILoader.load().then(() => {
       this.setCurrentLocation();
       this.geoCoder = new google.maps.Geocoder();
-
+      let inputfield = document
+        .getElementById("autocomplete_input")
+        .getElementsByTagName("input")[0];
       const autocomplete = new google.maps.places.Autocomplete(
-        this.searchElementRef.nativeElement,
+        inputfield,
+
         {
           types: ["address"],
         }
       );
+
       autocomplete.addListener("place_changed", () => {
         this.ngZone.run(() => {
           // get the place result
@@ -143,6 +153,50 @@ export class MapComponent implements OnInit {
     });
   }
 
+  search() {
+    if (this.searchForm.value.autocomplete_input.length > 0) {
+      let inputfield = document
+        .getElementById("autocomplete_input")
+        .getElementsByTagName("input")[0];
+      this.mapsAPILoader.load().then(() => {
+        this.setCurrentLocation();
+        this.geoCoder = new google.maps.Geocoder();
+
+        const autocomplete = new google.maps.places.Autocomplete(
+          inputfield,
+
+          {
+            types: ["address"],
+          }
+        );
+
+        autocomplete.addListener("place_changed", () => {
+          this.ngZone.run(() => {
+            // get the place result
+            const place = autocomplete.getPlace();
+
+            // verify result
+            if (place.geometry === undefined || place.geometry === null) {
+              return;
+            }
+
+            this.selectedLocation = new Location();
+            this.selectedLocation.latitude = place.geometry.location.lat();
+            this.selectedLocation.longitude = place.geometry.location.lng();
+            this.selectedLocation.formattedAddress = place.formatted_address;
+            // TODO: add a way to save the name
+
+            // set latitude, longitude and zoom
+            this.latitude = place.geometry.location.lat();
+            this.longitude = place.geometry.location.lng();
+            this.address = place.formatted_address;
+            this.zoom = 12;
+          });
+        });
+      });
+    }
+  }
+
   // Get Current Location Coordinates
   private setCurrentLocation() {
     if ("geolocation" in navigator) {
@@ -156,7 +210,6 @@ export class MapComponent implements OnInit {
   }
 
   markerDragEnd($event: MouseEvent) {
-    console.log($event);
     this.latitude = $event.coords.lat;
     this.longitude = $event.coords.lng;
     this.getAddress(this.latitude, this.longitude);

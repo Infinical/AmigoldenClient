@@ -9,29 +9,21 @@
   </ion-toolbar>
 </ion-header> -->
 <div>
-  <!-- <div class="form-group">
-      <label>Enter address</label>
-      <input type="text" class="form-control" (keydown.enter)="$event.preventDefault()" placeholder="Search Nearest Location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
-  </div> -->
-  <ion-header translucent>
-    <ion-toolbar>
-      <ion-title>Enter address</ion-title>
-    </ion-toolbar>
-    <ion-toolbar>
-      <ion-input
-        type="text"
-        class="form-control"
-        (keydown.enter)="$event.preventDefault()"
-        placeholder="Search Nearest Location"
-        autocorrect="off"
-        autocapitalize="off"
-        spellcheck="off"
-        type="text"
-        #search
-      ></ion-input>
-    </ion-toolbar>
-  </ion-header>
+  <div [formGroup]="searchForm">
+    <ion-item>
+      <ion-label class="ion-item-small" position="floating"
+        >Search Nearest Location</ion-label
+      >
 
+      <ion-input
+        formControlName="autocomplete_input"
+        id="autocomplete_input"
+        autocomplete="off"
+        (keyup)="search()"
+      >
+      </ion-input>
+    </ion-item>
+  </div>
   <ion-button
     *ngIf="!isCreating && options.canCreate"
     (click)="create()"
@@ -89,24 +81,5 @@
     </agm-marker>
   </agm-map>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>Address: {{ address }}</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-row>
-        <ion-col>
-          <ion-label>Latitude:</ion-label>
-          <h6>{{ latitude }}</h6>
-        </ion-col>
-        <ion-col>
-          <ion-label>Longitude:</ion-label>
-          <h6>{{ longitude }}</h6>
-        </ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
-  <!-- <h5>Address: {{ address }}</h5> -->
-  <!-- <div>Latitude: {{ latitude }}</div>
-  <div>Longitude: {{ longitude }}</div> -->
+  <ion-card-title>Address: {{ address }}</ion-card-title>
 </div>

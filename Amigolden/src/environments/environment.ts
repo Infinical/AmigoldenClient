@@ -12,7 +12,9 @@ export const environment = {
     userTokenName: "UT-8675309",
   },
   googleMaps: {
-    apiKey: "AIzaSyCXBaTUeO21FjzLJnghunS7CkDnLcLnYm4",
+    // apiKey: "AIzaSyCXBaTUeO21FjzLJnghunS7CkDnLcLnYm4",
+    // apiKey: "AIzaSyD7psaOzyFhNTJJaADO93nRc2xJnsdl_CY",
+    apiKey: "AIzaSyAIgQez_AR0WN2_Kwx_SimJkOCtHQyzMdE",
   },
   data: {
     currentUser: "CurrentUser",
