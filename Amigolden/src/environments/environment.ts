@@ -4,21 +4,22 @@
 
 export const environment = {
   production: false,
-  odataMetadataurl: 'https://localhost:44377/OData/$metadata',
-  baseUrl: 'https://localhost:44377/',
-  apiUrl: 'https://localhost:44377/api',
+  odataMetadataurl: "https://localhost:44377/OData/$metadata",
+  baseUrl: "https://localhost:44377/",
+  // apiUrl: 'https://localhost:44377/api',
+  apiUrl: "https://www.amigolden.com/api/api",
   authentication: {
-    userTokenName: 'UT-8675309'
+    userTokenName: "UT-8675309",
   },
   googleMaps: {
-    apiKey: 'AIzaSyCXBaTUeO21FjzLJnghunS7CkDnLcLnYm4'
+    apiKey: "AIzaSyCXBaTUeO21FjzLJnghunS7CkDnLcLnYm4",
   },
   data: {
-    currentUser: 'CurrentUser',
+    currentUser: "CurrentUser",
   },
   eventCosts: {
     platform: 2500,
-    direct: 2000
+    direct: 2000,
   },
 };
 

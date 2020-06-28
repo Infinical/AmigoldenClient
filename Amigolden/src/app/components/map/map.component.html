@@ -1,53 +1,112 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-        <ion-button color="dark" (click)="closeModal()">
-          <ion-icon name="arrow-back"></ion-icon>
-        </ion-button>
+      <ion-button color="dark" (click)="closeModal()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
     </ion-buttons>
-   <ion-title>Pick a location</ion-title> 
+    <ion-title>Pick a location</ion-title>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
 <div>
-  <div class="form-group">
+  <!-- <div class="form-group">
       <label>Enter address</label>
       <input type="text" class="form-control" (keydown.enter)="$event.preventDefault()" placeholder="Search Nearest Location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
-  </div>
-  <ion-button *ngIf="!isCreating && options.canCreate" (click)="create()"> Create </ion-button>
+  </div> -->
+  <ion-header translucent>
+    <ion-toolbar>
+      <ion-title>Enter address</ion-title>
+    </ion-toolbar>
+    <ion-toolbar>
+      <ion-input
+        type="text"
+        class="form-control"
+        (keydown.enter)="$event.preventDefault()"
+        placeholder="Search Nearest Location"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="off"
+        type="text"
+        #search
+      ></ion-input>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-button
+    *ngIf="!isCreating && options.canCreate"
+    (click)="create()"
+    size="small"
+    color="primary"
+  >
+    Create
+    <ion-icon name="add-outline"></ion-icon>
+  </ion-button>
+
   <ion-button *ngIf="isCreating" (click)="save()"> Select </ion-button>
   <ion-button *ngIf="isCreating" (click)="cancel()"> Cancel </ion-button>
+
   <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
-      <ng-container *ngIf="!isCreating">
-        <agm-marker color="Blue" *ngFor="let locationGroup of locationEntitiesMap" (markerClick)="clickedMarker(locationGroup)" 
-          [latitude]="locationGroup?.location?.latitude" [longitude]="locationGroup?.location?.longitude">
-          
-          <agm-snazzy-info-window [closeWhenOthersOpen]="true">
-              <ng-template> 
-                  <ng-template [ngTemplateOutlet]="infoWindowTemplate || defaultTemplate" [ngTemplateOutletContext]="{group: locationGroup}">
-                  </ng-template>
-                  <ng-template #defaultTemplate let-group="group"> 
-                    <ng-container *ngIf="group">
-                        <ion-slides>
-                          <ion-slide  *ngFor="let data of group.data">
-                              <ion-label>Location: </ion-label>
-                              <ion-label>{{group.location.name}} 5 </ion-label>
-                              <ion-button (click)="selectLocation(group.location, data)">
-                                {{options?.selectLabel || 'Select'}}
-                              </ion-button>
-                          </ion-slide>
-                        </ion-slides>
-                    </ng-container>
-                  </ng-template>
-              </ng-template>
-          </agm-snazzy-info-window>
-        </agm-marker>
-    </ng-container>
-      <agm-marker *ngIf="isCreating" [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
-        (dragEnd)="markerDragEnd($event)">
+    <ng-container *ngIf="!isCreating">
+      <agm-marker
+        color="Blue"
+        *ngFor="let locationGroup of locationEntitiesMap"
+        (markerClick)="clickedMarker(locationGroup)"
+        [latitude]="locationGroup?.location?.latitude"
+        [longitude]="locationGroup?.location?.longitude"
+      >
+        <agm-snazzy-info-window [closeWhenOthersOpen]="true">
+          <ng-template>
+            <ng-template
+              [ngTemplateOutlet]="infoWindowTemplate || defaultTemplate"
+              [ngTemplateOutletContext]="{ group: locationGroup }"
+            >
+            </ng-template>
+            <ng-template #defaultTemplate let-group="group">
+              <ng-container *ngIf="group">
+                <ion-slides>
+                  <ion-slide *ngFor="let data of group.data">
+                    <ion-label>Location: </ion-label>
+                    <ion-label>{{ group.location.name }} 5 </ion-label>
+                    <ion-button (click)="selectLocation(group.location, data)">
+                      {{ options?.selectLabel || "Select" }}
+                    </ion-button>
+                  </ion-slide>
+                </ion-slides>
+              </ng-container>
+            </ng-template>
+          </ng-template>
+        </agm-snazzy-info-window>
       </agm-marker>
+    </ng-container>
+
+    <agm-marker
+      *ngIf="isCreating"
+      [latitude]="latitude"
+      [longitude]="longitude"
+      [markerDraggable]="true"
+      (dragEnd)="markerDragEnd($event)"
+    >
+    </agm-marker>
   </agm-map>
 
-  <h5>Address: {{address}}</h5>
-  <div>Latitude: {{latitude}}</div>
-  <div>Longitude: {{longitude}}</div>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Address: {{ address }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-row>
+        <ion-col>
+          <ion-label>Latitude:</ion-label>
+          <h6>{{ latitude }}</h6>
+        </ion-col>
+        <ion-col>
+          <ion-label>Longitude:</ion-label>
+          <h6>{{ longitude }}</h6>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+  <!-- <h5>Address: {{ address }}</h5> -->
+  <!-- <div>Latitude: {{ latitude }}</div>
+  <div>Longitude: {{ longitude }}</div> -->
 </div>

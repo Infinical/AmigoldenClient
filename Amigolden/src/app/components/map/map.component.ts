@@ -1,18 +1,27 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
-import { MapsAPILoader, MouseEvent } from '@agm/core';
-import { ModalController } from '@ionic/angular';
-import { Location } from 'src/app/models/location';
-import { MapOptions } from 'src/app/models/map/map-options';
-import * as _ from 'underscore';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  NgZone,
+  Input,
+  Output,
+  EventEmitter,
+  TemplateRef,
+} from "@angular/core";
+import { MapsAPILoader, MouseEvent } from "@agm/core";
+import { ModalController } from "@ionic/angular";
+import { Location } from "src/app/models/location";
+import { MapOptions } from "src/app/models/map/map-options";
+import * as _ from "underscore";
 declare var google: any;
 
 @Component({
-  selector: 'app-map',
-  templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss'],
+  selector: "app-map",
+  templateUrl: "./map.component.html",
+  styleUrls: ["./map.component.scss"],
 })
 export class MapComponent implements OnInit {
-
   @Input() infoWindowTemplate: TemplateRef<any>;
   @Output() locationSelected = new EventEmitter<any>();
 
@@ -33,40 +42,47 @@ export class MapComponent implements OnInit {
   longitude = -73.9921495;
   zoom: number;
   address: string;
-  isCreating = false;
-  locationEntitiesMap = new Array<{location: Location, data: Array<any>}>();
+  // isCreating = false;
+  isCreating = true;
+  locationEntitiesMap = new Array<{ location: Location; data: Array<any> }>();
   private geoCoder;
 
-  @ViewChild('search', {static: false })
+  @ViewChild("search", { static: false })
   public searchElementRef: ElementRef;
-
 
   constructor(
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     protected modalController: ModalController
-  ) { }
+  ) {}
 
   resolveMapData() {
-    this.options.getData(this.latitude, this.longitude, this.withinMiles).subscribe(entities => {
-      const entitiesMap = entities.map(e => ({ location: this.options.locationResolver(e), data: e}));
-      const group = (array, prop) => array.reduce((g, item) => {
-        const propVal = item[prop];
-        const identifier = propVal.id;
-        const entry = g[identifier];
-        const data = item.data;
+    this.options
+      .getData(this.latitude, this.longitude, this.withinMiles)
+      .subscribe((entities) => {
+        const entitiesMap = entities.map((e) => ({
+          location: this.options.locationResolver(e),
+          data: e,
+        }));
+        const group = (array, prop) =>
+          array.reduce((g, item) => {
+            const propVal = item[prop];
+            const identifier = propVal.id;
+            const entry = g[identifier];
+            const data = item.data;
 
-        if (entry) {
-          entry.data.push(data);
-        } else {
-          g[identifier] = {location: propVal, data: [data]};
-        }
-        return g;
-      }, {});
-      const groups = group(entitiesMap, 'location');
-      this.locationEntitiesMap = Object.keys(groups).map((key) => groups[key])
-            || new Array<{location: Location, data: Array<any>}>();
-    });
+            if (entry) {
+              entry.data.push(data);
+            } else {
+              g[identifier] = { location: propVal, data: [data] };
+            }
+            return g;
+          }, {});
+        const groups = group(entitiesMap, "location");
+        this.locationEntitiesMap =
+          Object.keys(groups).map((key) => groups[key]) ||
+          new Array<{ location: Location; data: Array<any> }>();
+      });
   }
 
   closeModal() {
@@ -74,11 +90,10 @@ export class MapComponent implements OnInit {
   }
 
   selectLocation(location: Location, data: any) {
-    this.locationSelected.emit({location, data});
+    this.locationSelected.emit({ location, data });
   }
 
-  clickedMarker(locationPair: {location: Location, data: any[]}) {
-  }
+  clickedMarker(locationPair: { location: Location; data: any[] }) {}
 
   create() {
     this.isCreating = true;
@@ -88,8 +103,7 @@ export class MapComponent implements OnInit {
     this.locationSelected.emit({ location: this.selectedLocation });
   }
 
-  cancel() {
-  }
+  cancel() {}
 
   ngOnInit() {
     // load Places Autocomplete
@@ -97,10 +111,13 @@ export class MapComponent implements OnInit {
       this.setCurrentLocation();
       this.geoCoder = new google.maps.Geocoder();
 
-      const autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
-        types: ['address']
-      });
-      autocomplete.addListener('place_changed', () => {
+      const autocomplete = new google.maps.places.Autocomplete(
+        this.searchElementRef.nativeElement,
+        {
+          types: ["address"],
+        }
+      );
+      autocomplete.addListener("place_changed", () => {
         this.ngZone.run(() => {
           // get the place result
           const place = autocomplete.getPlace();
@@ -128,7 +145,7 @@ export class MapComponent implements OnInit {
 
   // Get Current Location Coordinates
   private setCurrentLocation() {
-    if ('geolocation' in navigator) {
+    if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
@@ -138,7 +155,6 @@ export class MapComponent implements OnInit {
     }
   }
 
-
   markerDragEnd($event: MouseEvent) {
     console.log($event);
     this.latitude = $event.coords.lat;
@@ -147,19 +163,23 @@ export class MapComponent implements OnInit {
   }
 
   getAddress(latitude, longitude) {
-    this.geoCoder.geocode({ location: { lat: latitude, lng: longitude } }, (results, status) => {
-      console.log(results);
-      console.log(status);
-      if (status === 'OK') {
-        if (results[0]) {
-          this.zoom = 12;
-          this.address = results[0].formatted_address;
+    this.geoCoder.geocode(
+      { location: { lat: latitude, lng: longitude } },
+      (results, status) => {
+        // console.log(results);
+        // console.log(status);
+        if (status === "OK") {
+          if (results[0]) {
+            this.zoom = 12;
+            this.address = results[0].formatted_address;
+            console.log("address", this.address);
+          } else {
+            window.alert("No results found");
+          }
         } else {
-          window.alert('No results found');
+          window.alert("Geocoder failed due to: " + status);
         }
-      } else {
-        window.alert('Geocoder failed due to: ' + status);
       }
-    });
+    );
   }
 }
