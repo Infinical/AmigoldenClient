@@ -10,7 +10,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, IonInput } from '@ionic/angular';
 import { Location } from 'src/app/models/location';
 import { MapOptions } from 'src/app/models/map/map-options';
 import * as _ from 'underscore';
@@ -45,16 +45,23 @@ export class MapComponent implements OnInit {
   longitude = -73.9921495;
 
   zoom: number;
-  address: string = '';
-  town: string = '';
-  state: string = '';
+  address = '';
+  town = '';
+  state = '';
   isCreating = false;
   i = 0;
   locationEntitiesMap = new Array<{ location: Location; data: Array<any> }>();
   private geoCoder;
+  icon = {
+    url: './assets/images/maps-and-flags.svg',
+    scaledSize: {
+      width: 40,
+      height: 60,
+    },
+  };
 
   @ViewChild('search', { static: false })
-  public searchElementRef: ElementRef;
+  public search: IonInput;
 
   @ViewChild(IonSlides, { static: false }) slides: IonSlides;
 
@@ -242,18 +249,13 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
     // load Places Autocomplete
-    this.mapsAPILoader.load().then(() => {
+    this.mapsAPILoader.load().then(async () => {
       this.setCurrentLocation();
       this.geoCoder = new google.maps.Geocoder();
-      // const inputfield = document
-      //   .getElementById('autocomplete_input')
-      //   .getElementsByTagName('input')[0];
-      const autocomplete = new google.maps.places.Autocomplete(
-        this.searchElementRef.nativeElement,
-        {
-          types: ['address'],
-        }
-      );
+      const native = await this.search.getInputElement();
+      const autocomplete = new google.maps.places.Autocomplete(native, {
+        types: ['address'],
+      });
       autocomplete.addListener('place_changed', () => {
         this.ngZone.run(() => {
           // get the place result
