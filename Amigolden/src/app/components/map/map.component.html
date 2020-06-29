@@ -9,11 +9,9 @@
   </ion-toolbar>
 </ion-header>
 <div>
-  <div class="form-group">
-    <label>Enter address</label>
-    <input
+  <ion-item>
+    <ion-input
       type="text"
-      class="form-control"
       (keydown.enter)="$event.preventDefault()"
       placeholder="Search Nearest Location"
       autocorrect="off"
@@ -21,8 +19,8 @@
       spellcheck="off"
       type="text"
       #search
-    />
-  </div>
+    ></ion-input>
+  </ion-item>
 
   <ion-button *ngIf="!isCreating && options.canCreate" (click)="create()">
     Create
@@ -36,6 +34,7 @@
         (markerClick)="clickedMarker(locationGroup)"
         [latitude]="locationGroup?.location?.latitude"
         [longitude]="locationGroup?.location?.longitude"
+        [iconUrl]="icon"
       >
         <agm-snazzy-info-window
           [closeWhenOthersOpen]="true"
@@ -51,6 +50,15 @@
             </ng-template>
             <ng-template #defaultTemplate let-group="group">
               <ng-container *ngIf="group">
+                <ion-row>
+                  <img
+                    class="overlay"
+                    src="https://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2014/4/11/1397210130748/Spring-Lamb.-Image-shot-2-011.jpg"
+                  />
+                  <ion-avatar>
+                    <img src="assets/images/man.svg" />
+                  </ion-avatar>
+                </ion-row>
                 <div
                   style="
                     position: absolute;
