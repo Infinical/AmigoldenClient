@@ -9,7 +9,7 @@
   </ion-toolbar>
 </ion-header>
 <div>
-  <!-- <div class="form-group">
+  <div class="form-group">
     <label>Enter address</label>
     <input
       type="text"
@@ -22,22 +22,8 @@
       type="text"
       #search
     />
-  </div> -->
-  <div [formGroup]="searchForm">
-    <ion-item>
-      <ion-label class="ion-item-small" position="floating"
-        >Enter Address</ion-label
-      >
-
-      <ion-input
-        formControlName="autocomplete_input"
-        id="autocomplete_input"
-        autocomplete="off"
-        (keyup)="search()"
-      >
-      </ion-input>
-    </ion-item>
   </div>
+
   <ion-button *ngIf="!isCreating && options.canCreate" (click)="create()">
     Create
   </ion-button>
@@ -54,7 +40,8 @@
         <agm-snazzy-info-window
           [closeWhenOthersOpen]="true"
           [maxWidth]="600"
-          [maxHeight]="600"
+          [maxHeight]="400"
+          [padding]="0"
         >
           <ng-template>
             <ng-template
@@ -64,111 +51,113 @@
             </ng-template>
             <ng-template #defaultTemplate let-group="group">
               <ng-container *ngIf="group">
-                <ion-grid>
-                  <ion-row>
-                    <ion-col size="1">
-                      <ion-icon
-                        name="arrow-back"
-                        (click)="slidePrev()"
-                      ></ion-icon>
-                    </ion-col>
+                <div
+                  style="
+                    position: absolute;
+                    top: 50%;
+                    left: 16px;
+                    font-size: 25px;
+                    z-index: 2;
+                  "
+                  (click)="slidePrev()"
+                >
+                  <ion-icon name="arrow-back"></ion-icon>
+                </div>
+                <div
+                  style="
+                    position: absolute;
+                    top: 50%;
+                    right: 16px;
+                    font-size: 25px;
+                    z-index: 2;
+                  "
+                  (click)="slideNext()"
+                >
+                  <ion-icon name="arrow-forward"></ion-icon>
+                </div>
+                <ion-slides
+                  [options]="slideOptions"
+                  (ionSlideDidChange)="slideChanged()"
+                >
+                  <ion-slide *ngFor="let data of group.data">
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col>
+                          <div>{{ group.location.name }}</div>
+                        </ion-col>
+                      </ion-row>
 
-                    <ion-col size="10">
-                      <ion-slides
-                        paginationType="bullets"
-                        slidesPerView="1"
-                        pager="false"
-                        loop="true"
-                        speed="300"
-                        [options]="slideOpts"
-                        #slideWithNav
-                      >
-                        <ion-slide *ngFor="let data of group.data">
-                          <ion-grid>
-                            <ion-row class="ion-justify-content-evenly">
-                              <ion-col>
-                                <ion-label>
-                                  {{ group.location.name }}
-                                </ion-label>
-                              </ion-col>
-                              <ion-col>
-                                <ion-avatar>
-                                  <img
-                                    src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"
-                                  />
-                                </ion-avatar>
-                              </ion-col>
-                            </ion-row>
+                      <ion-row>
+                        <ion-col>
+                          <ion-label>
+                            <p>Event Name:</p>
+                          </ion-label>
+                        </ion-col>
+                        <ion-col>
+                          <ion-label>
+                            <p>{{ group.data[this.i].name }}</p>
+                          </ion-label>
+                        </ion-col>
+                      </ion-row>
 
-                            <ion-list>
-                              <ion-list-header>
-                                Event Details
-                              </ion-list-header>
+                      <ion-row>
+                        <ion-col>
+                          <ion-label>
+                            <p>Event Date:</p>
+                          </ion-label>
+                        </ion-col>
+                        <ion-col>
+                          <ion-label>
+                            <p>
+                              {{
+                                group.data[this.i].meetTime | date: 'mediumDate'
+                              }}
+                            </p>
+                          </ion-label>
+                        </ion-col>
+                      </ion-row>
 
-                              <ion-item>
-                                <ion-label slot="start">
-                                  Event Name
-                                </ion-label>
-                                <ion-label>
-                                  <h2>{{ group.location.name }}</h2>
-                                </ion-label>
-                              </ion-item>
-                              <ion-item>
-                                <ion-label slot="start">
-                                  Event Description
-                                </ion-label>
-                                <ion-label>
-                                  <h2>{{ group.location.name }}</h2>
-                                </ion-label>
-                              </ion-item>
-                              <ion-item>
-                                <ion-label slot="start">
-                                  Event Organizer
-                                </ion-label>
-                                <ion-label>
-                                  <h2>{{ group.location.name }}</h2>
-                                </ion-label>
-                              </ion-item>
-                              <ion-item>
-                                <ion-label slot="start">
-                                  Price
-                                </ion-label>
-                                <ion-label>
-                                  <h2>USD. 100</h2>
-                                </ion-label>
-                              </ion-item>
+                      <ion-row>
+                        <ion-col>
+                          <ion-label>
+                            <p>Event Description:</p>
+                          </ion-label>
+                        </ion-col>
+                        <ion-col>
+                          <ion-label>
+                            <p>{{ group.data[this.i].description }}</p>
+                          </ion-label>
+                        </ion-col>
+                      </ion-row>
 
-                              <ion-item>
-                                <ion-label slot="start">
-                                  Event Style
-                                </ion-label>
-                                <ion-label>
-                                  <h2>
-                                    <ion-label>
-                                      <h2>USD. 100</h2>
-                                    </ion-label>
-                                  </h2>
-                                </ion-label>
-                              </ion-item>
-                            </ion-list>
-                            <ion-row class="ion-justify-content-end">
-                              <ion-col>
-                                <ion-button color="primary">Enroll</ion-button>
-                              </ion-col>
-                            </ion-row>
-                          </ion-grid>
-                        </ion-slide>
-                      </ion-slides>
-                    </ion-col>
+                      <ion-row>
+                        <ion-col>
+                          <ion-label>
+                            <p>Event Cost:</p>
+                          </ion-label>
+                        </ion-col>
+                        <ion-col>
+                          <ion-label>
+                            <p>{{ group.data[this.i].eventCostInCents }}</p>
+                          </ion-label>
+                        </ion-col>
+                      </ion-row>
 
-                    <ion-col size="1">
-                      <ion-icon
-                        name="arrow-forward"
-                        (click)="slideNext()"
-                      ></ion-icon>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
+                      <ion-row>
+                        <ion-col>
+                          <ion-label>
+                            <p>Event Type:</p>
+                          </ion-label>
+                        </ion-col>
+                        <ion-col>
+                          <ion-label>
+                            <p>{{ group.data[this.i].eventType }}</p>
+                          </ion-label>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-slide>
+                </ion-slides>
               </ng-container>
             </ng-template>
           </ng-template>
@@ -192,12 +181,11 @@
           Address: {{ address + ', ' + town + ', ' + state }}
         </h6></ion-col
       >
-      <ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-end">
         <ion-button color="primary" class="">Enroll</ion-button></ion-col
       >
     </ion-row>
   </ion-grid>
 </div>
-<!-- 
-[latitude]="locationGroup?.location?.latitude"
-[longitude]="locationGroup?.location?.longitude" -->

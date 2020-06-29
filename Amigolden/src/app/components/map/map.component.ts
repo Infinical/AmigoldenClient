@@ -49,20 +49,37 @@ export class MapComponent implements OnInit {
   town: string = '';
   state: string = '';
   isCreating = false;
-  searchForm: FormGroup;
+  i = 0;
   locationEntitiesMap = new Array<{ location: Location; data: Array<any> }>();
   private geoCoder;
 
   @ViewChild('search', { static: false })
-  @ViewChild(IonSlides, { static: false })
-  slides: IonSlides;
   public searchElementRef: ElementRef;
 
-  slideOpts = {
+  @ViewChild(IonSlides, { static: false }) slides: IonSlides;
+
+  slideChanged() {
+    this.slides.getActiveIndex().then((index) => {
+      this.i = index;
+    });
+  }
+
+  // slider functions
+
+  slidePrev() {
+    this.slides.slidePrev();
+  }
+  slideNext() {
+    this.slides.slideNext();
+  }
+
+  //Flip
+  slideOptions = {
     on: {
       beforeInit() {
         const swiper = this;
-        swiper.classNames.push(`${swiper.params.containerModifierClass}fade`);
+        swiper.classNames.push(`${swiper.params.containerModifierClass}flip`);
+        swiper.classNames.push(`${swiper.params.containerModifierClass}3d`);
         const overwriteParams = {
           slidesPerView: 1,
           slidesPerColumn: 1,
@@ -72,40 +89,88 @@ export class MapComponent implements OnInit {
           virtualTranslate: true,
         };
         swiper.params = Object.assign(swiper.params, overwriteParams);
-        swiper.params = Object.assign(swiper.originalParams, overwriteParams);
+        swiper.originalParams = Object.assign(
+          swiper.originalParams,
+          overwriteParams
+        );
       },
       setTranslate() {
         const swiper = this;
-        const { slides } = swiper;
+        const { $, slides, rtlTranslate: rtl } = swiper;
         for (let i = 0; i < slides.length; i += 1) {
-          const $slideEl = swiper.slides.eq(i);
+          const $slideEl = slides.eq(i);
+          let progress = $slideEl[0].progress;
+          if (swiper.params.flipEffect.limitRotation) {
+            progress = Math.max(Math.min($slideEl[0].progress, 1), -1);
+          }
           const offset$$1 = $slideEl[0].swiperSlideOffset;
+          const rotate = -180 * progress;
+          let rotateY = rotate;
+          let rotateX = 0;
           let tx = -offset$$1;
-          if (!swiper.params.virtualTranslate) tx -= swiper.translate;
           let ty = 0;
           if (!swiper.isHorizontal()) {
             ty = tx;
             tx = 0;
+            rotateX = -rotateY;
+            rotateY = 0;
+          } else if (rtl) {
+            rotateY = -rotateY;
           }
-          const slideOpacity = swiper.params.fadeEffect.crossFade
-            ? Math.max(1 - Math.abs($slideEl[0].progress), 0)
-            : 1 + Math.min(Math.max($slideEl[0].progress, -1), 0);
-          $slideEl
-            .css({
-              opacity: slideOpacity,
-            })
-            .transform(`translate3d(${tx}px, ${ty}px, 0px)`);
+
+          $slideEl[0].style.zIndex =
+            -Math.abs(Math.round(progress)) + slides.length;
+
+          if (swiper.params.flipEffect.slideShadows) {
+            // Set shadows
+            let shadowBefore = swiper.isHorizontal()
+              ? $slideEl.find('.swiper-slide-shadow-left')
+              : $slideEl.find('.swiper-slide-shadow-top');
+            let shadowAfter = swiper.isHorizontal()
+              ? $slideEl.find('.swiper-slide-shadow-right')
+              : $slideEl.find('.swiper-slide-shadow-bottom');
+            if (shadowBefore.length === 0) {
+              shadowBefore = swiper.$(
+                `<div class="swiper-slide-shadow-${
+                  swiper.isHorizontal() ? 'left' : 'top'
+                }"></div>`
+              );
+              $slideEl.append(shadowBefore);
+            }
+            if (shadowAfter.length === 0) {
+              shadowAfter = swiper.$(
+                `<div class="swiper-slide-shadow-${
+                  swiper.isHorizontal() ? 'right' : 'bottom'
+                }"></div>`
+              );
+              $slideEl.append(shadowAfter);
+            }
+            if (shadowBefore.length)
+              shadowBefore[0].style.opacity = Math.max(-progress, 0);
+            if (shadowAfter.length)
+              shadowAfter[0].style.opacity = Math.max(progress, 0);
+          }
+          $slideEl.transform(
+            `translate3d(${tx}px, ${ty}px, 0px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`
+          );
         }
       },
       setTransition(duration) {
         const swiper = this;
-        const { slides, $wrapperEl } = swiper;
-        slides.transition(duration);
+        const { slides, activeIndex, $wrapperEl } = swiper;
+        slides
+          .transition(duration)
+          .find(
+            '.swiper-slide-shadow-top, .swiper-slide-shadow-right, .swiper-slide-shadow-bottom, .swiper-slide-shadow-left'
+          )
+          .transition(duration);
         if (swiper.params.virtualTranslate && duration !== 0) {
           let eventTriggered = false;
-          slides.transitionEnd(() => {
+          // eslint-disable-next-line
+          slides.eq(activeIndex).transitionEnd(function onTransitionEnd() {
             if (eventTriggered) return;
             if (!swiper || swiper.destroyed) return;
+
             eventTriggered = true;
             swiper.animating = false;
             const triggerEvents = ['webkitTransitionEnd', 'transitionend'];
@@ -121,8 +186,7 @@ export class MapComponent implements OnInit {
   constructor(
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
-    protected modalController: ModalController,
-    private fb: FormBuilder
+    protected modalController: ModalController
   ) {}
 
   resolveMapData() {
@@ -176,30 +240,20 @@ export class MapComponent implements OnInit {
 
   cancel() {}
 
-  // slider functions
-
-  slidePrev() {
-    this.slides.slidePrev();
-  }
-  slideNext() {
-    this.slides.slideNext();
-  }
-
   ngOnInit() {
     // load Places Autocomplete
-    this.searchForm = this.fb.group({
-      autocomplete_input: [''],
-    });
-
     this.mapsAPILoader.load().then(() => {
       this.setCurrentLocation();
       this.geoCoder = new google.maps.Geocoder();
-      const inputfield = document
-        .getElementById('autocomplete_input')
-        .getElementsByTagName('input')[0];
-      const autocomplete = new google.maps.places.Autocomplete(inputfield, {
-        types: ['address'],
-      });
+      // const inputfield = document
+      //   .getElementById('autocomplete_input')
+      //   .getElementsByTagName('input')[0];
+      const autocomplete = new google.maps.places.Autocomplete(
+        this.searchElementRef.nativeElement,
+        {
+          types: ['address'],
+        }
+      );
       autocomplete.addListener('place_changed', () => {
         this.ngZone.run(() => {
           // get the place result
@@ -211,7 +265,6 @@ export class MapComponent implements OnInit {
           if (place.geometry === undefined || place.geometry === null) {
             return;
           }
-
           this.selectedLocation = new Location();
           this.selectedLocation.latitude = place.geometry.location.lat();
           this.selectedLocation.longitude = place.geometry.location.lng();
@@ -220,7 +273,6 @@ export class MapComponent implements OnInit {
 
           // set latitude, longitude and zoom
           this.latitude = place.geometry.location.lat();
-
           this.longitude = place.geometry.location.lng();
           // this.address = place.formatted_address;
           this.address = place.address_components[0].short_name;
@@ -233,51 +285,6 @@ export class MapComponent implements OnInit {
     });
   }
 
-  // listen to keyp and search google places
-
-  search() {
-    if (this.searchForm.value.autocomplete_input.length > 0) {
-      const inputfield = document
-        .getElementById('autocomplete_input')
-        .getElementsByTagName('input')[0];
-      this.mapsAPILoader.load().then(() => {
-        this.setCurrentLocation();
-        this.geoCoder = new google.maps.Geocoder();
-
-        const autocomplete = new google.maps.places.Autocomplete(
-          inputfield,
-
-          {
-            types: ['address'],
-          }
-        );
-
-        autocomplete.addListener('place_changed', () => {
-          this.ngZone.run(() => {
-            // get the place result
-            const place = autocomplete.getPlace();
-
-            // verify result
-            if (place.geometry === undefined || place.geometry === null) {
-              return;
-            }
-
-            this.selectedLocation = new Location();
-            this.selectedLocation.latitude = place.geometry.location.lat();
-            this.selectedLocation.longitude = place.geometry.location.lng();
-            this.selectedLocation.formattedAddress = place.formatted_address;
-            // TODO: add a way to save the name
-
-            // set latitude, longitude and zoom
-            this.latitude = place.geometry.location.lat();
-            this.longitude = place.geometry.location.lng();
-            this.address = place.formatted_address;
-            this.zoom = 12;
-          });
-        });
-      });
-    }
-  }
   // Get Current Location Coordinates
   private setCurrentLocation() {
     if ('geolocation' in navigator) {
