@@ -28,6 +28,7 @@
   <ion-button *ngIf="isCreating" (click)="save()"> Select </ion-button>
   <ion-button *ngIf="isCreating" (click)="cancel()"> Cancel </ion-button>
   <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+
     <ng-container *ngIf="!isCreating">
       <agm-marker
         *ngFor="let locationGroup of locationEntitiesMap"
@@ -170,6 +171,7 @@
             </ng-template>
           </ng-template>
         </agm-snazzy-info-window>
+
       </agm-marker>
     </ng-container>
     <agm-marker
