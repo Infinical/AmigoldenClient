@@ -1,20 +1,26 @@
-agm-map {
-  height: 44vh;
+#map-container {
+  height: 70vh;
 }
-
-.si-frame .si-content-wrapper {
-  padding: 0.3vh;
+#map {
+  height: 80%;
 }
 
 .overlay {
-  height: 30%;
+  height: 100%;
   width: 100%;
 }
 
 ion-avatar {
-  position: relative;
+  position: absolute;
   z-index: 99;
-  top: -23vh;
-  left: 53vw;
-  // opacity: 0.5;
+  top: 5vh;
+  right: 7vw;
+}
+
+// .image {
+//   height: 20vh;
+// }
+
+#footer {
+  height: 10%;
 }
