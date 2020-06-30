@@ -11,10 +11,10 @@
 }
 
 ion-avatar {
-  position: absolute;
+  position: relative;
   z-index: 99;
-  top: 5vh;
-  right: 7vw;
+  top: -25vh;
+  left: 65vw;
 }
 
 // .image {
@@ -23,4 +23,8 @@ ion-avatar {
 
 #footer {
   height: 10%;
+}
+
+.enroll {
+  margin-bottom: 5vh;
 }
