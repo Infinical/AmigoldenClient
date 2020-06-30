@@ -75,7 +75,7 @@ export class EventsService extends ApiResourceBaseService<Meeting>  {
         const headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
 
-        const url = `${this.apiUrl}/${this.route}/user-meetings?lat=${lat}&lon=${lon}&withinMiles=${withinMiles}`;
+        const url = `${this.apiUrl}/${this.route}/within-range?lat=${lat}&lon=${lon}&withinMiles=${withinMiles}`;
         return this.http.get<Meeting[]>(url, { headers});
     }
 }

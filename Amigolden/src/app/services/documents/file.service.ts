@@ -13,7 +13,7 @@ export class FileService {
 
     apiUrl = environment.apiUrl;
     route = 'upload';
-    uploadRoute = `${this.apiUrl}/${this.route}/`;
+    uploadRoute = `${this.apiUrl}/${this.route}`;
     constructor(public http: HttpClient) {
     }
 
