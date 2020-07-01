@@ -1,30 +1,45 @@
 #map-container {
-  height: 70vh;
+  height: 90vh;
+  min-height: 90vh;
+  
 }
-#map {
-  height: 80%;
-}
-
-.overlay {
-  height: 100%;
-  width: 100%;
+ #map {
+  height: 80vh;
+  min-height: 80vh;
 }
 
-ion-avatar {
-  position: relative;
-  z-index: 99;
-  top: -25vh;
-  left: 68vw;
+
+#footer {
+  height: 10vh;
+  min-height: 10vh;
+}
+
+.container {
+ position: relative;
+width: 100%;
 }
 
 .image {
-  height: 30vh;
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
-#footer {
-  height: 10%;
+.overlay{
+  position: absolute;
+  top: 3vh;
+  right:3vw
 }
 
 .enroll {
-  margin-bottom: 5vh;
+  margin-bottom: 2vh;
 }
+
+// ion-avatar {
+//   position: relative;
+//   z-index: 99;
+//   top: -25vh;
+//   left: 68vw;
+// }
+
+

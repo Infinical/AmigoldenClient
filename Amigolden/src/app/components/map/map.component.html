@@ -25,17 +25,17 @@
       <agm-marker *ngFor="let locationGroup of locationEntitiesMap" (markerClick)="clickedMarker(locationGroup)"
         [latitude]="locationGroup?.location?.latitude" [longitude]="locationGroup?.location?.longitude"
         [iconUrl]="icon">
-        <agm-snazzy-info-window [closeWhenOthersOpen]="true" [maxWidth]="500" [maxHeight]="800" padding="0 0 0 0">
+        <agm-snazzy-info-window [closeWhenOthersOpen]="true" [maxWidth]="400" [maxHeight]="600" padding="0 0 0 0">
           <ng-template>
             <ng-template [ngTemplateOutlet]="infoWindowTemplate || defaultTemplate"
               [ngTemplateOutletContext]="{ group: locationGroup }">
             </ng-template>
             <ng-template #defaultTemplate let-group="group">
               <ng-container *ngIf="group">
-                <ion-row class="image">
-                  <img class="overlay"
+                <ion-row class="container">
+                  <img class="image"
                     src="https://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2014/4/11/1397210130748/Spring-Lamb.-Image-shot-2-011.jpg" />
-                  <ion-avatar>
+                  <ion-avatar class="overlay">
                     <img src="assets/images/man.svg" />
                   </ion-avatar>
                 </ion-row>
@@ -74,11 +74,6 @@
                 <ion-slides [options]="slideOptions" (ionSlideDidChange)="slideChanged()">
                   <ion-slide *ngFor="let data of group.data">
                     <ion-grid>
-                      <!-- <ion-row>
-                        <ion-col>
-                          <div>{{ group.location.name }}</div>
-                        </ion-col>
-                      </ion-row> -->
 
                       <ion-row>
                         <ion-col>
