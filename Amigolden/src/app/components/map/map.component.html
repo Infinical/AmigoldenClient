@@ -51,7 +51,7 @@
                     left: 16px;
                     font-size: 25px;
                     z-index: 2;
-                  " (click)="slidePrev()">
+                  " (click)="slidePrev(theSlides)">
                     <ion-icon name="arrow-back"></ion-icon>
                   </div>
                   <div style="
@@ -60,10 +60,10 @@
                     right: 16px;
                     font-size: 25px;
                     z-index: 2;
-                  " (click)="slideNext()">
+                  " (click)="slideNext(theSlides)">
                     <ion-icon name="arrow-forward"></ion-icon>
                   </div>
-                  <ion-slides [options]="slideOptions" (ionSlideDidChange)="slideChanged()">
+                  <ion-slides [options]="slideOptions" (ionSlideDidChange)="slideChanged()" #theSlides>
                     <ion-slide *ngFor="let data of group.data">
                       <ion-grid>
 

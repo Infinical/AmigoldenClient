@@ -14,7 +14,7 @@ import { ModalController, IonInput, Platform } from '@ionic/angular';
 import { Location } from 'src/app/models/location';
 import { MapOptions } from 'src/app/models/map/map-options';
 import * as _ from 'underscore';
-import { FormGroup, FormBuilder } from '@angular/forms';
+
 import { IonSlides } from '@ionic/angular';
 
 
@@ -67,22 +67,6 @@ export class MapComponent implements OnInit {
 
   @ViewChild(IonSlides, { static: false }) slides: IonSlides;
 
-  slideChanged() {
-    this.slides.getActiveIndex().then((index) => {
-      this.i = index;
-    });
-  }
-
-  // slider functions
-
-  slidePrev() {
-    this.slides.slidePrev();
-  }
-  slideNext() {
-    this.slides.slideNext();
-  }
-
-  //Flip
   slideOptions = {
     on: {
       beforeInit() {
@@ -154,10 +138,12 @@ export class MapComponent implements OnInit {
               );
               $slideEl.append(shadowAfter);
             }
-            if (shadowBefore.length)
+            if (shadowBefore.length) {
               shadowBefore[0].style.opacity = Math.max(-progress, 0);
-            if (shadowAfter.length)
+            }
+            if (shadowAfter.length) {
               shadowAfter[0].style.opacity = Math.max(progress, 0);
+            }
           }
           $slideEl.transform(
             `translate3d(${tx}px, ${ty}px, 0px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`
@@ -177,8 +163,8 @@ export class MapComponent implements OnInit {
           let eventTriggered = false;
           // eslint-disable-next-line
           slides.eq(activeIndex).transitionEnd(function onTransitionEnd() {
-            if (eventTriggered) return;
-            if (!swiper || swiper.destroyed) return;
+            if (eventTriggered) { return; }
+            if (!swiper || swiper.destroyed) { return; }
 
             eventTriggered = true;
             swiper.animating = false;
@@ -192,14 +178,33 @@ export class MapComponent implements OnInit {
     },
   };
 
-  height = 0
+
+
+
+  height = 0;
+  slideChanged() {
+    this.slides.getActiveIndex().then((index) => {
+      this.i = index;
+    });
+  }
+
+  // slider functions
+
+  slidePrev(slides) {
+    slides.slidePrev();
+  }
+  slideNext(slides) {
+    slides.slideNext();
+  }
+
+
   constructor(
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     protected modalController: ModalController,
     public platform: Platform
   ) {
-    this.height = platform.height() - 200
+    this.height = platform.height() - 200;
   }
 
   resolveMapData() {
