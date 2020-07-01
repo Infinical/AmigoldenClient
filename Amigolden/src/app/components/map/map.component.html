@@ -1,31 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="dark" (click)="closeModal()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Pick a location</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-item>
+  <ion-input type="text" (keydown.enter)="$event.preventDefault()" placeholder="Search Nearest Location"
+    autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search></ion-input>
+</ion-item>
+
+<ion-button *ngIf="!isCreating && options.canCreate" (click)="create()">
+  Create
+</ion-button>
+<ion-button *ngIf="isCreating" (click)="save()"> Select </ion-button>
+<ion-button *ngIf="isCreating" (click)="cancel()"> Cancel </ion-button>
+
+
+
+
 <div class="section">
-  <div id="header">
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-button color="dark" (click)="closeModal()">
-            <ion-icon name="arrow-back"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-        <ion-title>Pick a location</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-item>
-      <ion-input type="text" (keydown.enter)="$event.preventDefault()" placeholder="Search Nearest Location"
-        autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search></ion-input>
-    </ion-item>
-
-    <ion-button *ngIf="!isCreating && options.canCreate" (click)="create()">
-      Create
-    </ion-button>
-    <ion-button *ngIf="isCreating" (click)="save()"> Select </ion-button>
-    <ion-button *ngIf="isCreating" (click)="cancel()"> Cancel </ion-button>
-  </div>
-
-
-  <div id="map-container">
-    <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" id="map">
+  <div class="agm-map" #map>
+    <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" [style.height.px]="height">
       <ng-container *ngIf="!isCreating">
         <agm-marker *ngFor="let locationGroup of locationEntitiesMap" (markerClick)="clickedMarker(locationGroup)"
           [latitude]="locationGroup?.location?.latitude" [longitude]="locationGroup?.location?.longitude"

@@ -10,12 +10,13 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
-import { ModalController, IonInput } from '@ionic/angular';
+import { ModalController, IonInput, Platform } from '@ionic/angular';
 import { Location } from 'src/app/models/location';
 import { MapOptions } from 'src/app/models/map/map-options';
 import * as _ from 'underscore';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { IonSlides } from '@ionic/angular';
+
 
 declare var google: any;
 
@@ -52,6 +53,7 @@ export class MapComponent implements OnInit {
   i = 0;
   locationEntitiesMap = new Array<{ location: Location; data: Array<any> }>();
   private geoCoder;
+
   icon = {
     url: './assets/images/maps-and-flags.svg',
     scaledSize: {
@@ -139,7 +141,7 @@ export class MapComponent implements OnInit {
             if (shadowBefore.length === 0) {
               shadowBefore = swiper.$(
                 `<div class="swiper-slide-shadow-${
-                  swiper.isHorizontal() ? 'left' : 'top'
+                swiper.isHorizontal() ? 'left' : 'top'
                 }"></div>`
               );
               $slideEl.append(shadowBefore);
@@ -147,7 +149,7 @@ export class MapComponent implements OnInit {
             if (shadowAfter.length === 0) {
               shadowAfter = swiper.$(
                 `<div class="swiper-slide-shadow-${
-                  swiper.isHorizontal() ? 'right' : 'bottom'
+                swiper.isHorizontal() ? 'right' : 'bottom'
                 }"></div>`
               );
               $slideEl.append(shadowAfter);
@@ -190,11 +192,15 @@ export class MapComponent implements OnInit {
     },
   };
 
+  height = 0
   constructor(
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
-    protected modalController: ModalController
-  ) {}
+    protected modalController: ModalController,
+    public platform: Platform
+  ) {
+    this.height = platform.height() - 200
+  }
 
   resolveMapData() {
     this.options
@@ -235,7 +241,7 @@ export class MapComponent implements OnInit {
     this.locationSelected.emit({ location, data });
   }
 
-  clickedMarker(locationPair: { location: Location; data: any[] }) {}
+  clickedMarker(locationPair: { location: Location; data: any[] }) { }
 
   create() {
     this.isCreating = true;
@@ -245,7 +251,7 @@ export class MapComponent implements OnInit {
     this.locationSelected.emit({ location: this.selectedLocation });
   }
 
-  cancel() {}
+  cancel() { }
 
   ngOnInit() {
     // load Places Autocomplete
