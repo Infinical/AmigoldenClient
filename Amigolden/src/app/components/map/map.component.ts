@@ -1,14 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  NgZone,
-  Input,
-  Output,
-  EventEmitter,
-  TemplateRef,
-} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
 import { ModalController, IonInput, Platform } from '@ionic/angular';
 import { Location } from 'src/app/models/location';
@@ -26,6 +16,7 @@ declare var google: any;
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit {
+
   @Input() infoWindowTemplate: TemplateRef<any>;
   @Output() locationSelected = new EventEmitter<any>();
 
@@ -44,7 +35,6 @@ export class MapComponent implements OnInit {
   withinMiles = 10;
   latitude = 40.7362942;
   longitude = -73.9921495;
-
   zoom: number;
   address = '';
   town = '';
@@ -198,6 +188,7 @@ export class MapComponent implements OnInit {
   }
 
 
+
   constructor(
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
@@ -208,34 +199,25 @@ export class MapComponent implements OnInit {
   }
 
   resolveMapData() {
-    this.options
-      .getData(this.latitude, this.longitude, this.withinMiles)
-      .subscribe((entities) => {
-        const entitiesMap = entities.map((e) => ({
-          location: this.options.locationResolver(e),
-          data: e,
-        }));
+    this.options.getData(this.latitude, this.longitude, this.withinMiles).subscribe(entities => {
+      const entitiesMap = entities.map(e => ({ location: this.options.locationResolver(e), data: e }));
+      const group = (array, prop) => array.reduce((g, item) => {
+        const propVal = item[prop];
+        const identifier = propVal.id;
+        const entry = g[identifier];
+        const data = item.data;
 
-        const group = (array, prop) =>
-          array.reduce((g, item) => {
-            const propVal = item[prop];
-            const identifier = propVal.id;
-            const entry = g[identifier];
-            const data = item.data;
-
-            if (entry) {
-              entry.data.push(data);
-            } else {
-              g[identifier] = { location: propVal, data: [data] };
-            }
-            return g;
-          }, {});
-
-        const groups = group(entitiesMap, 'location');
-        this.locationEntitiesMap =
-          Object.keys(groups).map((key) => groups[key]) ||
-          new Array<{ location: Location; data: Array<any> }>();
-      });
+        if (entry) {
+          entry.data.push(data);
+        } else {
+          g[identifier] = { location: propVal, data: [data] };
+        }
+        return g;
+      }, {});
+      const groups = group(entitiesMap, 'location');
+      this.locationEntitiesMap = Object.keys(groups).map((key) => groups[key])
+        || new Array<{ location: Location, data: Array<any> }>();
+    });
   }
 
   closeModal() {
@@ -271,9 +253,7 @@ export class MapComponent implements OnInit {
         this.ngZone.run(() => {
           // get the place result
           const place = autocomplete.getPlace();
-          this.address = '';
-          this.town = '';
-          this.state = '';
+
           // verify result
           if (place.geometry === undefined || place.geometry === null) {
             return;
@@ -287,11 +267,7 @@ export class MapComponent implements OnInit {
           // set latitude, longitude and zoom
           this.latitude = place.geometry.location.lat();
           this.longitude = place.geometry.location.lng();
-          // this.address = place.formatted_address;
-          this.address = place.address_components[0].short_name;
-          this.town = place.address_components[1].short_name;
-          this.state = place.address_components[2].short_name;
-          // console.log(place);
+          this.address = place.formatted_address;
           this.zoom = 12;
         });
       });
@@ -310,8 +286,9 @@ export class MapComponent implements OnInit {
     }
   }
 
+
   markerDragEnd($event: MouseEvent) {
-    // console.log($event);
+    console.log($event);
     this.latitude = $event.coords.lat;
     this.longitude = $event.coords.lng;
     this.getAddress(this.latitude, this.longitude);
@@ -337,10 +314,9 @@ export class MapComponent implements OnInit {
           } else {
             window.alert('No results found');
           }
-        } else {
-          window.alert('Geocoder failed due to: ' + status);
         }
-      }
-    );
+
+      });
   }
+
 }

@@ -4,14 +4,10 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button
-        *ngIf="headerOptions.canCreate"
-        (click)="onCreate()"
-        ion-button
-      >
+      <button *ngIf="headerOptions.canCreate" (click)="onCreate()" ion-button>
         <ion-icon name="create"></ion-icon>
         &nbsp;Create
-      </ion-button>
+      </button>
     </ion-buttons>
     <!-- <app-search (searchFilter)="this.config.filter=$event"></app-search> -->
   </ion-toolbar>
@@ -25,27 +21,22 @@
       <ion-label>List</ion-label>
     </ion-segment-button>
   </ion-segment>
-  <app-list-base
-    *ngIf="viewController.value == 'list'"
-    [config]="config"
-    [template]="itemTemplate"
-  ></app-list-base>
+  <app-list-base *ngIf="viewController.value == 'list'" [config]="config" [template]="itemTemplate"></app-list-base>
   <div *ngIf="viewController.value == 'map'">
 
-      <app-map [options]="mapOptions" (locationSelected)="navigateToDetail($event.data)" ></app-map>
+    <app-map [options]="mapOptions" (locationSelected)="navigateToDetail($event.data)"></app-map>
 
   </div>
 </ion-content>
 <ng-template #itemTemplate let-entity="entity">
   <ion-card>
     <img *ngIf="entity.imageSrc" [src]="entity.imageSrc" />
-    <img src="https://ionicframework.com/docs/demos/api/card/madison.jpg" />
+    <img src='https://ionicframework.com/docs/demos/api/card/madison.jpg' />
     <ion-card-header>
       <ion-card-subtitle>Destination</ion-card-subtitle>
       <ion-card-title>{{ displayLocation(entity) }}</ion-card-title>
     </ion-card-header>
-    <ion-card-content>
-      {{ entity.description }}
+    <ion-card-content> {{ entity.description }}
       <ion-button (click)="navigateToDetail(entity)">Learn More...</ion-button>
     </ion-card-content>
   </ion-card>
